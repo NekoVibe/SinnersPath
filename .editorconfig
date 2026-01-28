@@ -1,0 +1,46 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# All files
+[*]
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# C# files
+[*.cs]
+indent_style = tab
+indent_size = unset
+end_of_line = crlf
+
+# Unity YAML files
+[*.{asset,unity,prefab,anim,controller,mat,physicMaterial,physicsMaterial2D,terrainlayer}]
+indent_style = tab
+indent_size = unset
+end_of_line = crlf
+
+# JSON files
+[*.json]
+indent_style = tab
+indent_size = unset
+end_of_line = crlf
+
+# YAML files
+[*.{yaml,yml}]
+indent_style = tab
+indent_size = unset
+end_of_line = crlf
+
+# Shader files
+[*.shader]
+indent_style = tab
+indent_size = unset
+end_of_line = crlf
+
+# XML files
+[*.xml]
+indent_style = tab
+indent_size = unset
+end_of_line = crlf
