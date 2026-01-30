@@ -44,9 +44,10 @@ GameObject:
   - component: {fileID: 3526202443230208601}
   - component: {fileID: 2569514230709742275}
   - component: {fileID: 5926887594471049790}
+  - component: {fileID: 4493831863888155}
   m_Layer: 0
   m_Name: Personaje
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -179,7 +180,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponInventory
   weaponHolder: {fileID: 1439703008680022850}
-  weaponPrefabs: []
   reloadKey: 114
   nextWeaponKey: 101
   prevWeaponKey: 113
+  pickupKey: 102
+  weapons: []
+--- !u!114 &4493831863888155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8644148489220667401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea637270403acdf4cbbc7479be061d75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerPersistence
+  spawnPointTag: Respawn
