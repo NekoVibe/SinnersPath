@@ -129,7 +129,7 @@ public class EnemyBase : MonoBehaviour
 		float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
 		// Comportamiento según distancia (use horizontal distance for attack range)
-		if (horizontalDistance <= attackRange)
+		if (distanceToAttack <= attackRange)
 		{
 			// Atacar (también actualiza la orientación)
 			UpdateSpriteFlip();
@@ -323,66 +323,6 @@ public class EnemyBase : MonoBehaviour
 				Debug.Log($"{enemyName} dealt {damage} damage to player!");
 				break;
 			}
-		}
-	}
-
-	// Resetear flag de ataque
-	private void ResetAttack()
-	{
-		isAttacking = false;
-		// NUEVO: Volver al collider idle
-		SetColliderToIdle();
-	}
-
-	// Actualizar animación de movimiento solo cuando cambie el estado
-	private void UpdateAnimationMovement()
-	{
-		if (animator == null) return;
-
-		// Detectar si se está moviendo
-		bool isMoving = false;
-		if (rb != null)
-		{
-			float horizontalSpeed = Mathf.Abs(rb.linearVelocity.x) + Mathf.Abs(rb.linearVelocity.z);
-			isMoving = horizontalSpeed > movementThreshold;
-		}
-
-		// SOLO actualizar si el estado cambió
-		if (isMoving != wasWalking)
-		{
-			animator.SetBool(IsWalkingHash, isMoving);
-			wasWalking = isMoving;
-
-			// NUEVO: Actualizar collider según si está caminando o no
-			if (isMoving)
-			{
-				SetColliderToWalk();
-			}
-			else
-			{
-				SetColliderToIdle();
-			}
-		}
-	}
-
-	// Actualizar animación idle solo cuando cambie el estado
-	private void UpdateAnimationIdle()
-	{
-		if (animator == null) return;
-
-		// SOLO actualizar si estaba caminando
-		if (wasWalking)
-		{
-			animator.SetBool(IsWalkingHash, false);
-			wasWalking = false;
-			// NUEVO: Cambiar a collider idle
-			SetColliderToIdle();
-		}
-
-		// Detener movimiento
-		if (rb != null)
-		{
-			rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
 		}
 	}
 

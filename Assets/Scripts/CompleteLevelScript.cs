@@ -20,7 +20,6 @@ public class LevelExit : MonoBehaviour
 	[Header("UI Feedback")]
 	[SerializeField] private string lockedMessage = "Eliminate all enemies first!";
 	[SerializeField] private string unlockedMessage = "Press E to exit";
-	[SerializeField] private float messageDuration = 2f;
 
 	// Estado
 	private bool isUnlocked = false;
