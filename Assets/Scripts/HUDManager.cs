@@ -23,7 +23,6 @@ public class HUDManager : MonoBehaviour
     [SerializeField] private Sprite heartFullSprite;
     [SerializeField] private Sprite heartEmptySprite;
     [SerializeField] private Sprite coinSprite;
-    [SerializeField] private Sprite comboSprite;
 
     [Header("Configuración Animación")]
     [SerializeField] private float escalaSeleccionado = 1.3f;
