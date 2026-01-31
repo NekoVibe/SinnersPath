@@ -46,6 +46,9 @@ public class EnemySpawner : MonoBehaviour
 			spawnPoints = new Transform[] { transform };
 		}
 
+		// Registrarse en el EnemyManager
+		EnemyManager.Instance?.RegisterSpawner(this);
+
 		// Si no se activa por trigger, spawnar al inicio
 		if (!activateOnTrigger)
 		{
@@ -121,6 +124,9 @@ public class EnemySpawner : MonoBehaviour
 
 		Debug.Log("All waves completed!");
 		isSpawning = false;
+
+		// Notificar al EnemyManager que este spawner terminó
+		EnemyManager.Instance?.NotifySpawnerCompleted(this);
 	}
 
 	// Spawnar una oleada instantáneamente
