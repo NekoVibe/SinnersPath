@@ -27,6 +27,12 @@ public class EnemyBase : MonoBehaviour
 	[SerializeField] private Color damageFlashColor = Color.red;
 	[SerializeField] private float damageFlashDuration = 0.1f;
 
+	[Header("Drops")]
+	[SerializeField] private GameObject coinPrefab; // El prefab de la moneda
+	[SerializeField] private int minCoins = 1;
+	[SerializeField] private int maxCoins = 3;
+	[SerializeField] private float dropForce = 2f; // Fuerza para lanzar las monedas
+
 	// Referencias
 	private Transform player;
 	private Rigidbody rb;
@@ -201,10 +207,19 @@ public class EnemyBase : MonoBehaviour
 
 		Debug.Log($"{enemyName} died!");
 
+		// Desregistrar del EnemyManager
+		if (EnemyManager.Instance != null)
+		{
+			EnemyManager.Instance.UnregisterEnemy(this);
+		}
+
 		// Dar recompensas
 		GiveRewards();
 
-		// Dropear item si existe
+		// Dropear monedas
+		DropCoins();
+
+		// Drop de item especial (si existe)
 		if (dropOnDeath != null)
 		{
 			Instantiate(dropOnDeath, transform.position, Quaternion.identity);
@@ -212,6 +227,43 @@ public class EnemyBase : MonoBehaviour
 
 		// Destruir el enemigo
 		Destroy(gameObject);
+	}
+
+	// Nuevo método: Dropear monedas
+	private void DropCoins()
+	{
+		if (coinPrefab == null) return;
+
+		// Cantidad aleatoria de monedas
+		int coinCount = Random.Range(minCoins, maxCoins + 1);
+
+		for (int i = 0; i < coinCount; i++)
+		{
+			// Posición ligeramente aleatoria
+			Vector3 dropPosition = transform.position + new Vector3(
+				Random.Range(-0.5f, 0.5f),
+				0.5f,
+				Random.Range(-0.5f, 0.5f)
+			);
+
+			// Instanciar la moneda
+			GameObject coin = Instantiate(coinPrefab, dropPosition, Quaternion.identity);
+
+			// Añadir fuerza aleatoria para que se disperse (opcional)
+			Rigidbody rb = coin.GetComponent<Rigidbody>();
+			if (rb != null)
+			{
+				Vector3 randomDirection = new Vector3(
+					Random.Range(-1f, 1f),
+					Random.Range(0.5f, 1f),
+					Random.Range(-1f, 1f)
+				).normalized;
+
+				rb.AddForce(randomDirection * dropForce, ForceMode.Impulse);
+			}
+		}
+
+		Debug.Log($"{enemyName} dropped {coinCount} coin(s)");
 	}
 
 	// Dar recompensas al player

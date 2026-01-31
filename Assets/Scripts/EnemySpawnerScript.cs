@@ -267,4 +267,152 @@ public class EnemySpawner : MonoBehaviour
 			}
 		}
 	}
+	// ============================================
+	// FUNCIONES DE DEBUG
+	// ============================================
+
+	// Forzar spawn de enemigos (sin necesidad de trigger)
+	[ContextMenu("Debug: Force Spawn")]
+	private void DebugForceSpawn()
+	{
+		if (Application.isPlaying)
+		{
+			StartSpawning();
+		}
+		else
+		{
+			Debug.LogWarning("This only works in Play mode!");
+		}
+	}
+
+	// Matar todos los enemigos spawneados
+	[ContextMenu("Debug: Kill All Spawned Enemies")]
+	private void DebugKillAllEnemies()
+	{
+		if (!Application.isPlaying)
+		{
+			Debug.LogWarning("This only works in Play mode!");
+			return;
+		}
+
+		// Buscar todos los enemigos en la escena
+		EnemyBase[] allEnemies = FindObjectsByType<EnemyBase>(FindObjectsSortMode.None);
+
+		int killedCount = 0;
+		foreach (EnemyBase enemy in allEnemies)
+		{
+			if (enemy != null && !enemy.IsDead())
+			{
+				// Hacer daño masivo para matarlo
+				enemy.TakeDamage(999);
+				killedCount++;
+			}
+		}
+
+		Debug.Log($"Killed {killedCount} enemies");
+	}
+
+	// Matar UN enemigo aleatorio (para testing de drops)
+	[ContextMenu("Debug: Kill Random Enemy")]
+	private void DebugKillRandomEnemy()
+	{
+		if (!Application.isPlaying)
+		{
+			Debug.LogWarning("This only works in Play mode!");
+			return;
+		}
+
+		// Buscar todos los enemigos vivos
+		EnemyBase[] allEnemies = FindObjectsByType<EnemyBase>(FindObjectsSortMode.None);
+		List<EnemyBase> aliveEnemies = new List<EnemyBase>();
+
+		foreach (EnemyBase enemy in allEnemies)
+		{
+			if (enemy != null && !enemy.IsDead())
+			{
+				aliveEnemies.Add(enemy);
+			}
+		}
+
+		if (aliveEnemies.Count > 0)
+		{
+			// Elegir uno aleatorio y matarlo
+			int randomIndex = Random.Range(0, aliveEnemies.Count);
+			EnemyBase targetEnemy = aliveEnemies[randomIndex];
+			targetEnemy.TakeDamage(999);
+
+			Debug.Log($"Killed 1 enemy at position {targetEnemy.transform.position}");
+		}
+		else
+		{
+			Debug.Log("No enemies alive to kill");
+		}
+	}
+
+	// Resetear el spawner para poder usarlo de nuevo
+	[ContextMenu("Debug: Reset Spawner")]
+	private void DebugResetSpawner()
+	{
+		if (!Application.isPlaying)
+		{
+			Debug.LogWarning("This only works in Play mode!");
+			return;
+		}
+
+		hasSpawned = false;
+		isSpawning = false;
+		currentWaveIndex = 0;
+		activeEnemies.Clear();
+
+		// Reactivar el collider
+		Collider col = GetComponent<Collider>();
+		if (col != null)
+		{
+			col.enabled = true;
+		}
+
+		Debug.Log("Spawner reset! You can trigger it again.");
+	}
+
+	// Spawner UN enemigo instantáneamente (para testing rápido)
+	[ContextMenu("Debug: Spawn Single Enemy")]
+	private void DebugSpawnSingleEnemy()
+	{
+		if (!Application.isPlaying)
+		{
+			Debug.LogWarning("This only works in Play mode!");
+			return;
+		}
+
+		if (waves.Length > 0 && waves[0].enemyPrefab != null)
+		{
+			SpawnEnemy(waves[0].enemyPrefab);
+			Debug.Log("Spawned 1 enemy");
+		}
+		else
+		{
+			Debug.LogError("No enemy prefab configured in Wave 0!");
+		}
+	}
+
+	// Mostrar info del spawner
+	[ContextMenu("Debug: Show Info")]
+	private void DebugShowInfo()
+	{
+		Debug.Log("=== SPAWNER INFO ===");
+		Debug.Log($"Has Spawned: {hasSpawned}");
+		Debug.Log($"Is Spawning: {isSpawning}");
+		Debug.Log($"Current Wave: {currentWaveIndex + 1}/{waves.Length}");
+		Debug.Log($"Active Enemies: {activeEnemies.Count}");
+		Debug.Log($"Total Waves: {waves.Length}");
+
+		int totalEnemies = 0;
+		for (int i = 0; i < waves.Length; i++)
+		{
+			totalEnemies += waves[i].enemyCount;
+			Debug.Log($"Wave {i + 1}: {waves[i].waveName} - {waves[i].enemyCount} enemies");
+		}
+
+		Debug.Log($"Total Enemies to Spawn: {totalEnemies}");
+	}
 }
