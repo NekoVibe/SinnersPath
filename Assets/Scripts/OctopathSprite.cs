@@ -13,11 +13,7 @@ public class OctopathSprite : MonoBehaviour
     }
 
     [Header("Sprite Orientation")]
-    [SerializeField] private float tiltAngle = 10f;
-
-    [Header("Flip Settings")]
-    [SerializeField] private bool flipWithMovement = true;
-    [SerializeField] private float flipThreshold = 0.1f;
+    [SerializeField] private float tiltAngle = 8f;
 
     private SpriteRenderer spriteRenderer;
     private Vector3 lastPosition;
@@ -39,28 +35,11 @@ public class OctopathSprite : MonoBehaviour
     private void LateUpdate()
     {
         ApplyRotation();
-        if (flipWithMovement && spriteRenderer != null)
-            ApplyFlip();
     }
 
     private void ApplyRotation()
     {
         transform.rotation = Quaternion.Euler(tiltAngle, 0f, 0f);
-    }
-
-    private void ApplyFlip()
-    {
-        Vector3 movement = transform.position - lastPosition;
-        if (Mathf.Abs(movement.x) > flipThreshold * Time.deltaTime)
-        {
-            bool shouldFaceRight = movement.x > 0;
-            if (shouldFaceRight != facingRight)
-            {
-                facingRight = shouldFaceRight;
-                spriteRenderer.flipX = !facingRight;
-            }
-        }
-        lastPosition = transform.position;
     }
 
     /// <summary>

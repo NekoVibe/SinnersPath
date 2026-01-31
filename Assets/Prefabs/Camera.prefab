@@ -163,6 +163,13 @@ MonoBehaviour:
   useLimits: 0
   minX: -100
   maxX: 100
+  useWallLimits: 1
+  leftWall: {fileID: 0}
+  rightWall: {fileID: 0}
+  frontWall: {fileID: 0}
+  backWall: {fileID: 0}
+  groundPlaneY: 0
+  wallMargin: -20
   useFixedUpdate: 0
 --- !u!114 &3856779139690878859
 MonoBehaviour:

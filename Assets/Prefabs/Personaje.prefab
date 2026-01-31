@@ -244,6 +244,8 @@ MonoBehaviour:
   dashDuration: 0.1
   dashCooldown: 0.5
   animator: {fileID: 9191993468472502587}
+  spriteTransform: {fileID: 0}
+  mainCamera: {fileID: 0}
 --- !u!114 &7335432737228947505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -352,6 +354,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14f1f753965d3344c8d5c8bdd6cbfd5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OctopathSprite
-  tiltAngle: 10
-  flipWithMovement: 1
-  flipThreshold: 0.1
+  tiltAngle: 8

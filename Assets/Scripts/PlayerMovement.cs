@@ -184,13 +184,9 @@ public class PlayerMovement : MonoBehaviour
 	{
 		if (mainCamera == null || spriteTransform == null) return;
 
-		// Obtener posición del ratón en el mundo
-		Vector3 mousePosition = Input.mousePosition;
-		mousePosition.z = mainCamera.transform.position.y - transform.position.y; // Distancia de la cámara al player
-		Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(mousePosition);
-
-		// Calcular dirección hacia el cursor (solo en X)
-		float directionX = mouseWorldPos.x - transform.position.x;
+		// Compare in screen space (works correctly even when camera is offset from player)
+		Vector3 playerScreenPos = mainCamera.WorldToScreenPoint(transform.position);
+		float directionX = Input.mousePosition.x - playerScreenPos.x;
 
 		// Flip del sprite según la dirección
 		if (directionX > 0)

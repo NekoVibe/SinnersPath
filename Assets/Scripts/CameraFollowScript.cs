@@ -232,6 +232,7 @@ public class CameraFollow : MonoBehaviour
 
 	/// <summary>
 	/// Calculate clamped position so camera view doesn't extend past walls.
+	/// If play area is smaller than camera view, centers camera between walls.
 	/// </summary>
 	private float CalculateWallClampedPosition(float desiredPos, Transform minWall, Transform maxWall, float frustumHalfSize, bool isXAxis)
 	{
@@ -248,6 +249,14 @@ public class CameraFollow : MonoBehaviour
 		{
 			float wallPos = isXAxis ? maxWall.position.x : maxWall.position.z;
 			maxLimit = wallPos - frustumHalfSize - wallMargin;
+		}
+
+		// If play area is smaller than camera view (limits overlap), center the camera
+		if (minWall != null && maxWall != null && minLimit > maxLimit)
+		{
+			float minWallPos = isXAxis ? minWall.position.x : minWall.position.z;
+			float maxWallPos = isXAxis ? maxWall.position.x : maxWall.position.z;
+			return (minWallPos + maxWallPos) / 2f;
 		}
 
 		return Mathf.Clamp(desiredPos, minLimit, maxLimit);
