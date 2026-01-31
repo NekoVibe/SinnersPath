@@ -122,7 +122,7 @@ public class SlotMachine : MonoBehaviour
 
 		isActive = true;
 		uiPanel?.SetActive(true);
-		interactPrompt?.text = $"Press {interactKey} to spin";
+		if (interactPrompt != null) interactPrompt.text = $"Press {interactKey} to spin";
 		ShowResult($"Cost: {spinCost} coin", Color.white);
 	}
 
@@ -138,7 +138,7 @@ public class SlotMachine : MonoBehaviour
 
 	private void UpdateCostText()
 	{
-		costText?.text = $"Cost: {spinCost} coin";
+		if (costText != null) costText.text = $"Cost: {spinCost} coin";
 	}
 
 	private void ShowRandomSymbols()
@@ -174,7 +174,7 @@ public class SlotMachine : MonoBehaviour
 	{
 		isSpinning = true;
 		ShowResult("...", Color.white);
-		interactPrompt?.text = "Spinning...";
+		if (interactPrompt != null) interactPrompt.text = "Spinning...";
 
 		if (spinSound != null && AudioManager.Instance != null)
 		{
@@ -345,7 +345,7 @@ public class SlotMachine : MonoBehaviour
 		isBroken = true;
 		PlaySound(breakSound);
 		ShowResult("THE MACHINE BROKE!", Color.gray);
-		interactPrompt?.text = "Broken machine";
+		if (interactPrompt != null) interactPrompt.text = "Broken machine";
 
 		Invoke(nameof(CloseMachine), 2f);
 	}
@@ -406,7 +406,7 @@ public class SlotMachine : MonoBehaviour
 	{
 		isBroken = false;
 		ShowResult("Machine repaired!", Color.green);
-		interactPrompt?.text = $"Press {interactKey} to play";
+		if (interactPrompt != null) interactPrompt.text = $"Press {interactKey} to play";
 	}
 
 	public bool IsBroken() => isBroken;
