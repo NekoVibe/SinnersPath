@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4794096874020116178}
   - component: {fileID: 5865772945229738995}
   - component: {fileID: 6909841629042170994}
+  - component: {fileID: 8639348605500749855}
   m_Layer: 7
   m_Name: EnemyPlaceHolder
   m_TagString: Untagged
@@ -175,3 +176,19 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &8639348605500749855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 785309415909852800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14f1f753965d3344c8d5c8bdd6cbfd5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OctopathSprite
+  tiltAngle: 68.6
+  autoCalculateFromCamera: 1
+  flipWithMovement: 1
+  flipThreshold: 0.1

@@ -122,11 +122,7 @@ public class EnemyBase : MonoBehaviour
 			transform.position += direction * moveSpeed * Time.deltaTime;
 		}
 
-		// Rotar hacia el player (opcional)
-		if (direction != Vector3.zero)
-		{
-			transform.rotation = Quaternion.LookRotation(direction);
-		}
+		// Sprite flipping handled by OctopathSprite component
 	}
 
 	// Intentar atacar al player
