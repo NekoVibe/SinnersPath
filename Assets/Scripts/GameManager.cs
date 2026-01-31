@@ -134,12 +134,26 @@ public class GameManager : MonoBehaviour
 		coins = startingCoins;
 		combo = startingCombo;
 
-		// 3. Notificar cambios (el HUD se actualizará automáticamente en Start de la nueva escena)
+		// 3. Resetear el TIMER
+		if (TimerManager.Instance != null)
+		{
+			TimerManager.Instance.ResetTimer();
+			TimerManager.Instance.StartTimer();
+		}
+
+		// 4. Actualizar HUD
+		if (HUDView.Instance != null)
+		{
+			HUDView.Instance.ActualizarMonedas(coins);
+			HUDView.Instance.ActualizarCombo(combo);
+		}
+
+		// 5. Notificar cambios
 		OnPointsChanged?.Invoke(points);
 		OnCoinsChanged?.Invoke(coins);
 		OnComboChanged?.Invoke(combo);
 
-		// 4. Cargar la primera escena (esto recreará el HUD)
+		// 6. Cargar la primera escena
 		SceneManager.LoadScene(firstLevelSceneName);
 	}
 
@@ -179,13 +193,12 @@ public class GameManager : MonoBehaviour
 		Debug.Log("Game Over!");
 
 		// Detener el cronómetro
-		TimerManager timerManager = FindFirstObjectByType<TimerManager>();
-		timerManager?.setCronometro(false);
+		if (TimerManager.Instance != null)
+		{
+			TimerManager.Instance.StopTimer();
+		}
 
-		// Aquí puedes mostrar pantalla de Game Over
-		// Por ejemplo: GameOverUI.Instance.Show();
-
-		// O reiniciar automáticamente después de un delay
+		// Reiniciar después de 3 segundos
 		Invoke(nameof(RestartGame), 3f);
 	}
 

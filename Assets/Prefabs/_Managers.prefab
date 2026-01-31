@@ -45,7 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727e5ae341b9b29449aea5e3263e3601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimerManager
-  hud: {fileID: 4034227393309266234}
 --- !u!114 &4034227393309266234
 MonoBehaviour:
   m_ObjectHideFlags: 0

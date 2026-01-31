@@ -63,7 +63,26 @@ public class PlayerPersistence : MonoBehaviour
 	// Se llama cada vez que se carga una escena nueva
 	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 	{
+		Debug.Log($"Scene loaded: {scene.name}");
+
+		// 1. Reposicionar PRIMERO
 		RepositionToSpawnPoint();
+
+		// 2. FORZAR actualización del HUD con el estado actual del Player
+		PlayerHealth playerHealth = GetComponent<PlayerHealth>();
+		if (playerHealth != null && HUDView.Instance != null)
+		{
+			// Forzar actualización de corazones
+			HUDView.Instance.ActualizarHearts(playerHealth.currentHealth);
+			Debug.Log($"HUD synced: {playerHealth.currentHealth} lives");
+		}
+
+		// 3. Actualizar otros valores del HUD desde GameManager
+		if (GameManager.Instance != null && HUDView.Instance != null)
+		{
+			HUDView.Instance.ActualizarMonedas(GameManager.Instance.Coins);
+			HUDView.Instance.ActualizarCombo(GameManager.Instance.Combo);
+		}
 	}
 
 	// Reposicionar el player en el punto de spawn
