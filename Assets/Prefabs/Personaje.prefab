@@ -70,7 +70,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.10886683, y: 0, z: 0, w: 0.9940564}
   m_LocalPosition: {x: -3.98201, y: 5, z: -10.7}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1439703008680022850}
@@ -181,8 +181,13 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
+<<<<<<< Updated upstream
   m_Size: {x: 2.6400003, y: 6.2174077, z: 3}
   m_Center: {x: 0, y: -1.883704, z: 0}
+=======
+  m_Size: {x: 3.0597482, y: 6.439225, z: 0.2}
+  m_Center: {x: -0.22487426, y: -1.7583758, z: 0.0000002664992}
+>>>>>>> Stashed changes
 --- !u!114 &843692965030332901
 MonoBehaviour:
   m_ObjectHideFlags: 0
