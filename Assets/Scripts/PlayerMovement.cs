@@ -14,7 +14,11 @@ public class PlayerMovement : MonoBehaviour
 	[SerializeField] private float dashCooldown = 0.8f;
 
 	[Header("Animation")]
-	[SerializeField] private Animator animator; // ← AÑADIDO
+	[SerializeField] private Animator animator;
+
+	[Header("Look At Mouse")]
+	[SerializeField] private Transform spriteTransform; // El transform que tiene el sprite
+	[SerializeField] private Camera mainCamera;
 
 	private Rigidbody rb;
 	private PlayerInput playerInput;
@@ -43,13 +47,25 @@ public class PlayerMovement : MonoBehaviour
 		}
 
 		moveAction = playerInput.actions["Move"];
-		dashAction = playerInput.actions["Jump"]; // Using Jump action for dash
+		dashAction = playerInput.actions["Jump"];
 
-		// ↓ AÑADIDO
 		// Buscar animator si no está asignado
 		if (animator == null)
 		{
 			animator = GetComponent<Animator>();
+		}
+
+		// ↓ AÑADIDO
+		// Buscar la cámara principal
+		if (mainCamera == null)
+		{
+			mainCamera = Camera.main;
+		}
+
+		// Si no hay spriteTransform asignado, usar el propio transform
+		if (spriteTransform == null)
+		{
+			spriteTransform = transform;
 		}
 		// ↑ HASTA AQUÍ
 	}
@@ -94,8 +110,11 @@ public class PlayerMovement : MonoBehaviour
 			}
 		}
 
-		// ↓ AÑADIDO - Actualizar animación
+		// Actualizar animación
 		UpdateAnimation();
+
+		// ↓ AÑADIDO - Mirar hacia el cursor
+		LookAtMouse();
 		// ↑ HASTA AQUÍ
 	}
 
@@ -142,27 +161,48 @@ public class PlayerMovement : MonoBehaviour
 		}
 		else
 		{
-			dashDirection = transform.forward; // Fallback to facing direction
+			dashDirection = transform.forward;
 		}
 
 		isDashing = true;
 		dashTimer = dashDuration;
 		dashCooldownTimer = dashCooldown;
 
-		// Start trail effect
 		DashTrailEffect.Instance?.StartTrail();
 	}
 
-	// ↓ AÑADIDO - Método para actualizar animación
 	private void UpdateAnimation()
 	{
 		if (animator == null) return;
 
-		// Determinar si el player se está moviendo
 		bool isMoving = currentVelocity.magnitude > 0.1f;
-
-		// Actualizar el parámetro isWalking
 		animator.SetBool("isWalking", isMoving);
+	}
+
+	// ↓ AÑADIDO - Método para mirar hacia el cursor
+	private void LookAtMouse()
+	{
+		if (mainCamera == null || spriteTransform == null) return;
+
+		// Obtener posición del ratón en el mundo
+		Vector3 mousePosition = Input.mousePosition;
+		mousePosition.z = mainCamera.transform.position.y - transform.position.y; // Distancia de la cámara al player
+		Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(mousePosition);
+
+		// Calcular dirección hacia el cursor (solo en X)
+		float directionX = mouseWorldPos.x - transform.position.x;
+
+		// Flip del sprite según la dirección
+		if (directionX > 0)
+		{
+			// Cursor a la DERECHA → Sprite normal (escala positiva)
+			spriteTransform.localScale = new Vector3(Mathf.Abs(spriteTransform.localScale.x), spriteTransform.localScale.y, spriteTransform.localScale.z);
+		}
+		else if (directionX < 0)
+		{
+			// Cursor a la IZQUIERDA → Flip (escala negativa en X)
+			spriteTransform.localScale = new Vector3(-Mathf.Abs(spriteTransform.localScale.x), spriteTransform.localScale.y, spriteTransform.localScale.z);
+		}
 	}
 	// ↑ HASTA AQUÍ
 
