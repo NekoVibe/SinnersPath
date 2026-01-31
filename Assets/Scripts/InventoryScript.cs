@@ -25,6 +25,10 @@ public class WeaponInventory : MonoBehaviour
 
 	private void Update()
 	{
+		// No permitir acciones si el juego está en pausa
+		if (PauseMenu.Instance != null && PauseMenu.Instance.IsPaused())
+			return;
+
 		HandleInput();
 		CheckForWeaponPickup();
 	}
@@ -256,10 +260,13 @@ public class WeaponInventory : MonoBehaviour
 		currentWeapon = null;
 		currentWeaponIndex = -1;
 
-		// Limpiar slots del HUD
-		for (int i = 0; i < maxWeapons; i++)
+		// Limpiar slots del HUD solo si existe
+		if (HUDView.Instance != null)
 		{
-			HUDView.Instance?.ActualizarSlotInventario(i, null);
+			for (int i = 0; i < maxWeapons; i++)
+			{
+				HUDView.Instance.ActualizarSlotInventario(i, null);
+			}
 		}
 
 		Debug.Log("Weapon inventory cleared");
