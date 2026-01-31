@@ -49,9 +49,9 @@ GameObject:
   - component: {fileID: 7335432737228947505}
   - component: {fileID: 3320620062858189663}
   - component: {fileID: 5926887594471049790}
-  - component: {fileID: 8536263376296083590}
   - component: {fileID: 5542774482605372535}
   - component: {fileID: 9191993468472502587}
+  - component: {fileID: 782207861263896468}
   m_Layer: 6
   m_Name: Personaje
   m_TagString: Player
@@ -68,7 +68,7 @@ Transform:
   m_GameObject: {fileID: 8644148489220667401}
   serializedVersion: 2
   m_LocalRotation: {x: 0.10886683, y: 0, z: 0, w: 0.9940564}
-  m_LocalPosition: {x: -0.34909, y: 3.67, z: -1.25}
+  m_LocalPosition: {x: -3.98201, y: 5, z: -10.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -151,8 +151,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 2013286183025945711, guid: 1ed2c70d6f766db4b88fa2ff9ff806e9, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Sprite: {fileID: 21300000, guid: fe60444e8b794ea48babc3e1329d39c1, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -244,6 +244,8 @@ MonoBehaviour:
   dashDuration: 0.1
   dashCooldown: 0.5
   animator: {fileID: 9191993468472502587}
+  spriteTransform: {fileID: 0}
+  mainCamera: {fileID: 0}
 --- !u!114 &7335432737228947505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,21 +303,6 @@ MonoBehaviour:
   nextWeaponKey: 101
   prevWeaponKey: 113
   pickupKey: 102
---- !u!114 &8536263376296083590
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8644148489220667401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5879f8cfcb7067240aedce47872eaff3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BillboardSprite
-  lockYAxis: 1
-  flipWithMovement: 1
-  flipThreshold: 0.1
 --- !u!114 &5542774482605372535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -355,3 +342,16 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &782207861263896468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8644148489220667401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14f1f753965d3344c8d5c8bdd6cbfd5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OctopathSprite
+  tiltAngle: 8
