@@ -322,7 +322,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMeleeAttack
   attackDamage: 10
   attackRange: 4
-  attackCooldown: 0.5
+  attackCooldown: 0.1
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128

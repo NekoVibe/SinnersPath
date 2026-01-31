@@ -650,7 +650,7 @@ MonoBehaviour:
   followZ: 0
   useSmoothing: 1
   smoothSpeed: 5
-  offset: {x: 0, y: 5, z: -10}
+  offset: {x: 0, y: 0, z: 0}
   useLimits: 0
   minX: -100
   maxX: 100
@@ -1987,11 +1987,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6111456542524165172, guid: 7494f21dda0ac3646a1e3d9520a78579, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 7.85
       objectReference: {fileID: 0}
     - target: {fileID: 6111456542524165172, guid: 7494f21dda0ac3646a1e3d9520a78579, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.05606
+      value: -8.14
       objectReference: {fileID: 0}
     - target: {fileID: 6111456542524165172, guid: 7494f21dda0ac3646a1e3d9520a78579, type: 3}
       propertyPath: m_LocalRotation.w
