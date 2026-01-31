@@ -58,7 +58,6 @@ public class PlayerHealth : MonoBehaviour
 			return;
 
 		currentHealth -= damage;
-		currentHealth = Mathf.Max(currentHealth, 0); // No bajar de 0
 
 		Debug.Log($"Player took {damage} damage. Health: {currentHealth}/{maxHealth}");
 
@@ -72,6 +71,8 @@ public class PlayerHealth : MonoBehaviour
 
 		if (currentHealth == 0)
 		{
+			isInvulnerable = true;
+			invulnerabilityTimer = 999.0f;
 			Die();
 		}
 		else

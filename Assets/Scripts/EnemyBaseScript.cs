@@ -72,13 +72,14 @@ public class EnemyBase : MonoBehaviour
 			return;
 		}
 
-		// Calcular distancia al player (use attack origin for attack range check)
+		// Calcular distancia al player (horizontal only - Y positions differ due to collider offsets)
 		Vector3 attackOrigin = GetAttackOrigin();
-		float distanceToAttack = Vector3.Distance(attackOrigin, player.position);
+		Vector3 toPlayer = player.position - attackOrigin;
+		float horizontalDistance = new Vector2(toPlayer.x, toPlayer.z).magnitude;
 		float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-		// Comportamiento según distancia
-		if (distanceToAttack <= attackRange)
+		// Comportamiento según distancia (use horizontal distance for attack range)
+		if (horizontalDistance <= attackRange)
 		{
 			// Atacar
 			TryAttack();
@@ -160,14 +161,22 @@ public class EnemyBase : MonoBehaviour
 		Vector3 attackOrigin = GetAttackOrigin();
 		Collider[] hits = Physics.OverlapSphere(attackOrigin, attackRange, playerLayer);
 
+		float hDist = new Vector2(player.position.x - attackOrigin.x, player.position.z - attackOrigin.z).magnitude;
+		Debug.Log($"{enemyName} attack: origin={attackOrigin}, range={attackRange}, hDist={hDist:F2}, hits={hits.Length}, player={player.position}");
+
 		foreach (Collider hit in hits)
 		{
+			Debug.Log($"Hit: {hit.name} on layer {hit.gameObject.layer}");
 			PlayerHealth playerHealth = hit.GetComponent<PlayerHealth>();
 			if (playerHealth != null)
 			{
 				playerHealth.TakeDamage(damage);
-				Debug.Log($"{enemyName} attacked player for {damage} damage");
+				Debug.Log($"{enemyName} dealt {damage} damage to player!");
 				break;
+			}
+			else
+			{
+				Debug.LogWarning($"Hit {hit.name} but no PlayerHealth component found!");
 			}
 		}
 	}

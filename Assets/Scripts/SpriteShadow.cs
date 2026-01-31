@@ -4,12 +4,12 @@ using UnityEngine;
 /// Creates a fake shadow under sprite characters.
 /// Common technique in 2.5D games like Cult of the Lamb.
 /// </summary>
+[ExecuteAlways]
 public class SpriteShadow : MonoBehaviour
 {
 	[Header("Shadow Settings")]
 	[SerializeField] private Vector2 shadowSize = new Vector2(3f, 1.5f);
 	[SerializeField] private Color shadowColor = new Color(0f, 0f, 0f, 0.4f);
-	[SerializeField] private float groundOffset = 0.05f;
 
 	[Header("Ground Detection")]
 	[SerializeField] private float groundY = -0.5f;
@@ -25,22 +25,63 @@ public class SpriteShadow : MonoBehaviour
 	private GameObject shadowObject;
 	private SpriteRenderer shadowRenderer;
 	private Transform shadowTransform;
+	private Sprite cachedSprite;
+
+	private void OnEnable()
+	{
+		// Create shadow if it doesn't exist
+		if (shadowObject == null)
+		{
+			CreateShadow();
+		}
+	}
 
 	private void Start()
 	{
-		CreateShadow();
+		// Ensure shadow exists
+		if (shadowObject == null)
+		{
+			CreateShadow();
+		}
+
+		// Persist shadow across scene loads (only in play mode)
+		if (Application.isPlaying && shadowObject != null)
+		{
+			DontDestroyOnLoad(shadowObject);
+		}
 	}
 
 	private void CreateShadow()
 	{
+		// Clean up any existing shadow first
+		if (shadowObject != null)
+		{
+			if (Application.isPlaying)
+				Destroy(shadowObject);
+			else
+				DestroyImmediate(shadowObject);
+		}
+
 		// Create shadow GameObject
-		shadowObject = new GameObject("Shadow");
+		shadowObject = new GameObject("Shadow_" + gameObject.name);
+		shadowObject.hideFlags = Application.isPlaying ? HideFlags.None : HideFlags.DontSave;
 		shadowTransform = shadowObject.transform;
-		shadowTransform.SetParent(transform.parent); // Same parent, not child (so it doesn't rotate)
+
+		// In play mode, parent to same parent (so it doesn't rotate with character)
+		// In edit mode, make it a child so it moves with the object in scene view
+		if (Application.isPlaying)
+		{
+			shadowTransform.SetParent(transform.parent);
+		}
+		else
+		{
+			shadowTransform.SetParent(transform);
+		}
 
 		// Add SpriteRenderer
 		shadowRenderer = shadowObject.AddComponent<SpriteRenderer>();
-		shadowRenderer.sprite = CreateEllipseSprite();
+		cachedSprite = CreateEllipseSprite();
+		shadowRenderer.sprite = cachedSprite;
 		shadowRenderer.color = shadowColor;
 		shadowRenderer.sortingOrder = -100; // Behind everything
 
@@ -88,7 +129,18 @@ public class SpriteShadow : MonoBehaviour
 
 	private void UpdateShadow()
 	{
-		if (shadowTransform == null) return;
+		// Recreate shadow if it was destroyed
+		if (shadowTransform == null || shadowObject == null)
+		{
+			CreateShadow();
+			if (shadowTransform == null) return;
+		}
+
+		// Update color if changed in inspector
+		if (shadowRenderer != null && shadowRenderer.color != shadowColor)
+		{
+			shadowRenderer.color = shadowColor;
+		}
 
 		// Detect ground position
 		float currentGroundY = groundY;
@@ -103,7 +155,7 @@ public class SpriteShadow : MonoBehaviour
 		// Position shadow on ground directly below character
 		shadowTransform.position = new Vector3(
 			transform.position.x,
-			currentGroundY + groundOffset,
+			currentGroundY + 0.01f,
 			transform.position.z
 		);
 
@@ -122,11 +174,33 @@ public class SpriteShadow : MonoBehaviour
 		shadowTransform.localScale = new Vector3(shadowSize.x * scale, shadowSize.y * scale, 1f);
 	}
 
+	private void OnDisable()
+	{
+		// Clean up shadow in editor when component is disabled
+		if (!Application.isPlaying && shadowObject != null)
+		{
+			DestroyImmediate(shadowObject);
+			shadowObject = null;
+		}
+	}
+
 	private void OnDestroy()
 	{
 		if (shadowObject != null)
 		{
-			Destroy(shadowObject);
+			if (Application.isPlaying)
+				Destroy(shadowObject);
+			else
+				DestroyImmediate(shadowObject);
+		}
+
+		// Clean up cached sprite
+		if (cachedSprite != null)
+		{
+			if (Application.isPlaying)
+				Destroy(cachedSprite.texture);
+			else
+				DestroyImmediate(cachedSprite.texture);
 		}
 	}
 

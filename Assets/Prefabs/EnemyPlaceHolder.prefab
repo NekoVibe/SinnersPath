@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6496612397753662675}
-  - component: {fileID: 439014763077959773}
   - component: {fileID: 4794096874020116178}
   - component: {fileID: 5865772945229738995}
   - component: {fileID: 6909841629042170994}
+  - component: {fileID: 439014763077959773}
   - component: {fileID: 8639348605500749855}
   - component: {fileID: -9129942769592456366}
   m_Layer: 7
@@ -37,39 +37,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 12.5, y: 0, z: 0}
---- !u!114 &439014763077959773
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 785309415909852800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6927eb59dc3b822418e16671225bce24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  enemyName: Enemy
-  maxHealth: 30
-  currentHealth: 0
-  moveSpeed: 3
-  damage: 1
-  attackRange: 1.5
-  attackCooldown: 1.5
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  detectionRange: 8
-  alwaysChasePlayer: 1
-  pointsOnDeath: 100
-  coinsOnDeath: 5
-  dropOnDeath: {fileID: 8843497527569057443, guid: 175568e1fdb395c468f05c6a6a841887, type: 3}
-  damageFlashColor: {r: 1, g: 0, b: 0, a: 1}
-  damageFlashDuration: 0.1
-  coinPrefab: {fileID: 0}
-  minCoins: 1
-  maxCoins: 3
-  dropForce: 2
 --- !u!65 &4794096874020116178
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -89,8 +56,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.3603554, y: 4.4612603, z: 0.35229492}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.7880898, y: 5.062558, z: 0.96}
+  m_Center: {x: -0.06406975, y: -0.0012788773, z: 0}
 --- !u!54 &5865772945229738995
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -110,13 +77,13 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 116
+  m_Constraints: 112
   m_CollisionDetection: 1
 --- !u!212 &6909841629042170994
 SpriteRenderer:
@@ -168,7 +135,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 2013286183025945711, guid: 1ed2c70d6f766db4b88fa2ff9ff806e9, type: 3}
-  m_Color: {r: 0.09469509, g: 0, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -177,6 +144,40 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &439014763077959773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 785309415909852800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6927eb59dc3b822418e16671225bce24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  enemyName: Nobita
+  maxHealth: 30
+  currentHealth: 0
+  moveSpeed: 3
+  damage: 1
+  attackRange: 1.5
+  attackCooldown: 1.5
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  attackPointOffset: {x: 0, y: 0, z: 0}
+  detectionRange: 8
+  alwaysChasePlayer: 1
+  pointsOnDeath: 100
+  coinsOnDeath: 5
+  dropOnDeath: {fileID: 8843497527569057443, guid: 175568e1fdb395c468f05c6a6a841887, type: 3}
+  damageFlashColor: {r: 1, g: 0, b: 0, a: 1}
+  damageFlashDuration: 0.1
+  coinPrefab: {fileID: 8843497527569057443, guid: 175568e1fdb395c468f05c6a6a841887, type: 3}
+  minCoins: 1
+  maxCoins: 3
+  dropForce: 2
 --- !u!114 &8639348605500749855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,7 +190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14f1f753965d3344c8d5c8bdd6cbfd5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OctopathSprite
-  tiltAngle: 8
+  tiltAngle: 0
 --- !u!114 &-9129942769592456366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,10 +203,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4973749dded11e740b1cbc6b511cdfe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteShadow
-  shadowSize: {x: 3, y: 1.5}
+  shadowSize: {x: 3, y: 2}
   shadowColor: {r: 0, g: 0, b: 0, a: 0.4}
-  groundOffset: 0.05
-  groundY: -0.5
+  groundY: 0
   autoDetectGround: 1
   groundLayer:
     serializedVersion: 2

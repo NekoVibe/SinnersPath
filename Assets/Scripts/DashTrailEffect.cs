@@ -54,7 +54,7 @@ public class DashTrailEffect : MonoBehaviour
 
 			SpriteRenderer sr = afterimage.AddComponent<SpriteRenderer>();
 			sr.sortingLayerName = sourceSprite != null ? sourceSprite.sortingLayerName : "Default";
-			sr.sortingOrder = 5;
+			sr.sortingOrder = sourceSprite != null ? sourceSprite.sortingOrder : -1;
 			sr.enabled = false;
 
 			afterimagePool.Add(sr);
