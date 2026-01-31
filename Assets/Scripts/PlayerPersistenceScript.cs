@@ -24,6 +24,33 @@ public class PlayerPersistence : MonoBehaviour
 		SceneManager.sceneLoaded += OnSceneLoaded;
 	}
 
+	private void Start()
+	{
+		// Posicionar en el spawn point al iniciar el juego (esperar un frame)
+		StartCoroutine(RepositionOnStart());
+	}
+
+	private System.Collections.IEnumerator RepositionOnStart()
+	{
+		// Deshabilitar MovementScript temporalmente
+		MovementScript movement = GetComponent<MovementScript>();
+		if (movement != null)
+		{
+			movement.enabled = false;
+		}
+
+		yield return new WaitForFixedUpdate(); // Esperar al siguiente FixedUpdate
+		yield return null; // Esperar 1 frame más
+
+		RepositionToSpawnPoint();
+
+		// Reactivar MovementScript
+		if (movement != null)
+		{
+			movement.enabled = true;
+		}
+	}
+
 	private void OnDestroy()
 	{
 		// Limpiar el evento cuando se destruya
@@ -36,7 +63,12 @@ public class PlayerPersistence : MonoBehaviour
 	// Se llama cada vez que se carga una escena nueva
 	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 	{
-		// Reposicionar el player en el punto de spawn de la nueva escena
+		RepositionToSpawnPoint();
+	}
+
+	// Reposicionar el player en el punto de spawn
+	private void RepositionToSpawnPoint()
+	{
 		GameObject spawnPoint = null;
 
 		try
@@ -51,21 +83,40 @@ public class PlayerPersistence : MonoBehaviour
 
 		if (spawnPoint != null)
 		{
-			transform.position = spawnPoint.transform.position;
-			transform.rotation = spawnPoint.transform.rotation;
-			Debug.Log($"Player spawned at: {spawnPoint.name}");
+			// Resetear física ANTES de mover
+			Rigidbody rb = GetComponent<Rigidbody>();
+			if (rb != null)
+			{
+				// ✅ Solución al problema del Interpolate
+				// Temporalmente desactivar interpolación para el teleport
+				RigidbodyInterpolation originalInterpolation = rb.interpolation;
+				rb.interpolation = RigidbodyInterpolation.None;
+
+				rb.linearVelocity = Vector3.zero;
+				rb.angularVelocity = Vector3.zero;
+
+				// Usar Rigidbody.position para mover objetos con física
+				rb.position = spawnPoint.transform.position;
+				rb.rotation = spawnPoint.transform.rotation;
+
+				// Forzar al Rigidbody a sincronizarse inmediatamente
+				Physics.SyncTransforms();
+
+				// Reactivar la interpolación original
+				rb.interpolation = originalInterpolation;
+			}
+			else
+			{
+				// Si no hay Rigidbody, usar transform
+				transform.position = spawnPoint.transform.position;
+				transform.rotation = spawnPoint.transform.rotation;
+			}
+
+			Debug.Log($"Player repositioned to: {spawnPoint.transform.position}");
 		}
 		else
 		{
-			Debug.LogWarning($"No spawn point found with tag '{spawnPointTag}' or name 'spawnpoint' in scene {scene.name}");
-		}
-
-		// Resetear física si es necesario
-		Rigidbody rb = GetComponent<Rigidbody>();
-		if (rb != null)
-		{
-			rb.linearVelocity = Vector3.zero;
-			rb.angularVelocity = Vector3.zero;
+			Debug.LogWarning($"No spawn point found with tag '{spawnPointTag}' or name 'spawnpoint'");
 		}
 	}
 
