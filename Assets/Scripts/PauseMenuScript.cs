@@ -54,6 +54,11 @@ public class PauseMenu : MonoBehaviour
         btnPickUp?.onClick.AddListener(() => StartRebind("keyPickUp"));
         btnDash?.onClick.AddListener(() => StartRebind("keyDash"));
 
+        // Conectar sliders de volumen para actualizar en tiempo real
+        sliderGeneral?.onValueChanged.AddListener(OnVolumeChanged);
+        sliderMusic?.onValueChanged.AddListener(OnVolumeChanged);
+        sliderEffects?.onValueChanged.AddListener(OnVolumeChanged);
+
         // Carga y aplica los ajustes locales (Sliders y Teclas) nada más empezar
         ApplySavedSettings();
 
@@ -105,12 +110,25 @@ public class PauseMenu : MonoBehaviour
         if (isRebinding) return;
 
         SettingsData currentData = SaveManager.Instance.LoadSettings();
-        
+
         if (sliderGeneral) currentData.volGeneral = sliderGeneral.value;
         if (sliderMusic) currentData.volMusic = sliderMusic.value;
         if (sliderEffects) currentData.volEffects = sliderEffects.value;
 
         SaveManager.Instance.SaveSettings(currentData);
+    }
+
+    // Llamado cuando cualquier slider de volumen cambia
+    private void OnVolumeChanged(float value)
+    {
+        if (AudioManager.Instance != null)
+        {
+            float general = sliderGeneral ? sliderGeneral.value : 1f;
+            float music = sliderMusic ? sliderMusic.value : 0.7f;
+            float effects = sliderEffects ? sliderEffects.value : 0.7f;
+
+            AudioManager.Instance.UpdateVolumes(general, music, effects);
+        }
     }
 
     public void OpenOptionsMenu()
