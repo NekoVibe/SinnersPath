@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 8572cd5b87120014280b3d21c6436fc0
+guid: 077c10f1ff8fff84a9c7ccc1060db347
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6166165158916682091
-    second: rojo attack_0
+      213: -3478461235540343405
+    second: azul walk 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,30 +96,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: rojo attack_0
+      name: azul walk 1_0
       rect:
         serializedVersion: 2
-        x: 338
-        y: 20
-        width: 465
-        height: 623
+        x: 296
+        y: 16
+        width: 380
+        height: 645
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 59e816c25716d6aa0800000000000000
-      internalID: -6166165158916682091
+      spriteID: 395c6aa9fe50abfc0800000000000000
+      internalID: -3478461235540343405
       vertices: []
       indices: 
       edges: []
@@ -148,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      rojo attack_0: -6166165158916682091
+      azul walk 1_0: -3478461235540343405
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

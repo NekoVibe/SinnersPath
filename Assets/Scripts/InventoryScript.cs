@@ -13,14 +13,30 @@ public class WeaponInventory : MonoBehaviour
 	public KeyCode prevWeaponKey = KeyCode.Q;
 	public KeyCode pickupKey = KeyCode.F;
 
+	[Header("Animation")]
+	[SerializeField] private Animator playerAnimator; // Referencia al Animator del jugador
+
 	private List<WeaponBase> weapons = new List<WeaponBase>(); // Armas recogidas
 	private int currentWeaponIndex = -1;
 	private WeaponBase currentWeapon;
 	private WeaponPickup nearbyWeapon; // Arma cercana que se puede recoger
 
+	// Animation parameter hash
+	private static readonly int ArmaHash = Animator.StringToHash("arma");
+
 	private void Start()
 	{
-		// El inventario empieza vacío
+		// Obtener el Animator si no está asignado
+		if (playerAnimator == null)
+		{
+			playerAnimator = GetComponent<Animator>();
+		}
+
+		// Establecer arma = 0 (sin arma) al inicio
+		if (playerAnimator != null)
+		{
+			playerAnimator.SetInteger(ArmaHash, 0);
+		}
 	}
 
 	private void Update()
@@ -71,7 +87,7 @@ public class WeaponInventory : MonoBehaviour
 		nearbyWeapon = null;
 	}
 
-	// Equipar un arma por índice
+	// MODIFICADO: Equipar un arma por índice
 	public void EquipWeapon(int index)
 	{
 		if (index < 0 || index >= weapons.Count)
@@ -88,8 +104,21 @@ public class WeaponInventory : MonoBehaviour
 		currentWeapon = weapons[currentWeaponIndex];
 		currentWeapon.OnEquip();
 
+		// NUEVO: Actualizar parámetro de animación (arma 1, 2, 3...)
+		UpdateAnimatorWeaponState(currentWeaponIndex + 1); // +1 porque 0 = sin arma
+
 		// Actualizar HUD - seleccionar slot
 		HUDManager.Instance?.SeleccionarSlot(currentWeaponIndex);
+	}
+
+	// NUEVO: Actualizar el estado del arma en el Animator
+	private void UpdateAnimatorWeaponState(int weaponState)
+	{
+		if (playerAnimator != null)
+		{
+			playerAnimator.SetInteger(ArmaHash, weaponState);
+			Debug.Log($"Animator arma parameter set to: {weaponState}");
+		}
 	}
 
 	// Cambiar a siguiente arma
@@ -184,7 +213,6 @@ public class WeaponInventory : MonoBehaviour
 	// Manejo de inputs
 	private void HandleInput()
 	{
-
 		if (currentWeapon == null)
 			return;
 
@@ -248,7 +276,7 @@ public class WeaponInventory : MonoBehaviour
 		return "0/0";
 	}
 
-	// Limpiar todo el inventario (útil al reiniciar)
+	// MODIFICADO: Limpiar todo el inventario
 	public void ClearInventory()
 	{
 		// Destruir todas las armas
@@ -264,6 +292,9 @@ public class WeaponInventory : MonoBehaviour
 		currentWeapon = null;
 		currentWeaponIndex = -1;
 
+		// NUEVO: Volver a estado sin arma (arma = 0)
+		UpdateAnimatorWeaponState(0);
+
 		// Limpiar slots del HUD solo si existe
 		if (HUDManager.Instance != null)
 		{
@@ -274,5 +305,20 @@ public class WeaponInventory : MonoBehaviour
 		}
 
 		Debug.Log("Weapon inventory cleared");
+	}
+
+	// NUEVO: Método público para desequipar todas las armas (volver a arma = 0)
+	public void UnequipAllWeapons()
+	{
+		if (currentWeapon != null)
+		{
+			currentWeapon.OnUnequip();
+		}
+
+		currentWeapon = null;
+		currentWeaponIndex = -1;
+
+		// Volver a estado sin arma
+		UpdateAnimatorWeaponState(0);
 	}
 }
