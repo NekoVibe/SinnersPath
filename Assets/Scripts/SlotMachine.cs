@@ -19,10 +19,8 @@ public class SlotMachine : MonoBehaviour
 	[Header("Reel Sprites")]
 	[SerializeField] private SpriteRenderer[] reelRenderers;
 
-	[Header("UI Panel")]
-	[SerializeField] private GameObject uiPanel;
+	[Header("UI")]
 	[SerializeField] private TextMeshProUGUI resultText;
-	[SerializeField] private TextMeshProUGUI costText;
 	[SerializeField] private TextMeshProUGUI interactPrompt;
 
 	[Header("Symbol Sprites")]
@@ -42,14 +40,14 @@ public class SlotMachine : MonoBehaviour
 	[SerializeField] private KeyCode interactKey = KeyCode.F;
 
 	[Header("Symbol Weights (higher = more common)")]
-	[SerializeField] private float weightSeven = 5f;
-	[SerializeField] private float weightSix = 5f;
-	[SerializeField] private float weightHeart = 10f;
-	[SerializeField] private float weightBrokenHeart = 15f;
-	[SerializeField] private float weightCoin = 15f;
+	[SerializeField] private float weightSeven = 20f;
+	[SerializeField] private float weightSix = 15f;
+	[SerializeField] private float weightHeart = 25f;
+	[SerializeField] private float weightBrokenHeart = 20f;
+	[SerializeField] private float weightCoin = 30f;
 	[SerializeField] private float weightBrokenCoin = 20f;
-	[SerializeField] private float weightX = 10f;
-	[SerializeField] private float weightClover = 20f;
+	[SerializeField] private float weightX = 15f;
+	[SerializeField] private float weightClover = 35f;
 
 	[Header("Audio")]
 	[SerializeField] private AudioClip spinSound;
@@ -59,7 +57,11 @@ public class SlotMachine : MonoBehaviour
 	[SerializeField] private AudioClip breakSound;
 
 	[Header("Result Display")]
-	[SerializeField] private float resultDisplayTime = 3f;
+	[SerializeField] private float resultDisplayTime = 5f;
+
+	[Header("Win Probability")]
+	[Tooltip("Probabilidad de forzar un combo ganador (0-1). Ej: 0.3 = 30% de probabilidad de ganar")]
+	[SerializeField] [Range(0f, 1f)] private float forcedWinChance = 0.3f;
 
 	private Symbol[] currentSymbols = new Symbol[3];
 	private bool isSpinning = false;
@@ -69,11 +71,9 @@ public class SlotMachine : MonoBehaviour
 
 	private void Start()
 	{
-		UpdateCostText();
 		ShowRandomSymbols();
-
-		uiPanel?.SetActive(false);
 		interactPrompt?.gameObject.SetActive(false);
+		resultText?.gameObject.SetActive(false);
 	}
 
 	private void Update()
@@ -123,7 +123,6 @@ public class SlotMachine : MonoBehaviour
 	{
 		Debug.Log("[SlotMachine] Player entered trigger area");
 		playerInRange = true;
-		uiPanel?.SetActive(true);
 		UpdatePromptText();
 	}
 
@@ -131,8 +130,8 @@ public class SlotMachine : MonoBehaviour
 	{
 		Debug.Log("[SlotMachine] Player exited trigger area");
 		playerInRange = false;
-		uiPanel?.SetActive(false);
 		interactPrompt?.gameObject.SetActive(false);
+		resultText?.gameObject.SetActive(false);
 	}
 
 	private void UpdatePromptText()
@@ -144,15 +143,10 @@ public class SlotMachine : MonoBehaviour
 			if (isBroken)
 				interactPrompt.text = "Broken machine";
 			else if (isSpinning)
-				interactPrompt.text = "Spinning...";
+				interactPrompt.text = "Spinning";
 			else
 				interactPrompt.text = $"Press {interactKey} to spin";
 		}
-	}
-
-	private void UpdateCostText()
-	{
-		if (costText != null) costText.text = $"Cost: {spinCost} coin";
 	}
 
 	private void ShowRandomSymbols()
@@ -211,10 +205,28 @@ public class SlotMachine : MonoBehaviour
 			yield return new WaitForSeconds(spinSpeed);
 		}
 
-		for (int i = 0; i < 3; i++)
+		// Determinar si forzamos un combo ganador
+		bool forceWin = Random.value < forcedWinChance;
+
+		if (forceWin)
 		{
-			currentSymbols[i] = GetRandomSymbol();
-			UpdateReelSprite(i, currentSymbols[i]);
+			// Forzar combo: elegir un símbolo y aplicarlo a los 3 reels
+			Symbol winningSymbol = GetRandomSymbol();
+			for (int i = 0; i < 3; i++)
+			{
+				currentSymbols[i] = winningSymbol;
+				UpdateReelSprite(i, currentSymbols[i]);
+			}
+			Debug.Log($"[SlotMachine] Forced win with symbol: {winningSymbol}");
+		}
+		else
+		{
+			// Resultado aleatorio normal
+			for (int i = 0; i < 3; i++)
+			{
+				currentSymbols[i] = GetRandomSymbol();
+				UpdateReelSprite(i, currentSymbols[i]);
+			}
 		}
 
 		EvaluateResult();
@@ -407,30 +419,27 @@ public class SlotMachine : MonoBehaviour
 	{
 		if (resultText != null)
 		{
+			resultText.gameObject.SetActive(true);
 			resultText.text = message;
 			resultText.color = color;
 		}
 
-		// También mostrar en el prompt si no es el mensaje de spinning
-		if (interactPrompt != null && message != "...")
-		{
-			interactPrompt.text = message;
-			interactPrompt.color = color;
-		}
-
-		// Auto-restaurar después de unos segundos
-		if (autoHide && !isSpinning)
+		// Auto-ocultar resultado después de unos segundos
+		if (autoHide)
 		{
 			if (resultCoroutine != null)
 				StopCoroutine(resultCoroutine);
-			resultCoroutine = StartCoroutine(RestorePromptAfterDelay());
+			resultCoroutine = StartCoroutine(HideResultAfterDelay());
 		}
 	}
 
-	private IEnumerator RestorePromptAfterDelay()
+	private IEnumerator HideResultAfterDelay()
 	{
 		yield return new WaitForSeconds(resultDisplayTime);
-		UpdatePromptText();
+		if (resultText != null)
+		{
+			resultText.text = "";
+		}
 	}
 
 	#endregion

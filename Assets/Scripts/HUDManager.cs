@@ -27,8 +27,8 @@ public class HUDManager : MonoBehaviour
     [SerializeField] private Sprite coinSprite;
 
     [Header("Configuración Animación")]
-    [SerializeField] private float escalaSeleccionado = 1.3f;
-    [SerializeField] private float velocidadAnimacion = 8f;
+    [SerializeField] private float EscalaSeleccionado = 1.3f;
+    [SerializeField] private float VelocidadAnimacion = 8f;
     private int indiceSeleccionado = 0; 
 
     private void Awake() 
@@ -58,8 +58,8 @@ public class HUDManager : MonoBehaviour
     {
         for (int i = 0; i < inventorySlots.Length; i++)
         {
-            Vector3 escalaObjetivo = (i == indiceSeleccionado) ? Vector3.one * escalaSeleccionado : Vector3.one;
-            inventorySlots[i].transform.localScale = Vector3.Lerp(inventorySlots[i].transform.localScale, escalaObjetivo, Time.deltaTime * velocidadAnimacion);
+            Vector3 escalaObjetivo = (i == indiceSeleccionado) ? Vector3.one * EscalaSeleccionado : Vector3.one;
+            inventorySlots[i].transform.localScale = Vector3.Lerp(inventorySlots[i].transform.localScale, escalaObjetivo, Time.deltaTime * VelocidadAnimacion);
         }
     }
 
