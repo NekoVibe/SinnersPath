@@ -239,4 +239,29 @@ public class WeaponInventory : MonoBehaviour
 		}
 		return "0/0";
 	}
+
+	// Limpiar todo el inventario (útil al reiniciar)
+	public void ClearInventory()
+	{
+		// Destruir todas las armas
+		foreach (WeaponBase weapon in weapons)
+		{
+			if (weapon != null)
+			{
+				Destroy(weapon.gameObject);
+			}
+		}
+
+		weapons.Clear();
+		currentWeapon = null;
+		currentWeaponIndex = -1;
+
+		// Limpiar slots del HUD
+		for (int i = 0; i < maxWeapons; i++)
+		{
+			HUDView.Instance?.ActualizarSlotInventario(i, null);
+		}
+
+		Debug.Log("Weapon inventory cleared");
+	}
 }

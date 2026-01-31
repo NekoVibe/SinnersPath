@@ -298,6 +298,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   startingCoins: 10
   startingCombo: 0
+  firstLevelSceneName: Tutorial
+  mainMenuSceneName: MainMenu
 --- !u!4 &429244520
 Transform:
   m_ObjectHideFlags: 0

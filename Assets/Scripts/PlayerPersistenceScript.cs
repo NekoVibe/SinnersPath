@@ -6,7 +6,7 @@ public class PlayerPersistence : MonoBehaviour
 	public static PlayerPersistence Instance { get; private set; }
 
 	[Header("Spawn Settings")]
-	public string spawnPointTag = "Respawn"; // Tag para identificar puntos de spawn
+	public string spawnPointTag = "SpawnPoint"; // Tag para identificar puntos de spawn
 
 	private void Awake()
 	{
@@ -37,7 +37,17 @@ public class PlayerPersistence : MonoBehaviour
 	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 	{
 		// Reposicionar el player en el punto de spawn de la nueva escena
-		GameObject spawnPoint = GameObject.FindGameObjectWithTag(spawnPointTag);
+		GameObject spawnPoint = null;
+
+		try
+		{
+			spawnPoint = GameObject.FindGameObjectWithTag(spawnPointTag);
+		}
+		catch
+		{
+			// Si el tag no existe, buscar por nombre
+			spawnPoint = GameObject.Find("spawnpoint");
+		}
 
 		if (spawnPoint != null)
 		{
@@ -47,7 +57,7 @@ public class PlayerPersistence : MonoBehaviour
 		}
 		else
 		{
-			Debug.LogWarning($"No spawn point found with tag '{spawnPointTag}' in scene {scene.name}");
+			Debug.LogWarning($"No spawn point found with tag '{spawnPointTag}' or name 'spawnpoint' in scene {scene.name}");
 		}
 
 		// Resetear física si es necesario

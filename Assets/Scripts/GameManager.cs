@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -7,6 +8,10 @@ public class GameManager : MonoBehaviour
 	[Header("Starting Values")]
 	[SerializeField] private int startingCoins = 0;
 	[SerializeField] private int startingCombo = 0;
+
+	[Header("Scene Management")]
+	[SerializeField] private string firstLevelSceneName = "Level1"; // Nombre de la primera escena
+	[SerializeField] private string mainMenuSceneName = "MainMenu"; // Nombre del menú principal (opcional)
 
 	private int points;  // Puntuación final del juego
 	private int coins;
@@ -37,6 +42,28 @@ public class GameManager : MonoBehaviour
 		points = 0;
 		coins = startingCoins;
 		combo = startingCombo;
+
+		// Suscribirse al evento de carga de escena
+		SceneManager.sceneLoaded += OnSceneLoaded;
+	}
+
+	private void OnDestroy()
+	{
+		// Limpiar eventos
+		SceneManager.sceneLoaded -= OnSceneLoaded;
+	}
+
+	// Cada vez que se carga una escena, actualizar el HUD
+	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+	{
+		// Esperar un frame para que el HUD se inicialice
+		StartCoroutine(UpdateHUDNextFrame());
+	}
+
+	private System.Collections.IEnumerator UpdateHUDNextFrame()
+	{
+		yield return null; // Esperar 1 frame
+		UpdateHUD();
 	}
 
 	void Start()
@@ -48,8 +75,16 @@ public class GameManager : MonoBehaviour
 	// Actualizar todo el HUD de una vez
 	private void UpdateHUD()
 	{
-		HUDView.Instance?.ActualizarMonedas(coins);
-		HUDView.Instance?.ActualizarCombo(combo);
+		if (HUDView.Instance != null)
+		{
+			HUDView.Instance.ActualizarMonedas(coins);
+			HUDView.Instance.ActualizarCombo(combo);
+			Debug.Log("HUD updated successfully");
+		}
+		else
+		{
+			Debug.LogWarning("HUD not found! Make sure HUD_Canvas exists in the scene.");
+		}
 	}
 
 	#region Coins Management
@@ -79,6 +114,120 @@ public class GameManager : MonoBehaviour
 
 		Debug.Log($"Coins: {coins} (-{amount})");
 		return true;
+	}
+
+	#endregion
+
+	#region Game Flow Management
+
+	// Reiniciar la partida completamente
+	public void RestartGame()
+	{
+		Debug.Log("Restarting game...");
+
+		// 1. Resetear el Player (NO destruirlo)
+		ResetPlayer();
+
+		// 2. Resetear todos los valores del GameManager
+		points = 0;
+		coins = startingCoins;
+		combo = startingCombo;
+
+		// 3. Actualizar HUD con los valores reseteados
+		if (HUDView.Instance != null)
+		{
+			HUDView.Instance.ActualizarMonedas(coins);
+			HUDView.Instance.ActualizarCombo(combo);
+			// Los corazones se actualizarán automáticamente con ResetHealth()
+		}
+
+		// 4. Notificar cambios
+		OnPointsChanged?.Invoke(points);
+		OnCoinsChanged?.Invoke(coins);
+		OnComboChanged?.Invoke(combo);
+
+		// 5. Cargar la primera escena (el Player se reposicionará automáticamente en OnSceneLoaded)
+		SceneManager.LoadScene(firstLevelSceneName);
+	}
+
+	// Resetear el estado del player sin destruirlo
+	private void ResetPlayer()
+	{
+		if (PlayerPersistence.Instance == null)
+		{
+			Debug.LogWarning("No player to reset!");
+			return;
+		}
+
+		// Resetear vida al máximo
+		PlayerHealth playerHealth = PlayerPersistence.Instance.GetComponent<PlayerHealth>();
+		if (playerHealth != null)
+		{
+			playerHealth.ResetHealth();
+		}
+
+		// Limpiar inventario de armas
+		WeaponInventory weaponInventory = PlayerPersistence.Instance.GetComponent<WeaponInventory>();
+		if (weaponInventory != null)
+		{
+			weaponInventory.ClearInventory();
+		}
+
+		// Resetear física
+		Rigidbody rb = PlayerPersistence.Instance.GetComponent<Rigidbody>();
+		if (rb != null)
+		{
+			rb.linearVelocity = Vector3.zero;
+			rb.angularVelocity = Vector3.zero;
+		}
+
+		Debug.Log("Player reset successfully");
+	}
+
+	// Game Over - Muerte del jugador
+	public void GameOver()
+	{
+		Debug.Log("Game Over!");
+
+		// Detener el cronómetro
+		TimerManager timerManager = FindFirstObjectByType<TimerManager>();
+		timerManager?.setCronometro(false);
+
+		// Aquí puedes mostrar pantalla de Game Over
+		// Por ejemplo: GameOverUI.Instance.Show();
+
+		// O reiniciar automáticamente después de un delay
+		Invoke(nameof(RestartGame), 3f);
+	}
+
+	// Victoria - Completar el juego
+	public void Victory()
+	{
+		Debug.Log($"Victory! Final Score: {points} points");
+
+		// Detener el cronómetro
+		TimerManager timerManager = FindFirstObjectByType<TimerManager>();
+		timerManager?.setCronometro(false);
+
+		// Aquí puedes mostrar pantalla de victoria con puntuación final
+		// Por ejemplo: VictoryUI.Instance.Show(points);
+	}
+
+	// Volver al menú principal
+	public void LoadMainMenu()
+	{
+		// Resetear valores
+		points = 0;
+		coins = startingCoins;
+		combo = startingCombo;
+
+		// Destruir el player si existe
+		if (PlayerPersistence.Instance != null)
+		{
+			Destroy(PlayerPersistence.Instance.gameObject);
+		}
+
+		SceneManager.LoadScene(mainMenuSceneName);
 	}
 
 	#endregion
@@ -183,6 +332,24 @@ public class GameManager : MonoBehaviour
 	private void TestShowScore()
 	{
 		Debug.Log($"Final Score: {GetFinalScore()} points");
+	}
+
+	[ContextMenu("Test: Game Over")]
+	private void TestGameOver()
+	{
+		GameOver();
+	}
+
+	[ContextMenu("Test: Victory")]
+	private void TestVictory()
+	{
+		Victory();
+	}
+
+	[ContextMenu("Test: Restart Game")]
+	private void TestRestartGame()
+	{
+		RestartGame();
 	}
 
 	#endregion

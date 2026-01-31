@@ -91,13 +91,8 @@ public class PlayerHealth : MonoBehaviour
 	{
 		Debug.Log("Player died!");
 
-		// Detener el cronómetro
-		TimerManager timerManager = FindFirstObjectByType<TimerManager>();
-		timerManager?.setCronometro(false);
-
-		// Aquí añadir lógica de muerte (reiniciar nivel, pantalla de game over, etc.)
-		// Por ejemplo:
-		// GameManager.Instance.GameOver();
+		// Llamar al GameManager para Game Over
+		GameManager.Instance?.GameOver();
 	}
 
 	// Getter para saber si está vivo
@@ -110,6 +105,16 @@ public class PlayerHealth : MonoBehaviour
 	public int GetCurrentHealth()
 	{
 		return currentHealth;
+	}
+
+	// Resetear vida al máximo (útil al reiniciar)
+	public void ResetHealth()
+	{
+		_currentHealth = maxHealth;
+		isInvulnerable = false;
+		invulnerabilityTimer = 0f;
+		UpdateHealthHUD();
+		Debug.Log("Player health reset to maximum");
 	}
 
 	// Para debugging: cambiar vida directamente
