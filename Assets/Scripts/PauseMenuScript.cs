@@ -17,9 +17,15 @@ public class PauseMenu : MonoBehaviour
     public Slider sliderMusic;
     public Slider sliderEffects;
 
-    [Header("Controls UI (Textos de botones)")]
-    public TextMeshProUGUI txtHab1;
-    public TextMeshProUGUI txtHab2, txtHab3, txtPrev, txtNext, txtReload, txtPickUp, txtDash;
+    [Header("Controls UI (Botones de rebind)")]
+    public Button btnHab1;
+    public Button btnHab2;
+    public Button btnHab3;
+    public Button btnPrev;
+    public Button btnNext;
+    public Button btnReload;
+    public Button btnPickUp;
+    public Button btnDash;
 
     [Header("Settings")]
     public KeyCode pauseKey = KeyCode.Escape;
@@ -45,6 +51,16 @@ public class PauseMenu : MonoBehaviour
         // Asegurarse de que el menú esté oculto al inicio
         if (pauseMenuUI) pauseMenuUI.SetActive(false);
         if (optionsMenuUI) optionsMenuUI.SetActive(false);
+
+        // Conectar botones de rebind automáticamente
+        btnHab1?.onClick.AddListener(() => StartRebind("keyHab1"));
+        btnHab2?.onClick.AddListener(() => StartRebind("keyHab2"));
+        btnHab3?.onClick.AddListener(() => StartRebind("keyHab3"));
+        btnPrev?.onClick.AddListener(() => StartRebind("keyPrevHab"));
+        btnNext?.onClick.AddListener(() => StartRebind("keyNextHab"));
+        btnReload?.onClick.AddListener(() => StartRebind("keyReload"));
+        btnPickUp?.onClick.AddListener(() => StartRebind("keyPickUp"));
+        btnDash?.onClick.AddListener(() => StartRebind("keyDash"));
 
         // Carga y aplica los ajustes locales (Sliders y Teclas) nada más empezar
         ApplySavedSettings();
@@ -114,25 +130,60 @@ public class PauseMenu : MonoBehaviour
     public void CloseOptionsMenu()
     {
         if (isRebinding) return;
-        SaveCurrentSettings(); 
+        SaveCurrentSettings();
         optionsMenuUI?.SetActive(false);
     }
 
     private void UpdateControlTexts(SettingsData data)
     {
-        if (txtHab1) txtHab1.text = data.keyHab1;
-        if (txtHab2) txtHab2.text = data.keyHab2;
-        if (txtHab3) txtHab3.text = data.keyHab3;
-        if (txtPrev) txtPrev.text = data.keyPrevHab;
-        if (txtNext) txtNext.text = data.keyNextHab;
-        if (txtReload) txtReload.text = data.keyReload;
-        if (txtPickUp) txtPickUp.text = data.keyPickUp;
-        if (txtDash) txtDash.text = data.keyDash;
+        SetButtonText(btnHab1, data.keyHab1);
+        SetButtonText(btnHab2, data.keyHab2);
+        SetButtonText(btnHab3, data.keyHab3);
+        SetButtonText(btnPrev, data.keyPrevHab);
+        SetButtonText(btnNext, data.keyNextHab);
+        SetButtonText(btnReload, data.keyReload);
+        SetButtonText(btnPickUp, data.keyPickUp);
+        SetButtonText(btnDash, data.keyDash);
+    }
+
+    private void SetButtonText(Button btn, string text)
+    {
+        if (btn) btn.GetComponentInChildren<TextMeshProUGUI>().text = text;
     }
 
     // ============================================
     // SISTEMA DE REBINDING (TECLAS)
     // ============================================
+
+	private string FormatKeyName(string keyName)
+	{
+		// Números del teclado principal (Alpha1 → 1)
+		if (keyName.StartsWith("Alpha"))
+			return keyName.Replace("Alpha", "");
+		
+		// Números del teclado numérico (Numpad1 → 1)
+		if (keyName.StartsWith("Keypad"))
+			return keyName.Replace("Keypad", "");
+		
+		// Otras teclas comunes
+		return keyName switch
+		{
+			"Space" => "Espacio",
+			"LeftShift" => "Shift Izq",
+			"RightShift" => "Shift Der",
+			"LeftControl" => "Ctrl Izq",
+			"RightControl" => "Ctrl Der",
+			"LeftAlt" => "Alt Izq",
+			"RightAlt" => "Alt Der",
+			"Mouse0" => "Click Izq",
+			"Mouse1" => "Click Der",
+			"Mouse2" => "Click Central",
+			"Return" => "Enter",
+			"Escape" => "Esc",
+			"BackQuote" => "º",
+			_ => keyName
+		};
+	}
 
     public void StartRebind(string actionName)
     {
@@ -154,14 +205,14 @@ public class PauseMenu : MonoBehaviour
             {
                 foreach (KeyCode k in System.Enum.GetValues(typeof(KeyCode)))
                 {
-                    if (Input.GetKeyDown(k) && k != KeyCode.Escape)
-                    {
-                        SettingsData data = SaveManager.Instance.LoadSettings();
-                        AssignKey(data, actionName, k.ToString());
-                        SaveManager.Instance.SaveSettings(data);
-                        UpdateControlTexts(data);
-                        keyPressed = true;
-                    }
+					if (Input.GetKeyDown(k) && k != KeyCode.Escape)
+					{
+						SettingsData data = SaveManager.Instance.LoadSettings();
+						AssignKey(data, actionName, FormatKeyName(k.ToString()));
+						SaveManager.Instance.SaveSettings(data);
+						UpdateControlTexts(data);
+						keyPressed = true;
+					}
                 }
             }
             yield return null;
@@ -186,11 +237,19 @@ public class PauseMenu : MonoBehaviour
 
     private TextMeshProUGUI GetTextByActionName(string action)
     {
-        return action switch {
-            "keyHab1" => txtHab1, "keyHab2" => txtHab2, "keyHab3" => txtHab3,
-            "keyPrevHab" => txtPrev, "keyNextHab" => txtNext, "keyReload" => txtReload,
-            "keyPickUp" => txtPickUp, "keyDash" => txtDash, _ => null
+        Button btn = action switch
+        {
+            "keyHab1" => btnHab1,
+            "keyHab2" => btnHab2,
+            "keyHab3" => btnHab3,
+            "keyPrevHab" => btnPrev,
+            "keyNextHab" => btnNext,
+            "keyReload" => btnReload,
+            "keyPickUp" => btnPickUp,
+            "keyDash" => btnDash,
+            _ => null
         };
+        return btn?.GetComponentInChildren<TextMeshProUGUI>();
     }
 
     // ============================================
@@ -238,11 +297,11 @@ public class PauseMenu : MonoBehaviour
 
     public void QuitGame()
     {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
-        #else
+#else
         Application.Quit();
-        #endif
+#endif
     }
 
     public void SetCanPause(bool value)
