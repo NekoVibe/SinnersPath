@@ -35,10 +35,23 @@ public class SaveManager : MonoBehaviour
 		SaveAllData(data);
 	}
 
-	public SettingsData LoadSettings()
-	{
-		return LoadAllData().settings;
-	}
+    public SettingsData LoadSettings()
+    {
+        SettingsData settings = LoadAllData().settings;
+
+        // Aplicar valores por defecto si están vacíos (compatibilidad con saves antiguos)
+        SettingsData defaults = new SettingsData();
+        if (string.IsNullOrEmpty(settings.keyHab1)) settings.keyHab1 = defaults.keyHab1;
+        if (string.IsNullOrEmpty(settings.keyHab2)) settings.keyHab2 = defaults.keyHab2;
+        if (string.IsNullOrEmpty(settings.keyHab3)) settings.keyHab3 = defaults.keyHab3;
+        if (string.IsNullOrEmpty(settings.keyPrevHab)) settings.keyPrevHab = defaults.keyPrevHab;
+        if (string.IsNullOrEmpty(settings.keyNextHab)) settings.keyNextHab = defaults.keyNextHab;
+        if (string.IsNullOrEmpty(settings.keyReload)) settings.keyReload = defaults.keyReload;
+        if (string.IsNullOrEmpty(settings.keyPickUp)) settings.keyPickUp = defaults.keyPickUp;
+        if (string.IsNullOrEmpty(settings.keyDash)) settings.keyDash = defaults.keyDash;
+
+        return settings;
+    }
 
 	// ============================================
 	// GESTIÓN DE LEADERBOARD (PUNTUACIONES)
