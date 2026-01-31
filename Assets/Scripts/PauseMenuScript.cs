@@ -30,14 +30,6 @@ public class PauseMenu : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton original
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()

@@ -42,15 +42,16 @@ GameObject:
   - component: {fileID: 3909189684994438738}
   - component: {fileID: 3526202443230208601}
   - component: {fileID: 2569514230709742275}
-  - component: {fileID: 5926887594471049790}
-  - component: {fileID: 4493831863888155}
-  - component: {fileID: 7335432737228947505}
   - component: {fileID: 5113672074468134375}
-  - component: {fileID: 8517617963293899866}
   - component: {fileID: 843692965030332901}
+  - component: {fileID: 4493831863888155}
+  - component: {fileID: 8517617963293899866}
+  - component: {fileID: 7335432737228947505}
+  - component: {fileID: 3320620062858189663}
+  - component: {fileID: 5926887594471049790}
   - component: {fileID: 8536263376296083590}
   - component: {fileID: 5542774482605372535}
-  - component: {fileID: 3320620062858189663}
+  - component: {fileID: 9191993468472502587}
   m_Layer: 6
   m_Name: Personaje
   m_TagString: Player
@@ -160,53 +161,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &5926887594471049790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8644148489220667401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2496dd5c818d60c49a06183d12203db2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeaponInventory
-  weaponHolder: {fileID: 1439703008680022850}
-  maxWeapons: 3
-  reloadKey: 114
-  nextWeaponKey: 101
-  prevWeaponKey: 113
-  pickupKey: 102
---- !u!114 &4493831863888155
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8644148489220667401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea637270403acdf4cbbc7479be061d75, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerPersistence
-  spawnPointTag: Respawn
---- !u!114 &7335432737228947505
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8644148489220667401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f47a81f0d52312b4f97f2bb75d5abc86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  maxHealth: 3
-  _currentHealth: 3
-  invulnerabilityTime: 1.5
-  hitStopDuration: 0.25
 --- !u!65 &5113672074468134375
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -228,24 +182,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.61, y: 5.12, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8517617963293899866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8644148489220667401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53f5061029a511a4d88fa6314335e83f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  moveSpeed: 8
-  acceleration: 80
-  deceleration: 160
-  dashSpeed: 25
-  dashDuration: 0.1
-  dashCooldown: 0.5
 --- !u!114 &843692965030332901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,6 +212,95 @@ MonoBehaviour:
   m_DefaultActionMap: 
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &4493831863888155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8644148489220667401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea637270403acdf4cbbc7479be061d75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerPersistence
+  spawnPointTag: Respawn
+--- !u!114 &8517617963293899866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8644148489220667401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53f5061029a511a4d88fa6314335e83f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+  moveSpeed: 8
+  acceleration: 80
+  deceleration: 160
+  dashSpeed: 25
+  dashDuration: 0.1
+  dashCooldown: 0.5
+  animator: {fileID: 9191993468472502587}
+--- !u!114 &7335432737228947505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8644148489220667401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f47a81f0d52312b4f97f2bb75d5abc86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  maxHealth: 3
+  _currentHealth: 3
+  invulnerabilityTime: 1.5
+  hitStopDuration: 0.25
+--- !u!114 &3320620062858189663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8644148489220667401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88420e4348753af4c8c75861955060f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMeleeAttack
+  attackDamage: 10
+  attackRange: 4
+  attackCooldown: 0.1
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  attackPoint: {fileID: 1439703008680022850}
+  attackKey: 323
+  showAttackGizmo: 1
+  gizmoColor: {r: 1, g: 0, b: 0, a: 1}
+  animator: {fileID: 9191993468472502587}
+--- !u!114 &5926887594471049790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8644148489220667401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2496dd5c818d60c49a06183d12203db2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponInventory
+  weaponHolder: {fileID: 1439703008680022850}
+  maxWeapons: 3
+  reloadKey: 114
+  nextWeaponKey: 101
+  prevWeaponKey: 113
+  pickupKey: 102
 --- !u!114 &8536263376296083590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,25 +333,25 @@ MonoBehaviour:
   maxAfterimages: 10
   colorDarken: 0.3
   sourceSprite: {fileID: 2569514230709742275}
---- !u!114 &3320620062858189663
-MonoBehaviour:
+--- !u!95 &9191993468472502587
+Animator:
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8644148489220667401}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88420e4348753af4c8c75861955060f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerMeleeAttack
-  attackDamage: 10
-  attackRange: 4
-  attackCooldown: 0.1
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  attackPoint: {fileID: 0}
-  attackKey: 323
-  showAttackGizmo: 1
-  gizmoColor: {r: 1, g: 0, b: 0, a: 1}
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 59043a48bbabde8459802794ae24a2a8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
