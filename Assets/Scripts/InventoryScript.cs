@@ -5,6 +5,7 @@ public class WeaponInventory : MonoBehaviour
 {
 	[Header("Weapon Settings")]
 	public Transform weaponHolder; // Punto donde se colocan las armas (ej: mano del player)
+	public int maxWeapons = 3; // Máximo número de armas que puede llevar
 
 	[Header("Input Settings")]
 	public KeyCode reloadKey = KeyCode.R;
@@ -12,7 +13,7 @@ public class WeaponInventory : MonoBehaviour
 	public KeyCode prevWeaponKey = KeyCode.Q;
 	public KeyCode pickupKey = KeyCode.F;
 
-	public List<WeaponBase> weapons = new List<WeaponBase>(); // Armas recogidas
+	private List<WeaponBase> weapons = new List<WeaponBase>(); // Armas recogidas
 	private int currentWeaponIndex = -1;
 	private WeaponBase currentWeapon;
 	private WeaponPickup nearbyWeapon; // Arma cercana que se puede recoger
@@ -82,6 +83,9 @@ public class WeaponInventory : MonoBehaviour
 		currentWeaponIndex = index;
 		currentWeapon = weapons[currentWeaponIndex];
 		currentWeapon.OnEquip();
+
+		// Actualizar HUD - seleccionar slot
+		HUDView.Instance?.SeleccionarSlot(currentWeaponIndex);
 	}
 
 	// Cambiar a siguiente arma
@@ -110,6 +114,13 @@ public class WeaponInventory : MonoBehaviour
 	// Añadir un arma nueva al inventario (pickup)
 	public void AddWeapon(GameObject weaponPrefab)
 	{
+		// Verificar si ya tiene el máximo de armas
+		if (weapons.Count >= maxWeapons)
+		{
+			Debug.Log($"Inventory full! Max {maxWeapons} weapons.");
+			return;
+		}
+
 		GameObject weaponObj = Instantiate(weaponPrefab, weaponHolder);
 		WeaponBase weapon = weaponObj.GetComponent<WeaponBase>();
 
@@ -119,12 +130,33 @@ public class WeaponInventory : MonoBehaviour
 			weapon.OnUnequip();
 			Debug.Log($"Added weapon: {weapon.weaponName}");
 
+			// Actualizar HUD - añadir icono del arma
+			UpdateWeaponSlotHUD(weapons.Count - 1, weapon);
+
 			// Si es la primera arma, equiparla automáticamente
 			if (weapons.Count == 1)
 			{
 				EquipWeapon(0);
 			}
 		}
+	}
+
+	// Actualizar el icono del arma en el HUD
+	private void UpdateWeaponSlotHUD(int slotIndex, WeaponBase weapon)
+	{
+		if (HUDView.Instance != null)
+		{
+			// Aquí necesitas un sprite del icono del arma
+			// Por ahora usamos null, pero deberías añadir un campo "weaponIcon" en WeaponBase
+			Sprite weaponIcon = GetWeaponIcon(weapon);
+			HUDView.Instance.ActualizarSlotInventario(slotIndex, weaponIcon);
+		}
+	}
+
+	// Obtener el icono del arma (modificar según tu implementación)
+	private Sprite GetWeaponIcon(WeaponBase weapon)
+	{
+		return weapon.weaponIcon; // Ahora retorna el sprite del arma
 	}
 
 	// Disparar con el arma actual

@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponBase
   weaponName: Weapon
+  weaponIcon: {fileID: 2013286183025945711, guid: 1ed2c70d6f766db4b88fa2ff9ff806e9, type: 3}
   damage: 10
   fireRate: 0.5
   maxAmmo: 30

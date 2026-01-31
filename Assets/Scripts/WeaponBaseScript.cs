@@ -4,6 +4,7 @@ public class WeaponBase : MonoBehaviour
 {
 	[Header("Weapon Properties")]
 	public string weaponName = "Weapon";
+	public Sprite weaponIcon; // Icono para mostrar en el HUD
 	public float damage = 10f;
 	public float fireRate = 0.5f; // Tiempo entre disparos
 	public int maxAmmo = 30;
