@@ -696,8 +696,8 @@ MonoBehaviour:
   - {fileID: 7726624168495019140}
   resultText: {fileID: 6458087131094273084}
   interactPrompt: {fileID: 7814410529228830432}
-  spriteSeven: {fileID: 0}
-  spriteSix: {fileID: 0}
+  spriteSeven: {fileID: 7028616704906629411, guid: b8755ae8145c88d45b4ddf30127ffed0, type: 3}
+  spriteSix: {fileID: 3465286685962602723, guid: 69a1a3c57ba103249a00e179298340a1, type: 3}
   spriteHeart: {fileID: -3621682252929738812, guid: 422d7d72d7853304694728b30e91e4f0, type: 3}
   spriteBrokenHeart: {fileID: -1957253202200871324, guid: 5891153197aa0ca45b784c7c99a01bdf, type: 3}
   spriteCoin: {fileID: 8741200022194658665, guid: 4d499dc676ddb204a9bff6c991444cc3, type: 3}

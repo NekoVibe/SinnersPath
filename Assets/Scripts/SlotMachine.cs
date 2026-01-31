@@ -342,9 +342,22 @@ public class SlotMachine : MonoBehaviour
 
 	private void WinHeart()
 	{
-		AddPlayerLife(1);
-		PlaySound(winSound);
-		ShowResult("HEARTS!\n+1 life", Color.magenta);
+		GameObject player = GameObject.FindGameObjectWithTag("Player");
+		PlayerHealth health = player?.GetComponent<PlayerHealth>();
+
+		// Si ya tiene vida máxima, dar puntos en lugar de vida
+		if (health != null && health.currentHealth >= health.maxHealth)
+		{
+			GameManager.Instance?.AddPoints(500);
+			PlaySound(winSound);
+			ShowResult("HEARTS!\n+500 points (full health)", Color.magenta);
+		}
+		else
+		{
+			AddPlayerLife(1);
+			PlaySound(winSound);
+			ShowResult("HEARTS!\n+1 life", Color.magenta);
+		}
 	}
 
 	private void LoseBrokenHeart()
