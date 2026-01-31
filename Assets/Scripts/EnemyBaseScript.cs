@@ -13,6 +13,8 @@ public class EnemyBase : MonoBehaviour
 	[SerializeField] private float attackRange = 1.5f;
 	[SerializeField] private float attackCooldown = 1.5f;
 	[SerializeField] private LayerMask playerLayer;
+	[Tooltip("Offset from transform for attack origin (Y should be negative to attack at ground level)")]
+	[SerializeField] private Vector3 attackPointOffset = new Vector3(0f, -2f, 0f);
 
 	[Header("Detection Settings")]
 	[SerializeField] private float detectionRange = 8f;
@@ -70,11 +72,13 @@ public class EnemyBase : MonoBehaviour
 			return;
 		}
 
-		// Calcular distancia al player
+		// Calcular distancia al player (use attack origin for attack range check)
+		Vector3 attackOrigin = GetAttackOrigin();
+		float distanceToAttack = Vector3.Distance(attackOrigin, player.position);
 		float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
 		// Comportamiento según distancia
-		if (distanceToPlayer <= attackRange)
+		if (distanceToAttack <= attackRange)
 		{
 			// Atacar
 			TryAttack();
@@ -141,13 +145,20 @@ public class EnemyBase : MonoBehaviour
 		}
 	}
 
+	// Get the attack origin position (offset from transform)
+	private Vector3 GetAttackOrigin()
+	{
+		return transform.position + attackPointOffset;
+	}
+
 	// Atacar al player
 	private void Attack()
 	{
 		if (player == null) return;
 
-		// Verificar si el player está en rango
-		Collider[] hits = Physics.OverlapSphere(transform.position, attackRange, playerLayer);
+		// Use attack origin point instead of transform.position
+		Vector3 attackOrigin = GetAttackOrigin();
+		Collider[] hits = Physics.OverlapSphere(attackOrigin, attackRange, playerLayer);
 
 		foreach (Collider hit in hits)
 		{
@@ -298,12 +309,20 @@ public class EnemyBase : MonoBehaviour
 	// Dibujar gizmos en el editor
 	private void OnDrawGizmosSelected()
 	{
-		// Rango de ataque (rojo)
+		// Attack origin point (small red sphere)
+		Vector3 attackOrigin = transform.position + attackPointOffset;
 		Gizmos.color = Color.red;
-		Gizmos.DrawWireSphere(transform.position, attackRange);
+		Gizmos.DrawSphere(attackOrigin, 0.2f);
 
-		// Rango de detección (amarillo)
+		// Rango de ataque (rojo wire sphere at attack origin)
+		Gizmos.DrawWireSphere(attackOrigin, attackRange);
+
+		// Rango de detección (amarillo, from transform position)
 		Gizmos.color = Color.yellow;
 		Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+		// Line from transform to attack origin (cyan)
+		Gizmos.color = Color.cyan;
+		Gizmos.DrawLine(transform.position, attackOrigin);
 	}
 }
