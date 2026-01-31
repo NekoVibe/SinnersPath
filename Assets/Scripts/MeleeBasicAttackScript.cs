@@ -19,12 +19,23 @@ public class PlayerMeleeAttack : MonoBehaviour
 	[SerializeField] private bool showAttackGizmo = true;
 	[SerializeField] private Color gizmoColor = Color.red;
 
+	[Header("Animation")]
+	[SerializeField] private Animator animator; // ← AÑADIDO
+
 	private float nextAttackTime = 0f;
 	private WeaponInventory weaponInventory;
 
 	private void Start()
 	{
 		weaponInventory = GetComponent<WeaponInventory>();
+
+		// ↓ AÑADIDO
+		// Buscar animator si no está asignado
+		if (animator == null)
+		{
+			animator = GetComponent<Animator>();
+		}
+		// ↑ HASTA AQUÍ
 
 		// Crear AttackPoint si no existe
 		if (attackPoint == null)
@@ -74,6 +85,13 @@ public class PlayerMeleeAttack : MonoBehaviour
 
 	private void PerformPunchAttack()
 	{
+		// ↓ AÑADIDO - Reproducir animación PRIMERO
+		if (animator != null)
+		{
+			animator.SetTrigger("Punch");
+		}
+		// ↑ HASTA AQUÍ
+
 		Debug.Log("Punch attack!");
 
 		// Detectar enemigos en rango
@@ -107,11 +125,6 @@ public class PlayerMeleeAttack : MonoBehaviour
 					Vector3 pushDirection = (enemy.transform.position - transform.position).normalized;
 					enemyRb.AddForce(pushDirection * 5f, ForceMode.Impulse);
 				}
-
-				// Aquí puedes añadir:
-				// - Efecto de sonido de golpe
-				// - Partículas de impacto
-				// - Empujar al enemigo
 			}
 		}
 
@@ -119,10 +132,6 @@ public class PlayerMeleeAttack : MonoBehaviour
 		{
 			Debug.Log("Punch missed!");
 		}
-
-		// Aquí puedes añadir:
-		// - Animación de puño
-		// - Sonido de ataque
 	}
 
 	// Visualizar área de ataque en el editor
