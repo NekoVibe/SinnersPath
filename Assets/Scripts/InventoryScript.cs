@@ -184,6 +184,10 @@ public class WeaponInventory : MonoBehaviour
 	// Manejo de inputs
 	private void HandleInput()
 	{
+
+		if (currentWeapon == null)
+			return;
+
 		// Disparar con click izquierdo
 		if (Input.GetMouseButton(0))
 		{
