@@ -13,6 +13,9 @@ public class PlayerMovement : MonoBehaviour
 	[SerializeField] private float dashDuration = 0.15f;
 	[SerializeField] private float dashCooldown = 0.8f;
 
+	[Header("Animation")]
+	[SerializeField] private Animator animator; // ← AÑADIDO
+
 	private Rigidbody rb;
 	private PlayerInput playerInput;
 	private InputAction moveAction;
@@ -41,6 +44,14 @@ public class PlayerMovement : MonoBehaviour
 
 		moveAction = playerInput.actions["Move"];
 		dashAction = playerInput.actions["Jump"]; // Using Jump action for dash
+
+		// ↓ AÑADIDO
+		// Buscar animator si no está asignado
+		if (animator == null)
+		{
+			animator = GetComponent<Animator>();
+		}
+		// ↑ HASTA AQUÍ
 	}
 
 	private void OnEnable()
@@ -82,6 +93,10 @@ public class PlayerMovement : MonoBehaviour
 				DashTrailEffect.Instance?.StopTrail();
 			}
 		}
+
+		// ↓ AÑADIDO - Actualizar animación
+		UpdateAnimation();
+		// ↑ HASTA AQUÍ
 	}
 
 	private void FixedUpdate()
@@ -99,6 +114,7 @@ public class PlayerMovement : MonoBehaviour
 	{
 		Vector2 targetVelocity = moveInput * moveSpeed;
 		float rate = (moveInput.magnitude > 0.1f) ? acceleration : deceleration;
+
 		currentVelocity = Vector2.MoveTowards(currentVelocity, targetVelocity, rate * Time.fixedDeltaTime);
 		rb.linearVelocity = new Vector3(currentVelocity.x, rb.linearVelocity.y, currentVelocity.y);
 	}
@@ -136,6 +152,19 @@ public class PlayerMovement : MonoBehaviour
 		// Start trail effect
 		DashTrailEffect.Instance?.StartTrail();
 	}
+
+	// ↓ AÑADIDO - Método para actualizar animación
+	private void UpdateAnimation()
+	{
+		if (animator == null) return;
+
+		// Determinar si el player se está moviendo
+		bool isMoving = currentVelocity.magnitude > 0.1f;
+
+		// Actualizar el parámetro isWalking
+		animator.SetBool("isWalking", isMoving);
+	}
+	// ↑ HASTA AQUÍ
 
 	public void ResetVelocity()
 	{

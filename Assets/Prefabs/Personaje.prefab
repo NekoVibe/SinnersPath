@@ -50,6 +50,7 @@ GameObject:
   - component: {fileID: 843692965030332901}
   - component: {fileID: 8536263376296083590}
   - component: {fileID: 5542774482605372535}
+  - component: {fileID: 3320620062858189663}
   m_Layer: 6
   m_Name: Personaje
   m_TagString: Player
@@ -307,3 +308,25 @@ MonoBehaviour:
   maxAfterimages: 10
   colorDarken: 0.3
   sourceSprite: {fileID: 2569514230709742275}
+--- !u!114 &3320620062858189663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8644148489220667401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88420e4348753af4c8c75861955060f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMeleeAttack
+  attackDamage: 10
+  attackRange: 4
+  attackCooldown: 0.1
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  attackPoint: {fileID: 0}
+  attackKey: 323
+  showAttackGizmo: 1
+  gizmoColor: {r: 1, g: 0, b: 0, a: 1}
