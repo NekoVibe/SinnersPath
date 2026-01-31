@@ -19,10 +19,8 @@ public class SlotMachine : MonoBehaviour
 	[Header("Reel Sprites")]
 	[SerializeField] private SpriteRenderer[] reelRenderers;
 
-	[Header("UI Panel")]
-	[SerializeField] private GameObject uiPanel;
+	[Header("UI")]
 	[SerializeField] private TextMeshProUGUI resultText;
-	[SerializeField] private TextMeshProUGUI costText;
 	[SerializeField] private TextMeshProUGUI interactPrompt;
 
 	[Header("Symbol Sprites")]
@@ -39,17 +37,17 @@ public class SlotMachine : MonoBehaviour
 	[SerializeField] private int spinCost = 1;
 	[SerializeField] private float spinDuration = 2f;
 	[SerializeField] private float spinSpeed = 0.1f;
-	[SerializeField] private KeyCode interactKey = KeyCode.E;
+	[SerializeField] private KeyCode interactKey = KeyCode.F;
 
 	[Header("Symbol Weights (higher = more common)")]
-	[SerializeField] private float weightSeven = 5f;
-	[SerializeField] private float weightSix = 5f;
-	[SerializeField] private float weightHeart = 10f;
-	[SerializeField] private float weightBrokenHeart = 15f;
-	[SerializeField] private float weightCoin = 15f;
+	[SerializeField] private float weightSeven = 20f;
+	[SerializeField] private float weightSix = 15f;
+	[SerializeField] private float weightHeart = 25f;
+	[SerializeField] private float weightBrokenHeart = 20f;
+	[SerializeField] private float weightCoin = 30f;
 	[SerializeField] private float weightBrokenCoin = 20f;
-	[SerializeField] private float weightX = 10f;
-	[SerializeField] private float weightClover = 20f;
+	[SerializeField] private float weightX = 15f;
+	[SerializeField] private float weightClover = 35f;
 
 	[Header("Audio")]
 	[SerializeField] private AudioClip spinSound;
@@ -58,51 +56,41 @@ public class SlotMachine : MonoBehaviour
 	[SerializeField] private AudioClip jackpotSound;
 	[SerializeField] private AudioClip breakSound;
 
+	[Header("Result Display")]
+	[SerializeField] private float resultDisplayTime = 5f;
+
+	[Header("Win Probability")]
+	[Tooltip("Probabilidad de forzar un combo ganador (0-1). Ej: 0.3 = 30% de probabilidad de ganar")]
+	[SerializeField] [Range(0f, 1f)] private float forcedWinChance = 0.3f;
+
 	private Symbol[] currentSymbols = new Symbol[3];
 	private bool isSpinning = false;
 	private bool isBroken = false;
 	private bool playerInRange = false;
-	private bool isActive = false;
+	private Coroutine resultCoroutine;
 
 	private void Start()
 	{
-		UpdateCostText();
 		ShowRandomSymbols();
-
-		uiPanel?.SetActive(false);
 		interactPrompt?.gameObject.SetActive(false);
+		resultText?.gameObject.SetActive(false);
 	}
 
 	private void Update()
 	{
-		if (playerInRange && Input.GetKeyDown(interactKey))
+		if (playerInRange && !isSpinning && Input.GetKeyDown(interactKey))
 		{
-			if (!isActive)
-			{
-				OpenMachine();
-			}
-			else if (!isSpinning)
-			{
-				TrySpin();
-			}
-		}
-
-		if (isActive && Input.GetKeyDown(KeyCode.Escape))
-		{
-			CloseMachine();
+			Debug.Log("[SlotMachine] Key pressed, trying to spin...");
+			TrySpin();
 		}
 	}
 
+	// 3D Collider support
 	private void OnTriggerEnter(Collider other)
 	{
 		if (other.CompareTag("Player"))
 		{
-			playerInRange = true;
-			if (interactPrompt != null)
-			{
-				interactPrompt.gameObject.SetActive(true);
-				interactPrompt.text = isBroken ? "Broken machine" : $"Press {interactKey} to play";
-			}
+			OnPlayerEnter();
 		}
 	}
 
@@ -110,35 +98,55 @@ public class SlotMachine : MonoBehaviour
 	{
 		if (other.CompareTag("Player"))
 		{
-			playerInRange = false;
-			interactPrompt?.gameObject.SetActive(false);
-			CloseMachine();
+			OnPlayerExit();
 		}
 	}
 
-	private void OpenMachine()
+	// 2D Collider support
+	private void OnTriggerEnter2D(Collider2D other)
 	{
-		if (isBroken) return;
-
-		isActive = true;
-		uiPanel?.SetActive(true);
-		if (interactPrompt != null) interactPrompt.text = $"Press {interactKey} to spin";
-		ShowResult($"Cost: {spinCost} coin", Color.white);
-	}
-
-	private void CloseMachine()
-	{
-		isActive = false;
-		uiPanel?.SetActive(false);
-		if (interactPrompt != null && playerInRange)
+		if (other.CompareTag("Player"))
 		{
-			interactPrompt.text = isBroken ? "Broken machine" : $"Press {interactKey} to play";
+			OnPlayerEnter();
 		}
 	}
 
-	private void UpdateCostText()
+	private void OnTriggerExit2D(Collider2D other)
 	{
-		if (costText != null) costText.text = $"Cost: {spinCost} coin";
+		if (other.CompareTag("Player"))
+		{
+			OnPlayerExit();
+		}
+	}
+
+	private void OnPlayerEnter()
+	{
+		Debug.Log("[SlotMachine] Player entered trigger area");
+		playerInRange = true;
+		UpdatePromptText();
+	}
+
+	private void OnPlayerExit()
+	{
+		Debug.Log("[SlotMachine] Player exited trigger area");
+		playerInRange = false;
+		interactPrompt?.gameObject.SetActive(false);
+		resultText?.gameObject.SetActive(false);
+	}
+
+	private void UpdatePromptText()
+	{
+		if (interactPrompt != null)
+		{
+			interactPrompt.gameObject.SetActive(true);
+			interactPrompt.color = Color.white;
+			if (isBroken)
+				interactPrompt.text = "Broken machine";
+			else if (isSpinning)
+				interactPrompt.text = "Spinning";
+			else
+				interactPrompt.text = $"Press {interactKey} to spin";
+		}
 	}
 
 	private void ShowRandomSymbols()
@@ -152,6 +160,8 @@ public class SlotMachine : MonoBehaviour
 
 	public void TrySpin()
 	{
+		Debug.Log($"[SlotMachine] TrySpin called - isBroken:{isBroken}, isSpinning:{isSpinning}, GameManager:{GameManager.Instance != null}, Coins:{GameManager.Instance?.Coins}");
+
 		if (isBroken)
 		{
 			ShowResult("Machine broken!", Color.gray);
@@ -166,6 +176,7 @@ public class SlotMachine : MonoBehaviour
 			return;
 		}
 
+		Debug.Log("[SlotMachine] Starting spin!");
 		GameManager.Instance.SpendCoins(spinCost);
 		StartCoroutine(SpinReels());
 	}
@@ -173,8 +184,8 @@ public class SlotMachine : MonoBehaviour
 	private IEnumerator SpinReels()
 	{
 		isSpinning = true;
-		ShowResult("...", Color.white);
-		if (interactPrompt != null) interactPrompt.text = "Spinning...";
+		ShowResult("...", Color.white, false);
+		UpdatePromptText();
 
 		if (spinSound != null && AudioManager.Instance != null)
 		{
@@ -194,17 +205,34 @@ public class SlotMachine : MonoBehaviour
 			yield return new WaitForSeconds(spinSpeed);
 		}
 
-		for (int i = 0; i < 3; i++)
+		// Determinar si forzamos un combo ganador
+		bool forceWin = Random.value < forcedWinChance;
+
+		if (forceWin)
 		{
-			currentSymbols[i] = GetRandomSymbol();
-			UpdateReelSprite(i, currentSymbols[i]);
+			// Forzar combo: elegir un símbolo y aplicarlo a los 3 reels
+			Symbol winningSymbol = GetRandomSymbol();
+			for (int i = 0; i < 3; i++)
+			{
+				currentSymbols[i] = winningSymbol;
+				UpdateReelSprite(i, currentSymbols[i]);
+			}
+			Debug.Log($"[SlotMachine] Forced win with symbol: {winningSymbol}");
+		}
+		else
+		{
+			// Resultado aleatorio normal
+			for (int i = 0; i < 3; i++)
+			{
+				currentSymbols[i] = GetRandomSymbol();
+				UpdateReelSprite(i, currentSymbols[i]);
+			}
 		}
 
 		EvaluateResult();
 
 		isSpinning = false;
-		if (interactPrompt != null && !isBroken)
-			interactPrompt.text = $"Press {interactKey} to spin";
+		UpdatePromptText();
 	}
 
 	private Symbol GetRandomSymbol()
@@ -345,9 +373,7 @@ public class SlotMachine : MonoBehaviour
 		isBroken = true;
 		PlaySound(breakSound);
 		ShowResult("THE MACHINE BROKE!", Color.gray);
-		if (interactPrompt != null) interactPrompt.text = "Broken machine";
-
-		Invoke(nameof(CloseMachine), 2f);
+		UpdatePromptText();
 	}
 
 	private void WinClover()
@@ -389,12 +415,30 @@ public class SlotMachine : MonoBehaviour
 		}
 	}
 
-	private void ShowResult(string message, Color color)
+	private void ShowResult(string message, Color color, bool autoHide = true)
 	{
 		if (resultText != null)
 		{
+			resultText.gameObject.SetActive(true);
 			resultText.text = message;
 			resultText.color = color;
+		}
+
+		// Auto-ocultar resultado después de unos segundos
+		if (autoHide)
+		{
+			if (resultCoroutine != null)
+				StopCoroutine(resultCoroutine);
+			resultCoroutine = StartCoroutine(HideResultAfterDelay());
+		}
+	}
+
+	private IEnumerator HideResultAfterDelay()
+	{
+		yield return new WaitForSeconds(resultDisplayTime);
+		if (resultText != null)
+		{
+			resultText.text = "";
 		}
 	}
 
@@ -406,7 +450,7 @@ public class SlotMachine : MonoBehaviour
 	{
 		isBroken = false;
 		ShowResult("Machine repaired!", Color.green);
-		if (interactPrompt != null) interactPrompt.text = $"Press {interactKey} to play";
+		UpdatePromptText();
 	}
 
 	public bool IsBroken() => isBroken;
