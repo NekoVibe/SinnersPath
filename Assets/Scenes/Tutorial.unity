@@ -150,33 +150,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &265390345 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8644148489220667401, guid: f4fedb3390ed72b419f49bca4ae65fea, type: 3}
-  m_PrefabInstance: {fileID: 329146171}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &265390361
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 265390345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88420e4348753af4c8c75861955060f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  attackDamage: 10
-  attackRange: 2
-  attackCooldown: 0.5
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  attackPoint: {fileID: 0}
-  attackKey: 323
-  showAttackGizmo: 1
-  gizmoColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &288200443 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2242227352766157763, guid: 290091f58dc80d3448a4a7ae0a1db3ea, type: 3}
@@ -196,10 +169,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3526202443230208601, guid: f4fedb3390ed72b419f49bca4ae65fea, type: 3}
-      propertyPath: m_Constraints
-      value: 116
-      objectReference: {fileID: 0}
     - target: {fileID: 3909189684994438738, guid: f4fedb3390ed72b419f49bca4ae65fea, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.98201
@@ -250,7 +219,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8644148489220667401, guid: f4fedb3390ed72b419f49bca4ae65fea, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 265390361}
+      addedObject: {fileID: 1048556368}
   m_SourcePrefab: {fileID: 100100000, guid: f4fedb3390ed72b419f49bca4ae65fea, type: 3}
 --- !u!1 &429244518
 GameObject:
@@ -283,8 +252,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   startingCoins: 10
   startingCombo: 0
-  firstLevelSceneName: Tutorial
-  mainMenuSceneName: MainMenu
+  startScene:
+    sceneAsset: {fileID: 0}
+    scenePath: 
 --- !u!4 &429244520
 Transform:
   m_ObjectHideFlags: 0
@@ -515,6 +485,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1048556367 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8644148489220667401, guid: f4fedb3390ed72b419f49bca4ae65fea, type: 3}
+  m_PrefabInstance: {fileID: 329146171}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1048556368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1048556367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88420e4348753af4c8c75861955060f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMeleeAttack
+  attackDamage: 10
+  attackRange: 4
+  attackCooldown: 0.5
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  attackPoint: {fileID: 0}
+  attackKey: 323
+  showAttackGizmo: 1
+  gizmoColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1220891127 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 738744778523242773, guid: 290091f58dc80d3448a4a7ae0a1db3ea, type: 3}
@@ -889,7 +886,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4323cfbf5518c4e9a43e9bf0f0c628, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelExit
-  nextLevelName: level1
+  nextLevel:
+    sceneAsset: {fileID: 0}
+    scenePath: 
   requireAllEnemiesDead: 1
   requireKeyPress: 0
   interactionKey: 101
@@ -937,6 +936,51 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.2, y: 0.2, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1921284954
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1921284956}
+  - component: {fileID: 1921284955}
+  m_Layer: 0
+  m_Name: Debug
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1921284955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921284954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e93a045f8092ac45a44a5bdbcd05436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DebugPanel
+  toggleKey: 282
+--- !u!4 &1921284956
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921284954}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1216.1151, y: 429.70773, z: 321.96338}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2084533221
 GameObject:
   m_ObjectHideFlags: 0
@@ -2330,3 +2374,4 @@ SceneRoots:
   - {fileID: 1841059706}
   - {fileID: 567428258}
   - {fileID: 4353667064099835363}
+  - {fileID: 1921284956}
