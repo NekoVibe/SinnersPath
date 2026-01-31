@@ -39,7 +39,7 @@ public class SlotMachine : MonoBehaviour
 	[SerializeField] private int spinCost = 1;
 	[SerializeField] private float spinDuration = 2f;
 	[SerializeField] private float spinSpeed = 0.1f;
-	[SerializeField] private KeyCode interactKey = KeyCode.E;
+	[SerializeField] private KeyCode interactKey = KeyCode.F;
 
 	[Header("Symbol Weights (higher = more common)")]
 	[SerializeField] private float weightSeven = 5f;
@@ -58,11 +58,14 @@ public class SlotMachine : MonoBehaviour
 	[SerializeField] private AudioClip jackpotSound;
 	[SerializeField] private AudioClip breakSound;
 
+	[Header("Result Display")]
+	[SerializeField] private float resultDisplayTime = 3f;
+
 	private Symbol[] currentSymbols = new Symbol[3];
 	private bool isSpinning = false;
 	private bool isBroken = false;
 	private bool playerInRange = false;
-	private bool isActive = false;
+	private Coroutine resultCoroutine;
 
 	private void Start()
 	{
@@ -75,34 +78,19 @@ public class SlotMachine : MonoBehaviour
 
 	private void Update()
 	{
-		if (playerInRange && Input.GetKeyDown(interactKey))
+		if (playerInRange && !isSpinning && Input.GetKeyDown(interactKey))
 		{
-			if (!isActive)
-			{
-				OpenMachine();
-			}
-			else if (!isSpinning)
-			{
-				TrySpin();
-			}
-		}
-
-		if (isActive && Input.GetKeyDown(KeyCode.Escape))
-		{
-			CloseMachine();
+			Debug.Log("[SlotMachine] Key pressed, trying to spin...");
+			TrySpin();
 		}
 	}
 
+	// 3D Collider support
 	private void OnTriggerEnter(Collider other)
 	{
 		if (other.CompareTag("Player"))
 		{
-			playerInRange = true;
-			if (interactPrompt != null)
-			{
-				interactPrompt.gameObject.SetActive(true);
-				interactPrompt.text = isBroken ? "Broken machine" : $"Press {interactKey} to play";
-			}
+			OnPlayerEnter();
 		}
 	}
 
@@ -110,29 +98,55 @@ public class SlotMachine : MonoBehaviour
 	{
 		if (other.CompareTag("Player"))
 		{
-			playerInRange = false;
-			interactPrompt?.gameObject.SetActive(false);
-			CloseMachine();
+			OnPlayerExit();
 		}
 	}
 
-	private void OpenMachine()
+	// 2D Collider support
+	private void OnTriggerEnter2D(Collider2D other)
 	{
-		if (isBroken) return;
-
-		isActive = true;
-		uiPanel?.SetActive(true);
-		if (interactPrompt != null) interactPrompt.text = $"Press {interactKey} to spin";
-		ShowResult($"Cost: {spinCost} coin", Color.white);
+		if (other.CompareTag("Player"))
+		{
+			OnPlayerEnter();
+		}
 	}
 
-	private void CloseMachine()
+	private void OnTriggerExit2D(Collider2D other)
 	{
-		isActive = false;
-		uiPanel?.SetActive(false);
-		if (interactPrompt != null && playerInRange)
+		if (other.CompareTag("Player"))
 		{
-			interactPrompt.text = isBroken ? "Broken machine" : $"Press {interactKey} to play";
+			OnPlayerExit();
+		}
+	}
+
+	private void OnPlayerEnter()
+	{
+		Debug.Log("[SlotMachine] Player entered trigger area");
+		playerInRange = true;
+		uiPanel?.SetActive(true);
+		UpdatePromptText();
+	}
+
+	private void OnPlayerExit()
+	{
+		Debug.Log("[SlotMachine] Player exited trigger area");
+		playerInRange = false;
+		uiPanel?.SetActive(false);
+		interactPrompt?.gameObject.SetActive(false);
+	}
+
+	private void UpdatePromptText()
+	{
+		if (interactPrompt != null)
+		{
+			interactPrompt.gameObject.SetActive(true);
+			interactPrompt.color = Color.white;
+			if (isBroken)
+				interactPrompt.text = "Broken machine";
+			else if (isSpinning)
+				interactPrompt.text = "Spinning...";
+			else
+				interactPrompt.text = $"Press {interactKey} to spin";
 		}
 	}
 
@@ -152,6 +166,8 @@ public class SlotMachine : MonoBehaviour
 
 	public void TrySpin()
 	{
+		Debug.Log($"[SlotMachine] TrySpin called - isBroken:{isBroken}, isSpinning:{isSpinning}, GameManager:{GameManager.Instance != null}, Coins:{GameManager.Instance?.Coins}");
+
 		if (isBroken)
 		{
 			ShowResult("Machine broken!", Color.gray);
@@ -166,6 +182,7 @@ public class SlotMachine : MonoBehaviour
 			return;
 		}
 
+		Debug.Log("[SlotMachine] Starting spin!");
 		GameManager.Instance.SpendCoins(spinCost);
 		StartCoroutine(SpinReels());
 	}
@@ -173,8 +190,8 @@ public class SlotMachine : MonoBehaviour
 	private IEnumerator SpinReels()
 	{
 		isSpinning = true;
-		ShowResult("...", Color.white);
-		if (interactPrompt != null) interactPrompt.text = "Spinning...";
+		ShowResult("...", Color.white, false);
+		UpdatePromptText();
 
 		if (spinSound != null && AudioManager.Instance != null)
 		{
@@ -203,8 +220,7 @@ public class SlotMachine : MonoBehaviour
 		EvaluateResult();
 
 		isSpinning = false;
-		if (interactPrompt != null && !isBroken)
-			interactPrompt.text = $"Press {interactKey} to spin";
+		UpdatePromptText();
 	}
 
 	private Symbol GetRandomSymbol()
@@ -345,9 +361,7 @@ public class SlotMachine : MonoBehaviour
 		isBroken = true;
 		PlaySound(breakSound);
 		ShowResult("THE MACHINE BROKE!", Color.gray);
-		if (interactPrompt != null) interactPrompt.text = "Broken machine";
-
-		Invoke(nameof(CloseMachine), 2f);
+		UpdatePromptText();
 	}
 
 	private void WinClover()
@@ -389,13 +403,34 @@ public class SlotMachine : MonoBehaviour
 		}
 	}
 
-	private void ShowResult(string message, Color color)
+	private void ShowResult(string message, Color color, bool autoHide = true)
 	{
 		if (resultText != null)
 		{
 			resultText.text = message;
 			resultText.color = color;
 		}
+
+		// También mostrar en el prompt si no es el mensaje de spinning
+		if (interactPrompt != null && message != "...")
+		{
+			interactPrompt.text = message;
+			interactPrompt.color = color;
+		}
+
+		// Auto-restaurar después de unos segundos
+		if (autoHide && !isSpinning)
+		{
+			if (resultCoroutine != null)
+				StopCoroutine(resultCoroutine);
+			resultCoroutine = StartCoroutine(RestorePromptAfterDelay());
+		}
+	}
+
+	private IEnumerator RestorePromptAfterDelay()
+	{
+		yield return new WaitForSeconds(resultDisplayTime);
+		UpdatePromptText();
 	}
 
 	#endregion
@@ -406,7 +441,7 @@ public class SlotMachine : MonoBehaviour
 	{
 		isBroken = false;
 		ShowResult("Machine repaired!", Color.green);
-		if (interactPrompt != null) interactPrompt.text = $"Press {interactKey} to play";
+		UpdatePromptText();
 	}
 
 	public bool IsBroken() => isBroken;

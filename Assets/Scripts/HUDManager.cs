@@ -7,7 +7,7 @@ public class HUDManager : MonoBehaviour
     public static HUDManager Instance { get; private set; }
 
     [Header("Vida y Economía")]
-    [SerializeField] private Image[] hearts;
+    [SerializeField] private Image heartImage;
     [SerializeField] private TextMeshProUGUI coinsText;
 
     [Header("Timer y Combo")]
@@ -20,8 +20,10 @@ public class HUDManager : MonoBehaviour
     
     [Header("Sprites")]
     [SerializeField] private Sprite emptySlotSprite;
-    [SerializeField] private Sprite heartFullSprite;
-    [SerializeField] private Sprite heartEmptySprite;
+	[SerializeField] private Sprite spriteHeartOneLife;
+	[SerializeField] private Sprite spriteHeartTwoLifes;
+	[SerializeField] private Sprite spriteFullHeart;
+	[SerializeField] private Sprite spriteEmptyHeart;
     [SerializeField] private Sprite coinSprite;
 
     [Header("Configuración Animación")]
@@ -61,10 +63,17 @@ public class HUDManager : MonoBehaviour
         }
     }
 
-    public void ActualizarHearts(int vidaActual) 
+    public void ActualizarHearts(int vidaActual)
     {
-        for (int i = 0; i < hearts.Length; i++)
-            hearts[i].sprite = (i < vidaActual) ? heartFullSprite : heartEmptySprite;
+        if (heartImage == null) return;
+
+        heartImage.sprite = vidaActual switch
+        {
+            0 => spriteEmptyHeart,
+            1 => spriteHeartOneLife,
+            2 => spriteHeartTwoLifes,
+            _ => spriteFullHeart // 3 o más
+        };
     }
 
     public void ActualizarMonedas(int cantidad) => coinsText.text = cantidad.ToString();

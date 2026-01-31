@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -350, y: -228}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 0, y: -176.3771}
+  m_SizeDelta: {x: 474.1361, y: 42.7541}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &476758591794713410
 CanvasRenderer:
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Quieres jugar 1 moneda?
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -92,15 +92,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22.05
+  m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_characterHorizontalScale: 1
@@ -929,15 +929,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f2fd1a5680ffa459d6fe32636ff098, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SlotMachine
-  reelRenderers: []
+  reelRenderers:
+  - {fileID: 6338880532336586977}
+  - {fileID: 9064518764826202444}
+  - {fileID: 7726624168495019140}
   uiPanel: {fileID: 1156157057443336701}
   resultText: {fileID: 716922866991283190}
   costText: {fileID: 6766765594016745029}
   interactPrompt: {fileID: 7814410529228830432}
   spriteSeven: {fileID: 0}
   spriteSix: {fileID: 0}
-  spriteHeart: {fileID: 0}
-  spriteBrokenHeart: {fileID: 0}
+  spriteHeart: {fileID: -3621682252929738812, guid: 422d7d72d7853304694728b30e91e4f0, type: 3}
+  spriteBrokenHeart: {fileID: -1957253202200871324, guid: 5891153197aa0ca45b784c7c99a01bdf, type: 3}
   spriteCoin: {fileID: 8741200022194658665, guid: 4d499dc676ddb204a9bff6c991444cc3, type: 3}
   spriteBrokenCoin: {fileID: 0}
   spriteX: {fileID: 0}

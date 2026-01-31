@@ -6,8 +6,8 @@ public class GameManager : MonoBehaviour
 	public static GameManager Instance { get; private set; }
 
 	[Header("Starting Values")]
-	[SerializeField] private int startingCoins = 0;
-	[SerializeField] private int startingCombo = 0;
+	[SerializeField] private readonly int StartingCoins = 0;
+	[SerializeField] private readonly int StartingCombo = 0;
 
 	[Header("Scene Management")]
 	[Tooltip("The starting/menu scene to load on restart or game over.")]
@@ -43,8 +43,8 @@ public class GameManager : MonoBehaviour
 
 		// Inicializar valores
 		points = 0;
-		coins = startingCoins;
-		combo = startingCombo;
+		coins = StartingCoins;
+		combo = StartingCombo;
 
 		// Suscribirse al evento de carga de escena
 		SceneManager.sceneLoaded += OnSceneLoaded;
@@ -159,8 +159,8 @@ public class GameManager : MonoBehaviour
 
 		// 2. Resetear todos los valores del GameManager
 		points = 0;
-		coins = startingCoins;
-		combo = startingCombo;
+		coins = StartingCoins;
+		combo = StartingCombo;
 
 		// 3. Resetear el TIMER
 		if (TimerManager.Instance != null)
@@ -288,8 +288,8 @@ public class GameManager : MonoBehaviour
 	{
 		// Resetear valores
 		points = 0;
-		coins = startingCoins;
-		combo = startingCombo;
+		coins = StartingCoins;
+		combo = StartingCombo;
 
 		// Destruir el player si existe
 		if (PlayerPersistence.Instance != null)
