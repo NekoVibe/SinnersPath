@@ -32,21 +32,22 @@ public class PlayerPersistence : MonoBehaviour
 
 	private System.Collections.IEnumerator RepositionOnStart()
 	{
-		// Deshabilitar MovementScript temporalmente
-		MovementScript movement = GetComponent<MovementScript>();
+		// Deshabilitar PlayerMovement temporalmente
+		PlayerMovement movement = GetComponent<PlayerMovement>();
 		if (movement != null)
 		{
 			movement.enabled = false;
 		}
 
-		yield return new WaitForFixedUpdate(); // Esperar al siguiente FixedUpdate
-		yield return null; // Esperar 1 frame más
+		yield return new WaitForFixedUpdate();
+		yield return null;
 
 		RepositionToSpawnPoint();
 
-		// Reactivar MovementScript
+		// Reactivar PlayerMovement y reset velocity
 		if (movement != null)
 		{
+			movement.ResetVelocity();
 			movement.enabled = true;
 		}
 	}
@@ -67,6 +68,10 @@ public class PlayerPersistence : MonoBehaviour
 
 		// 1. Reposicionar PRIMERO
 		RepositionToSpawnPoint();
+
+		// Reset movement velocity after reposition
+		PlayerMovement movement = GetComponent<PlayerMovement>();
+		movement?.ResetVelocity();
 
 		// 2. FORZAR actualización del HUD con el estado actual del Player
 		PlayerHealth playerHealth = GetComponent<PlayerHealth>();

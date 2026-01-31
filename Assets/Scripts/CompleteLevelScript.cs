@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class LevelExit : MonoBehaviour
 {
 	[Header("Level Settings")]
-	[SerializeField] private string nextLevelName;
+	[SerializeField] private SceneReference nextLevel;
 
 	[Header("Activation Conditions")]
 	[SerializeField] private bool requireAllEnemiesDead = true;
@@ -186,17 +186,14 @@ public class LevelExit : MonoBehaviour
 			return;
 		}
 
-		Debug.Log($"Loading next level: {nextLevelName}");
+		if (!nextLevel.IsValid)
+		{
+			Debug.LogError("No next level specified! Drag a scene to the 'Next Level' field.");
+			return;
+		}
 
-		// Cargar por nombre o por índice
-		if (!string.IsNullOrEmpty(nextLevelName))
-		{
-			SceneManager.LoadScene(nextLevelName);
-		}
-		else
-		{
-			Debug.LogError("No next level specified!");
-		}
+		Debug.Log($"Loading next level: {nextLevel.SceneName}");
+		SceneManager.LoadScene(nextLevel.SceneName);
 	}
 
 	// Mostrar mensaje en pantalla (puedes conectar con tu sistema de UI)

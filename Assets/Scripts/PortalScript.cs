@@ -4,8 +4,8 @@ using UnityEngine.SceneManagement;
 public class LevelPortal : MonoBehaviour
 {
 	[Header("Level Settings")]
-	[Tooltip("Nombre de la escena a cargar")]
-	public string targetSceneName;
+	[Tooltip("Drag a scene here to set the target level")]
+	[SerializeField] private SceneReference targetScene;
 
 	[Header("Activation Settings")]
 	public bool requireInput = true; // Si necesita presionar tecla o es automático
@@ -64,14 +64,14 @@ public class LevelPortal : MonoBehaviour
 
 	private void LoadLevel()
 	{
-		if (string.IsNullOrEmpty(targetSceneName))
+		if (!targetScene.IsValid)
 		{
-			Debug.LogError("Target scene name is not set!");
+			Debug.LogError("Target scene is not set! Drag a scene to the 'Target Scene' field.");
 			return;
 		}
 
-		Debug.Log($"Loading level: {targetSceneName}");
-		SceneManager.LoadScene(targetSceneName);
+		Debug.Log($"Loading level: {targetScene.SceneName}");
+		SceneManager.LoadScene(targetScene.SceneName);
 	}
 
 	// Opcional: Dibujar área del portal en el editor

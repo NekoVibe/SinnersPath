@@ -70,12 +70,8 @@ public class PauseMenu : MonoBehaviour
 		// Pausar el tiempo del juego
 		Time.timeScale = 0f;
 
-		// Pausar el cronómetro si existe
-		TimerManager timerManager = FindFirstObjectByType<TimerManager>();
-		if (timerManager != null)
-		{
-			timerManager.setCronometro(false);
-		}
+		// Pausar el cronómetro
+		TimerManager.Instance?.setCronometro(false);
 
 		// Opcional: Mostrar cursor
 		Cursor.visible = true;
@@ -98,12 +94,8 @@ public class PauseMenu : MonoBehaviour
 		// Reanudar el tiempo del juego
 		Time.timeScale = 1f;
 
-		// Reanudar el cronómetro si existe
-		TimerManager timerManager = FindFirstObjectByType<TimerManager>();
-		if (timerManager != null)
-		{
-			timerManager.setCronometro(true);
-		}
+		// Reanudar el cronómetro
+		TimerManager.Instance?.setCronometro(true);
 
 		// Opcional: Ocultar cursor
 		// Cursor.visible = false;
