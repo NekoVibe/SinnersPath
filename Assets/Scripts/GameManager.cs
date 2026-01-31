@@ -187,6 +187,23 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	public void Victory()
+	{
+		Debug.Log($"Victory! Final Score: {points}");
+
+		// Detener el cronómetro
+		if (TimerManager.Instance != null)
+		{
+			TimerManager.Instance.StopTimer();
+		}
+
+		// Guardar la run en el leaderboard
+		SaveCurrentRun();
+
+		// Aquí mostrarías la pantalla de victoria con la puntuación
+		// VictoryScreen.Instance.Show(points);
+	}
+
 	// Game Over - Muerte del jugador
 	public void GameOver()
 	{
@@ -198,21 +215,44 @@ public class GameManager : MonoBehaviour
 			TimerManager.Instance.StopTimer();
 		}
 
+		// Guardar la run incluso si pierdes (opcional)
+		SaveCurrentRun();
+
 		// Reiniciar después de 3 segundos
 		Invoke(nameof(RestartGame), 3f);
 	}
 
-	// Victoria - Completar el juego
-	public void Victory()
+	// Guardar la run actual
+	private void SaveCurrentRun()
 	{
-		Debug.Log($"Victory! Final Score: {points} points");
+		if (SaveManager.Instance == null)
+		{
+			Debug.LogError("SaveManager not found!");
+			return;
+		}
 
-		// Detener el cronómetro
-		TimerManager timerManager = FindFirstObjectByType<TimerManager>();
-		timerManager?.setCronometro(false);
+		// Obtener el tiempo del TimerManager
+		string timeElapsed = "00:00";
+		if (TimerManager.Instance != null)
+		{
+			float totalSeconds = TimerManager.Instance.GetCurrentTime();
+			int minutes = Mathf.FloorToInt(totalSeconds / 60);
+			int seconds = Mathf.FloorToInt(totalSeconds % 60);
+			timeElapsed = string.Format("{0:00}:{1:00}", minutes, seconds);
+		}
 
-		// Aquí puedes mostrar pantalla de victoria con puntuación final
-		// Por ejemplo: VictoryUI.Instance.Show(points);
+		// Crear la run data
+		RunData newRun = new RunData
+		{
+			score = points,
+			timeElapsed = timeElapsed,
+			date = System.DateTime.Now.ToString("dd/MM/yyyy HH:mm")
+		};
+
+		// Guardar en el leaderboard
+		SaveManager.Instance.SaveRun(newRun);
+
+		Debug.Log($"Run saved! Score: {points}, Time: {timeElapsed}");
 	}
 
 	// Volver al menú principal
