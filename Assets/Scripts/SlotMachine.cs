@@ -57,7 +57,7 @@ public class SlotMachine : MonoBehaviour
 	[SerializeField] private AudioClip breakSound;
 
 	[Header("Result Display")]
-	[SerializeField] private float resultDisplayTime = 5f;
+	[SerializeField] private float resultDisplayTime = 10f;
 
 	[Header("Win Probability")]
 	[Tooltip("Probabilidad de forzar un combo ganador (0-1). Ej: 0.3 = 30% de probabilidad de ganar")]
