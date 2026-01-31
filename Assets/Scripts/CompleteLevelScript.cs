@@ -5,7 +5,6 @@ public class LevelExit : MonoBehaviour
 {
 	[Header("Level Settings")]
 	[SerializeField] private string nextLevelName;
-	[SerializeField] private int nextLevelBuildIndex = -1; // Alternativa: usar índice en lugar de nombre
 
 	[Header("Activation Conditions")]
 	[SerializeField] private bool requireAllEnemiesDead = true;
@@ -194,13 +193,9 @@ public class LevelExit : MonoBehaviour
 		{
 			SceneManager.LoadScene(nextLevelName);
 		}
-		else if (nextLevelBuildIndex >= 0)
-		{
-			SceneManager.LoadScene(nextLevelBuildIndex);
-		}
 		else
 		{
-			Debug.LogError("No next level specified! Set either nextLevelName or nextLevelBuildIndex");
+			Debug.LogError("No next level specified!");
 		}
 	}
 

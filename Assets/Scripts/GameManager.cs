@@ -121,11 +121,12 @@ public class GameManager : MonoBehaviour
 	#region Game Flow Management
 
 	// Reiniciar la partida completamente
+	// Reiniciar la partida completamente
 	public void RestartGame()
 	{
 		Debug.Log("Restarting game...");
 
-		// 1. Resetear el Player (NO destruirlo)
+		// 1. Resetear el Player PRIMERO
 		ResetPlayer();
 
 		// 2. Resetear todos los valores del GameManager
@@ -133,55 +134,43 @@ public class GameManager : MonoBehaviour
 		coins = startingCoins;
 		combo = startingCombo;
 
-		// 3. Actualizar HUD con los valores reseteados
-		if (HUDView.Instance != null)
-		{
-			HUDView.Instance.ActualizarMonedas(coins);
-			HUDView.Instance.ActualizarCombo(combo);
-			// Los corazones se actualizarán automáticamente con ResetHealth()
-		}
-
-		// 4. Notificar cambios
+		// 3. Notificar cambios (el HUD se actualizará automáticamente en Start de la nueva escena)
 		OnPointsChanged?.Invoke(points);
 		OnCoinsChanged?.Invoke(coins);
 		OnComboChanged?.Invoke(combo);
 
-		// 5. Cargar la primera escena (el Player se reposicionará automáticamente en OnSceneLoaded)
+		// 4. Cargar la primera escena (esto recreará el HUD)
 		SceneManager.LoadScene(firstLevelSceneName);
 	}
 
-	// Resetear el estado del player sin destruirlo
 	private void ResetPlayer()
 	{
-		if (PlayerPersistence.Instance == null)
-		{
-			Debug.LogWarning("No player to reset!");
-			return;
-		}
+		GameObject player = GameObject.FindGameObjectWithTag("Player");
+		if (player == null) return;
 
-		// Resetear vida al máximo
-		PlayerHealth playerHealth = PlayerPersistence.Instance.GetComponent<PlayerHealth>();
+		// Resetear vida
+		PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
 		if (playerHealth != null)
 		{
 			playerHealth.ResetHealth();
+			Debug.Log($"Player lives reset to {playerHealth.GetCurrentHealth()}");
 		}
 
 		// Limpiar inventario de armas
-		WeaponInventory weaponInventory = PlayerPersistence.Instance.GetComponent<WeaponInventory>();
+		WeaponInventory weaponInventory = player.GetComponent<WeaponInventory>();
 		if (weaponInventory != null)
 		{
 			weaponInventory.ClearInventory();
+			Debug.Log("Player inventory cleared");
 		}
 
-		// Resetear física
-		Rigidbody rb = PlayerPersistence.Instance.GetComponent<Rigidbody>();
+		// Resetear física del player
+		Rigidbody rb = player.GetComponent<Rigidbody>();
 		if (rb != null)
 		{
 			rb.linearVelocity = Vector3.zero;
 			rb.angularVelocity = Vector3.zero;
 		}
-
-		Debug.Log("Player reset successfully");
 	}
 
 	// Game Over - Muerte del jugador

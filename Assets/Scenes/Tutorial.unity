@@ -173,6 +173,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 3526202443230208601, guid: f4fedb3390ed72b419f49bca4ae65fea, type: 3}
+      propertyPath: m_Constraints
+      value: 116
+      objectReference: {fileID: 0}
     - target: {fileID: 3909189684994438738, guid: f4fedb3390ed72b419f49bca4ae65fea, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.98201
@@ -1307,7 +1311,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelExit
   nextLevelName: level1
-  nextLevelBuildIndex: -1
   requireAllEnemiesDead: 0
   requireKeyPress: 0
   interactionKey: 101

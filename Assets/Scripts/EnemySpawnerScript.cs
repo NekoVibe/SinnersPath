@@ -49,7 +49,7 @@ public class EnemySpawner : MonoBehaviour
 		// Registrarse en el EnemyManager
 		EnemyManager.Instance?.RegisterSpawner(this);
 
-		// Si no se activa por trigger, spawnar al inicio
+		// Si no se activa por trigger, spawnear al inicio
 		if (!activateOnTrigger)
 		{
 			StartSpawning();
