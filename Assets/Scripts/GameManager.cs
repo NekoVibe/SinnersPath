@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
 	[Tooltip("The starting/menu scene to load on restart or game over.")]
 	[SerializeField] private SceneReference startScene;
 
+	[Header("Audio")]
+	[SerializeField] private string overworldMusicPath = "Music/Overworld";
+
 	private int points;  // Puntuación final del juego
 	private int coins;
 	private int combo;
@@ -70,6 +73,31 @@ public class GameManager : MonoBehaviour
 	{
 		// Sincronizar con el HUD al iniciar
 		UpdateHUD();
+
+		// Reproducir música de fondo (esperar a que AudioManager esté listo)
+		StartCoroutine(PlayMusicWhenReady());
+	}
+
+	private System.Collections.IEnumerator PlayMusicWhenReady()
+	{
+		// Esperar hasta que AudioManager esté disponible
+		while (AudioManager.Instance == null)
+		{
+			yield return null;
+		}
+
+		// Cargar música desde Resources
+		AudioClip clip = Resources.Load<AudioClip>(overworldMusicPath);
+
+		if (clip != null)
+		{
+			AudioManager.Instance.PlayMusic(clip);
+			Debug.Log($"Playing music: {overworldMusicPath}");
+		}
+		else
+		{
+			Debug.LogWarning($"Music not found at Resources/{overworldMusicPath}. Make sure the file is in Assets/Resources/Music/Overworld.mp3");
+		}
 	}
 
 	// Actualizar todo el HUD de una vez
