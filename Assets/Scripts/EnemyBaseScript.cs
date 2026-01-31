@@ -182,7 +182,7 @@ public class EnemyBase : MonoBehaviour
 		}
 
 		// Morir si la vida llega a 0
-		if (currentHealth <= 0)
+		if (currentHealth == 0)
 		{
 			Die();
 		}

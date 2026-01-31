@@ -75,10 +75,10 @@ public class GameManager : MonoBehaviour
 	// Actualizar todo el HUD de una vez
 	private void UpdateHUD()
 	{
-		if (HUDView.Instance != null)
+		if (HUDManager.Instance != null)
 		{
-			HUDView.Instance.ActualizarMonedas(coins);
-			HUDView.Instance.ActualizarCombo(combo);
+			HUDManager.Instance.ActualizarMonedas(coins);
+			HUDManager.Instance.ActualizarCombo(combo);
 			Debug.Log("HUD updated successfully");
 		}
 		else
@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
 
 		coins += amount;
 		OnCoinsChanged?.Invoke(coins);
-		HUDView.Instance?.ActualizarMonedas(coins);
+		HUDManager.Instance?.ActualizarMonedas(coins);
 
 		Debug.Log($"Coins: {coins} (+{amount})");
 	}
@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour
 
 		coins -= amount;
 		OnCoinsChanged?.Invoke(coins);
-		HUDView.Instance?.ActualizarMonedas(coins);
+		HUDManager.Instance?.ActualizarMonedas(coins);
 
 		Debug.Log($"Coins: {coins} (-{amount})");
 		return true;
@@ -142,10 +142,10 @@ public class GameManager : MonoBehaviour
 		}
 
 		// 4. Actualizar HUD
-		if (HUDView.Instance != null)
+		if (HUDManager.Instance != null)
 		{
-			HUDView.Instance.ActualizarMonedas(coins);
-			HUDView.Instance.ActualizarCombo(combo);
+			HUDManager.Instance.ActualizarMonedas(coins);
+			HUDManager.Instance.ActualizarCombo(combo);
 		}
 
 		// 5. Notificar cambios
@@ -296,7 +296,7 @@ public class GameManager : MonoBehaviour
 
 		combo += amount;
 		OnComboChanged?.Invoke(combo);
-		HUDView.Instance?.ActualizarCombo(combo);
+		HUDManager.Instance?.ActualizarCombo(combo);
 
 		Debug.Log($"Combo: x{combo}");
 	}
@@ -305,7 +305,7 @@ public class GameManager : MonoBehaviour
 	{
 		combo = 0;
 		OnComboChanged?.Invoke(combo);
-		HUDView.Instance?.ActualizarCombo(combo);
+		HUDManager.Instance?.ActualizarCombo(combo);
 
 		Debug.Log("Combo reset!");
 	}
@@ -314,7 +314,7 @@ public class GameManager : MonoBehaviour
 	{
 		combo = Mathf.Max(0, value);
 		OnComboChanged?.Invoke(combo);
-		HUDView.Instance?.ActualizarCombo(combo);
+		HUDManager.Instance?.ActualizarCombo(combo);
 	}
 
 	#endregion

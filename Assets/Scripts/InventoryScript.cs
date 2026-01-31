@@ -89,7 +89,7 @@ public class WeaponInventory : MonoBehaviour
 		currentWeapon.OnEquip();
 
 		// Actualizar HUD - seleccionar slot
-		HUDView.Instance?.SeleccionarSlot(currentWeaponIndex);
+		HUDManager.Instance?.SeleccionarSlot(currentWeaponIndex);
 	}
 
 	// Cambiar a siguiente arma
@@ -148,12 +148,12 @@ public class WeaponInventory : MonoBehaviour
 	// Actualizar el icono del arma en el HUD
 	private void UpdateWeaponSlotHUD(int slotIndex, WeaponBase weapon)
 	{
-		if (HUDView.Instance != null)
+		if (HUDManager.Instance != null)
 		{
 			// Aquí necesitas un sprite del icono del arma
 			// Por ahora usamos null, pero deberías añadir un campo "weaponIcon" en WeaponBase
 			Sprite weaponIcon = GetWeaponIcon(weapon);
-			HUDView.Instance.ActualizarSlotInventario(slotIndex, weaponIcon);
+			HUDManager.Instance.ActualizarSlotInventario(slotIndex, weaponIcon);
 		}
 	}
 
@@ -265,11 +265,11 @@ public class WeaponInventory : MonoBehaviour
 		currentWeaponIndex = -1;
 
 		// Limpiar slots del HUD solo si existe
-		if (HUDView.Instance != null)
+		if (HUDManager.Instance != null)
 		{
 			for (int i = 0; i < maxWeapons; i++)
 			{
-				HUDView.Instance.ActualizarSlotInventario(i, null);
+				HUDManager.Instance.ActualizarSlotInventario(i, null);
 			}
 		}
 

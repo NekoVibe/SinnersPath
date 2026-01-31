@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class CameraFollow : MonoBehaviour
 {
@@ -6,8 +7,14 @@ public class CameraFollow : MonoBehaviour
 	[SerializeField] private Transform target; // El player
 	[SerializeField] private bool findPlayerAutomatically = true;
 
+	[Header("Initialization")]
+	[SerializeField] private bool initializePositionFromPlayer = false;
+
+	[Header("Offset")]
+	[SerializeField] private Vector3 offset = new Vector3(0f, 8.9f, -17f);
+
 	[Header("Follow Settings")]
-	[SerializeField] private bool followX = true;
+	[SerializeField] private bool followX = false;
 	[SerializeField] private bool followY = false;
 	[SerializeField] private bool followZ = false;
 
@@ -15,16 +22,13 @@ public class CameraFollow : MonoBehaviour
 	[SerializeField] private bool useSmoothing = true;
 	[SerializeField] private float smoothSpeed = 5f;
 
-	[Header("Offset")]
-	[SerializeField] private Vector3 offset = new Vector3(0f, 5f, -10f);
-
 	[Header("Limits (Optional)")]
 	[SerializeField] private bool useLimits = false;
 	[SerializeField] private float minX = -100f;
 	[SerializeField] private float maxX = 100f;
 
 	[Header("Update Mode")]
-	[SerializeField] private bool useFixedUpdate = false; // Cambiar a true si hay jitter
+	[SerializeField] private bool useFixedUpdate = false;
 
 	private void Start()
 	{
@@ -37,6 +41,26 @@ public class CameraFollow : MonoBehaviour
 		if (target == null)
 		{
 			Debug.LogWarning("CameraFollow: No target assigned and couldn't find player!");
+			return;
+		}
+
+		if (initializePositionFromPlayer)
+		{
+			// Wait for player to be repositioned (PlayerPersistence waits 2 frames)
+			StartCoroutine(InitializePositionDelayed());
+		}
+	}
+
+	private IEnumerator InitializePositionDelayed()
+	{
+		// Wait 3 frames to ensure player has been repositioned
+		yield return null;
+		yield return null;
+		yield return null;
+
+		if (target != null)
+		{
+			transform.position = target.position + offset;
 		}
 	}
 

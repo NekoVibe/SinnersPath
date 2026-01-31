@@ -2,9 +2,9 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class HUDView : MonoBehaviour 
+public class HUDManager : MonoBehaviour 
 {
-    public static HUDView Instance { get; private set; }
+    public static HUDManager Instance { get; private set; }
 
     [Header("Vida y Economía")]
     [SerializeField] private Image[] hearts;

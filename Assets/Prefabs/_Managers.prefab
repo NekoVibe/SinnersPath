@@ -252,7 +252,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3e2252e649cccf049a84f83420f0c237, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HUDView
+  m_EditorClassIdentifier: Assembly-CSharp::HUDManager
   hearts:
   - {fileID: 0}
   - {fileID: 0}

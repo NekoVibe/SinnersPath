@@ -45,9 +45,9 @@ public class TimerManager : MonoBehaviour
 
 	private void ActualizarHUD(string tiempo)
 	{
-		if (HUDView.Instance != null)
+		if (HUDManager.Instance != null)
 		{
-			HUDView.Instance.ActualizarReloj(tiempo);
+			HUDManager.Instance.ActualizarReloj(tiempo);
 		}
 	}
 

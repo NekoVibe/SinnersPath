@@ -18,7 +18,7 @@ public class PlayerPersistence : MonoBehaviour
 		}
 
 		Instance = this;
-		DontDestroyOnLoad(gameObject); // El player NO se destruye al cambiar escena
+		DontDestroyOnLoad(gameObject);
 
 		// Suscribirse al evento de carga de escena
 		SceneManager.sceneLoaded += OnSceneLoaded;
@@ -75,18 +75,18 @@ public class PlayerPersistence : MonoBehaviour
 
 		// 2. FORZAR actualización del HUD con el estado actual del Player
 		PlayerHealth playerHealth = GetComponent<PlayerHealth>();
-		if (playerHealth != null && HUDView.Instance != null)
+		if (playerHealth != null && HUDManager.Instance != null)
 		{
 			// Forzar actualización de corazones
-			HUDView.Instance.ActualizarHearts(playerHealth.currentHealth);
+			HUDManager.Instance.ActualizarHearts(playerHealth.currentHealth);
 			Debug.Log($"HUD synced: {playerHealth.currentHealth} lives");
 		}
 
 		// 3. Actualizar otros valores del HUD desde GameManager
-		if (GameManager.Instance != null && HUDView.Instance != null)
+		if (GameManager.Instance != null && HUDManager.Instance != null)
 		{
-			HUDView.Instance.ActualizarMonedas(GameManager.Instance.Coins);
-			HUDView.Instance.ActualizarCombo(GameManager.Instance.Combo);
+			HUDManager.Instance.ActualizarMonedas(GameManager.Instance.Coins);
+			HUDManager.Instance.ActualizarCombo(GameManager.Instance.Combo);
 		}
 	}
 

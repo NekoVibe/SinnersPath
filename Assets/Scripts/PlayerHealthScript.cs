@@ -70,7 +70,7 @@ public class PlayerHealth : MonoBehaviour
 
 		UpdateHealthHUD();
 
-		if (currentHealth <= 0)
+		if (currentHealth == 0)
 		{
 			Die();
 		}
@@ -110,7 +110,7 @@ public class PlayerHealth : MonoBehaviour
 	private void UpdateHealthHUD()
 	{
 		// Pasar la vida actual al HUD, que mostrará tantos corazones llenos como vida tenga
-		HUDView.Instance?.ActualizarHearts(currentHealth);
+		HUDManager.Instance?.ActualizarHearts(currentHealth);
 	}
 
 	// Muerte del jugador
