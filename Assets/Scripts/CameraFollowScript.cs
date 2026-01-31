@@ -199,12 +199,12 @@ public class CameraFollow : MonoBehaviour
 	private void CacheCamera()
 	{
 		if (cam == null)
-			cam = GetComponent<Camera>();
+			cam = Camera.main;
 	}
 
 	/// <summary>
-	/// Calculate frustum dimensions at ground plane based on camera properties.
-	/// Cached and only recalculated when aspect ratio changes.
+	/// Calculate frustum dimensions at the play area depth.
+	/// Uses offset.z as the distance from camera to play area.
 	/// </summary>
 	private void CalculateFrustumDimensions()
 	{
@@ -215,18 +215,12 @@ public class CameraFollow : MonoBehaviour
 		if (Mathf.Approximately(cam.aspect, lastAspectRatio)) return;
 		lastAspectRatio = cam.aspect;
 
-		// Camera height above ground plane
-		float cameraHeight = transform.position.y - groundPlaneY;
+		// Use the Z-offset as distance to play area (how far camera is behind player)
+		float viewDistance = Mathf.Abs(offset.z);
 
-		// Camera's downward angle in radians
-		float cameraAngleRad = transform.eulerAngles.x * Mathf.Deg2Rad;
-
-		// Distance from camera to ground along the central viewing ray
-		float distanceToGround = cameraHeight / Mathf.Sin(cameraAngleRad);
-
-		// Calculate frustum dimensions at ground level
+		// Calculate frustum dimensions at that distance
 		float fovRad = cam.fieldOfView * Mathf.Deg2Rad;
-		cachedFrustumHalfHeight = Mathf.Tan(fovRad / 2f) * distanceToGround;
+		cachedFrustumHalfHeight = Mathf.Tan(fovRad / 2f) * viewDistance;
 		cachedFrustumHalfWidth = cachedFrustumHalfHeight * cam.aspect;
 	}
 
@@ -273,23 +267,18 @@ public class CameraFollow : MonoBehaviour
 		CacheCamera();
 		if (cam == null) return;
 
-		// Calculate frustum dimensions for gizmo drawing
-		float cameraHeight = transform.position.y - groundPlaneY;
-		float cameraAngleRad = transform.eulerAngles.x * Mathf.Deg2Rad;
-
-		if (cameraAngleRad <= 0.01f) return; // Avoid division by zero
-
-		float distanceToGround = cameraHeight / Mathf.Sin(cameraAngleRad);
+		// Calculate frustum dimensions using offset.z as view distance
+		float viewDistance = Mathf.Abs(offset.z);
 		float fovRad = cam.fieldOfView * Mathf.Deg2Rad;
-		float halfHeight = Mathf.Tan(fovRad / 2f) * distanceToGround;
+		float halfHeight = Mathf.Tan(fovRad / 2f) * viewDistance;
 		float halfWidth = halfHeight * cam.aspect;
 
-		// Draw frustum footprint at ground level
+		// Draw frustum footprint at ground level (centered on camera X, at target Z)
 		Gizmos.color = Color.yellow;
 		Vector3 center = new Vector3(
 			transform.position.x,
 			groundPlaneY,
-			transform.position.z + distanceToGround * Mathf.Cos(cameraAngleRad));
+			transform.position.z + viewDistance);
 
 		Gizmos.DrawWireCube(center, new Vector3(halfWidth * 2, 0.1f, halfHeight * 2));
 

@@ -154,7 +154,7 @@ MonoBehaviour:
   target: {fileID: 0}
   findPlayerAutomatically: 1
   initializePositionFromPlayer: 1
-  offset: {x: 0, y: 8.9, z: -17}
+  offset: {x: 0, y: 8.9, z: -19}
   followX: 1
   followY: 0
   followZ: 0
@@ -169,7 +169,7 @@ MonoBehaviour:
   frontWall: {fileID: 0}
   backWall: {fileID: 0}
   groundPlaneY: 0
-  wallMargin: -20
+  wallMargin: 0.5
   useFixedUpdate: 0
 --- !u!114 &3856779139690878859
 MonoBehaviour:

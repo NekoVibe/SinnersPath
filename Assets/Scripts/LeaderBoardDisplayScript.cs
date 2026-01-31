@@ -20,7 +20,7 @@ public class LeaderboardDisplay : MonoBehaviour
 	[SerializeField] private Color topColor = new Color(1f, 0.84f, 0f);         // Oro
 	[SerializeField] private Color secondColor = new Color(0.75f, 0.75f, 0.75f); // Plata
 	[SerializeField] private Color thirdColor = new Color(0.8f, 0.5f, 0.2f);     // Bronce
-	[SerializeField] private Color normalColor = new Color(0.2f, 0.2f, 0.2f); // Gris oscuro
+	[SerializeField] private Color normalColor = new Color(1f, 1f, 1f);
 
 	private List<LeaderboardEntry> spawnedEntries = new List<LeaderboardEntry>();
 	private float refreshTimer = 0f;

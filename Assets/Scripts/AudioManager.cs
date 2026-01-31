@@ -36,7 +36,17 @@ public class AudioManager : MonoBehaviour
 		}
 
 		Instance = this;
-		DontDestroyOnLoad(gameObject);
+
+		// Only call DontDestroyOnLoad if not already persistent (e.g., parent has it)
+		if (gameObject.scene.name != "DontDestroyOnLoad")
+		{
+			// DontDestroyOnLoad requires root GameObject - unparent first if needed
+			if (transform.parent != null)
+			{
+				transform.SetParent(null);
+			}
+			DontDestroyOnLoad(gameObject);
+		}
 
 		// Crear AudioSources si no están asignados
 		if (musicSource == null)

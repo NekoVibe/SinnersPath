@@ -18,7 +18,6 @@ public class PlayerMovement : MonoBehaviour
 
 	[Header("Look At Mouse")]
 	[SerializeField] private Transform spriteTransform; // El transform que tiene el sprite
-	[SerializeField] private Camera mainCamera;
 
 	private Rigidbody rb;
 	private PlayerInput playerInput;
@@ -33,6 +32,8 @@ public class PlayerMovement : MonoBehaviour
 	private float dashTimer;
 	private float dashCooldownTimer;
 	private Vector3 dashDirection;
+
+	private Camera mainCamera;
 
 	private void Awake()
 	{
@@ -49,25 +50,20 @@ public class PlayerMovement : MonoBehaviour
 		moveAction = playerInput.actions["Move"];
 		dashAction = playerInput.actions["Jump"];
 
-		// Buscar animator si no está asignado
 		if (animator == null)
 		{
 			animator = GetComponent<Animator>();
 		}
 
-		// ↓ AÑADIDO
-		// Buscar la cámara principal
 		if (mainCamera == null)
 		{
 			mainCamera = Camera.main;
 		}
 
-		// Si no hay spriteTransform asignado, usar el propio transform
 		if (spriteTransform == null)
 		{
 			spriteTransform = transform;
 		}
-		// ↑ HASTA AQUÍ
 	}
 
 	private void OnEnable()
@@ -182,7 +178,12 @@ public class PlayerMovement : MonoBehaviour
 	// ↓ AÑADIDO - Método para mirar hacia el cursor
 	private void LookAtMouse()
 	{
-		if (mainCamera == null || spriteTransform == null) return;
+		if (spriteTransform == null) return;
+
+		// Refresh camera reference if needed
+		if (mainCamera == null)
+			mainCamera = Camera.main;
+		if (mainCamera == null) return;
 
 		// Compare in screen space (works correctly even when camera is offset from player)
 		Vector3 playerScreenPos = mainCamera.WorldToScreenPoint(transform.position);
