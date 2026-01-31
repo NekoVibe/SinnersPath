@@ -83,6 +83,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   speed: 5
+  dashSpeed: 20
+  dashDuration: 0.2
+  dashCooldown: 1
 --- !u!54 &3526202443230208601
 Rigidbody:
   m_ObjectHideFlags: 0
