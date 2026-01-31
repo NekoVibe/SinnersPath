@@ -79,6 +79,7 @@ public class PlayerMovement : MonoBehaviour
 			if (dashTimer <= 0f)
 			{
 				isDashing = false;
+				DashTrailEffect.Instance?.StopTrail();
 			}
 		}
 	}
@@ -131,6 +132,9 @@ public class PlayerMovement : MonoBehaviour
 		isDashing = true;
 		dashTimer = dashDuration;
 		dashCooldownTimer = dashCooldown;
+
+		// Start trail effect
+		DashTrailEffect.Instance?.StartTrail();
 	}
 
 	public void ResetVelocity()

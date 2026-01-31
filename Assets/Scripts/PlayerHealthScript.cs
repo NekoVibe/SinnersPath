@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -20,6 +21,15 @@ public class PlayerHealth : MonoBehaviour
 	public float invulnerabilityTime = 1.5f; // Tiempo de invulnerabilidad tras recibir daño
 	private bool isInvulnerable = false;
 	private float invulnerabilityTimer = 0f;
+
+	[Header("Visual Feedback")]
+	[SerializeField] private float hitStopDuration = 0.05f;
+	private SpriteFlash spriteFlash;
+
+	private void Awake()
+	{
+		spriteFlash = GetComponent<SpriteFlash>();
+	}
 
 	private void Start()
 	{
@@ -52,6 +62,12 @@ public class PlayerHealth : MonoBehaviour
 
 		Debug.Log($"Player took {damage} damage. Health: {currentHealth}/{maxHealth}");
 
+		// Visual feedback
+		spriteFlash?.Flash();
+		CameraShake.Instance?.Shake();
+		ScreenEffects.Instance?.DamageFlash();
+		StartCoroutine(HitStop());
+
 		UpdateHealthHUD();
 
 		if (currentHealth <= 0)
@@ -76,7 +92,18 @@ public class PlayerHealth : MonoBehaviour
 		currentHealth = Mathf.Min(currentHealth, maxHealth); // No exceder el máximo
 
 		Debug.Log($"Player healed {amount}. Health: {currentHealth}/{maxHealth}");
+
+		// Visual feedback
+		ScreenEffects.Instance?.HealFlash();
+
 		UpdateHealthHUD();
+	}
+
+	private IEnumerator HitStop()
+	{
+		Time.timeScale = 0f;
+		yield return new WaitForSecondsRealtime(hitStopDuration);
+		Time.timeScale = 1f;
 	}
 
 	// Actualizar corazones en el HUD

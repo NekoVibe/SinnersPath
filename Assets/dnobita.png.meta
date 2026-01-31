@@ -103,10 +103,10 @@ TextureImporter:
       name: dnobita_0
       rect:
         serializedVersion: 2
-        x: 321
-        y: 0
-        width: 261
-        height: 512
+        x: 339
+        y: 11
+        width: 243
+        height: 501
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

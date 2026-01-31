@@ -10,9 +10,8 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private int startingCombo = 0;
 
 	[Header("Scene Management")]
-	[Tooltip("Drag scenes here. First scene = initial/menu. Reorder as needed.")]
-	[SerializeField] private SceneReference[] gameScenes = new SceneReference[0];
-	private int currentSceneIndex = 0;
+	[Tooltip("The starting/menu scene to load on restart or game over.")]
+	[SerializeField] private SceneReference startScene;
 
 	private int points;  // Puntuación final del juego
 	private int coins;
@@ -154,8 +153,8 @@ public class GameManager : MonoBehaviour
 		OnCoinsChanged?.Invoke(coins);
 		OnComboChanged?.Invoke(combo);
 
-		// 6. Cargar la primera escena (índice 0)
-		LoadSceneByIndex(0);
+		// 6. Cargar la escena inicial
+		LoadStartScene();
 	}
 
 	private void ResetPlayer()
@@ -230,68 +229,22 @@ public class GameManager : MonoBehaviour
 			Destroy(PlayerPersistence.Instance.gameObject);
 		}
 
-		LoadSceneByIndex(0);
+		LoadStartScene();
 	}
 
-	#endregion
-
-	#region Scene Navigation
-
 	/// <summary>
-	/// Load a scene by its index in the gameScenes array.
+	/// Load the starting/menu scene.
 	/// </summary>
-	public void LoadSceneByIndex(int index)
+	public void LoadStartScene()
 	{
-		if (gameScenes == null || gameScenes.Length == 0)
+		if (startScene == null || !startScene.IsValid)
 		{
-			Debug.LogError("No scenes configured in GameManager!");
+			Debug.LogError("Start scene is not assigned in GameManager!");
 			return;
 		}
 
-		if (index < 0 || index >= gameScenes.Length)
-		{
-			Debug.LogError($"Scene index {index} out of range! (0-{gameScenes.Length - 1})");
-			return;
-		}
-
-		if (!gameScenes[index].IsValid)
-		{
-			Debug.LogError($"Scene at index {index} is not assigned!");
-			return;
-		}
-
-		currentSceneIndex = index;
-		SceneManager.LoadScene(gameScenes[index].SceneName);
+		SceneManager.LoadScene(startScene.SceneName);
 	}
-
-	/// <summary>
-	/// Load the next scene in the array. Loops back to first if at end.
-	/// </summary>
-	public void LoadNextScene()
-	{
-		int nextIndex = (currentSceneIndex + 1) % gameScenes.Length;
-		LoadSceneByIndex(nextIndex);
-	}
-
-	/// <summary>
-	/// Load the previous scene in the array. Loops to last if at start.
-	/// </summary>
-	public void LoadPreviousScene()
-	{
-		int prevIndex = currentSceneIndex - 1;
-		if (prevIndex < 0) prevIndex = gameScenes.Length - 1;
-		LoadSceneByIndex(prevIndex);
-	}
-
-	/// <summary>
-	/// Get the current scene index.
-	/// </summary>
-	public int GetCurrentSceneIndex() => currentSceneIndex;
-
-	/// <summary>
-	/// Get total number of configured scenes.
-	/// </summary>
-	public int GetSceneCount() => gameScenes?.Length ?? 0;
 
 	#endregion
 

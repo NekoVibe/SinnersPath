@@ -48,6 +48,8 @@ GameObject:
   - component: {fileID: 5113672074468134375}
   - component: {fileID: 8517617963293899866}
   - component: {fileID: 843692965030332901}
+  - component: {fileID: 8536263376296083590}
+  - component: {fileID: 5542774482605372535}
   m_Layer: 6
   m_Name: Personaje
   m_TagString: Player
@@ -124,7 +126,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -201,8 +203,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   maxHealth: 3
-  _currentHealth: 0
+  _currentHealth: 3
   invulnerabilityTime: 1.5
+  hitStopDuration: 0.25
 --- !u!65 &5113672074468134375
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -237,11 +240,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 8
-  acceleration: 50
-  deceleration: 40
+  acceleration: 80
+  deceleration: 160
   dashSpeed: 25
-  dashDuration: 0.15
-  dashCooldown: 0.8
+  dashDuration: 0.1
+  dashCooldown: 0.5
 --- !u!114 &843692965030332901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,3 +275,35 @@ MonoBehaviour:
   m_DefaultActionMap: 
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &8536263376296083590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8644148489220667401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5879f8cfcb7067240aedce47872eaff3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BillboardSprite
+  lockYAxis: 1
+  flipWithMovement: 1
+  flipThreshold: 0.1
+--- !u!114 &5542774482605372535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8644148489220667401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f58e6bbc168a6c4eaf55729b1fca188, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DashTrailEffect
+  spawnInterval: 0.02
+  fadeDuration: 0.2
+  maxAfterimages: 10
+  colorDarken: 0.3
+  sourceSprite: {fileID: 2569514230709742275}
