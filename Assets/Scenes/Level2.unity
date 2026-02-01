@@ -1240,7 +1240,7 @@ PrefabInstance:
     - target: {fileID: 3519396508623220762, guid: 632729a1e84059d499a6668b663c4052, type: 3}
       propertyPath: maskIcon
       value: 
-      objectReference: {fileID: 5264695127882112060, guid: c76516f80d278394193532ed27fbe382, type: 3}
+      objectReference: {fileID: -8505317153632618118, guid: acd65125e07d4854ea77be2b89442e50, type: 3}
     - target: {fileID: 3519396508623220762, guid: 632729a1e84059d499a6668b663c4052, type: 3}
       propertyPath: maskImage
       value: 
@@ -1255,7 +1255,7 @@ PrefabInstance:
       objectReference: {fileID: 608707542}
     - target: {fileID: 3519396508623220762, guid: 632729a1e84059d499a6668b663c4052, type: 3}
       propertyPath: maskToUnlock
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3519396508623220762, guid: 632729a1e84059d499a6668b663c4052, type: 3}
       propertyPath: dialogueGroup
@@ -1272,26 +1272,26 @@ PrefabInstance:
     - target: {fileID: 3519396508623220762, guid: 632729a1e84059d499a6668b663c4052, type: 3}
       propertyPath: maskWeaponPrefab
       value: 
-      objectReference: {fileID: 5865662766892410920, guid: 5b8892acac5e7e3478347548ca2be04e, type: 3}
+      objectReference: {fileID: 5865662766892410920, guid: 99a245dfe7f0314419a9c2a31dfdce3f, type: 3}
     - target: {fileID: 3519396508623220762, guid: 632729a1e84059d499a6668b663c4052, type: 3}
       propertyPath: autoStartTracking
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3519396508623220762, guid: 632729a1e84059d499a6668b663c4052, type: 3}
       propertyPath: nextScene.scenePath
-      value: Assets/Scenes/Level2.unity
+      value: Assets/Scenes/Tutorial.unity
       objectReference: {fileID: 0}
     - target: {fileID: 3519396508623220762, guid: 632729a1e84059d499a6668b663c4052, type: 3}
       propertyPath: nextScene.sceneAsset
       value: 
-      objectReference: {fileID: 102900000, guid: 515168a8f2e1adf4ca566b6f08775417, type: 3}
+      objectReference: {fileID: 102900000, guid: 6c3acc9bf4aa691469cf59549dec793b, type: 3}
     - target: {fileID: 3519396508623220762, guid: 632729a1e84059d499a6668b663c4052, type: 3}
       propertyPath: postUnlockDialogue.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3519396508623220762, guid: 632729a1e84059d499a6668b663c4052, type: 3}
       propertyPath: 'postUnlockDialogue.Array.data[0]'
-      value: Your powers won't go wasted
+      value: ME CAGO EN LA PUTA
       objectReference: {fileID: 0}
     - target: {fileID: 3519396508623220762, guid: 632729a1e84059d499a6668b663c4052, type: 3}
       propertyPath: 'postUnlockDialogue.Array.data[1]'

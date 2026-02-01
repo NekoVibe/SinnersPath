@@ -219,7 +219,7 @@ public class PlayerPersistence : MonoBehaviour
 	}
 
 	// Restore masks that were unlocked (saved in PlayerPrefs)
-	private void RestoreUnlockedMasks()
+	public void RestoreUnlockedMasks()
 	{
 		WeaponInventory inventory = GetComponent<WeaponInventory>();
 		if (inventory == null)
