@@ -1962,9 +1962,29 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1630014867}
     - target: {fileID: 2795498035571539030, guid: fd33a9d2801db52439faecc8297bdf07, type: 3}
+      propertyPath: heartImage
+      value: 
+      objectReference: {fileID: 1099068807}
+    - target: {fileID: 2795498035571539030, guid: fd33a9d2801db52439faecc8297bdf07, type: 3}
       propertyPath: comboParent
       value: 
       objectReference: {fileID: 1461030298}
+    - target: {fileID: 2795498035571539030, guid: fd33a9d2801db52439faecc8297bdf07, type: 3}
+      propertyPath: spriteFullHeart
+      value: 
+      objectReference: {fileID: -3621682252929738812, guid: 422d7d72d7853304694728b30e91e4f0, type: 3}
+    - target: {fileID: 2795498035571539030, guid: fd33a9d2801db52439faecc8297bdf07, type: 3}
+      propertyPath: spriteEmptyHeart
+      value: 
+      objectReference: {fileID: 3514642804041318561, guid: f76a23bfcb87e77409fd0d483ae2d999, type: 3}
+    - target: {fileID: 2795498035571539030, guid: fd33a9d2801db52439faecc8297bdf07, type: 3}
+      propertyPath: spriteHeartOneLife
+      value: 
+      objectReference: {fileID: -1957253202200871324, guid: 5891153197aa0ca45b784c7c99a01bdf, type: 3}
+    - target: {fileID: 2795498035571539030, guid: fd33a9d2801db52439faecc8297bdf07, type: 3}
+      propertyPath: spriteHeartTwoLifes
+      value: 
+      objectReference: {fileID: -34151280512049172, guid: 0983503172146034e8a8dfb3b9697dfa, type: 3}
     - target: {fileID: 2795498035571539030, guid: fd33a9d2801db52439faecc8297bdf07, type: 3}
       propertyPath: 'hearts.Array.data[0]'
       value: 
