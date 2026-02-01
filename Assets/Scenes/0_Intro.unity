@@ -226,7 +226,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::IntroSequence
   nextScene:
     sceneAsset: {fileID: 102900000, guid: 2c989a5325f852d4694f0381bb3f75d6, type: 3}
-    scenePath: Assets/Scenes/Story.unity
+    scenePath: Assets/Scenes/1_Story.unity
   logoGroup: {fileID: 663829485}
   initialDelay: 2
   fadeInDuration: 1.5

@@ -16,6 +16,8 @@ public class MeleeSwingWeapon : WeaponBase
 
 	[Header("Visual Effect")]
 	[SerializeField] private GameObject swingEffectPrefab;
+	[SerializeField] private float effectScale = 3f;
+	[SerializeField] private float effectYOffset = 0.1f;
 
 	[Header("Audio")]
 	[SerializeField] private AudioClip swingSound;
@@ -104,7 +106,11 @@ public class MeleeSwingWeapon : WeaponBase
 		GameObject effectObj = null;
 		if (swingEffectPrefab != null)
 		{
-			effectObj = Instantiate(swingEffectPrefab, playerTransform.position, Quaternion.Euler(0, centerAngle, 0));
+			// Position slightly above ground, rotated to match player facing direction
+			Vector3 effectPos = playerTransform.position + Vector3.up * effectYOffset;
+			float playerAngle = playerTransform.eulerAngles.y;
+			effectObj = Instantiate(swingEffectPrefab, effectPos, Quaternion.Euler(0, playerAngle, 0));
+			effectObj.transform.localScale = Vector3.one * effectScale;
 			Destroy(effectObj, swingDuration + 0.1f);
 		}
 
@@ -167,7 +173,7 @@ public class MeleeSwingWeapon : WeaponBase
 			// Actualizar posición del efecto visual
 			if (effectObj != null)
 			{
-				effectObj.transform.position = playerTransform.position;
+				effectObj.transform.position = playerTransform.position + Vector3.up * effectYOffset;
 			}
 
 			elapsed += Time.deltaTime;

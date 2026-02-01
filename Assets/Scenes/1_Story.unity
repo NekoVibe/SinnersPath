@@ -1325,6 +1325,10 @@ PrefabInstance:
       propertyPath: doorSpawnEffect
       value: 
       objectReference: {fileID: 1747779617}
+    - target: {fileID: 3519396508623220762, guid: 632729a1e84059d499a6668b663c4052, type: 3}
+      propertyPath: nextScene.scenePath
+      value: Assets/Scenes/2_Level1.unity
+      objectReference: {fileID: 0}
     - target: {fileID: 6555778310982573343, guid: 632729a1e84059d499a6668b663c4052, type: 3}
       propertyPath: m_Name
       value: MaskUnlockManager

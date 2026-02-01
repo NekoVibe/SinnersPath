@@ -226,6 +226,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerPersistence
   spawnPointTag: Respawn
+  redMaskPrefab: {fileID: 5865662766892410920, guid: 1106912cc048b1c4aa2a858a493e9f8f, type: 3}
+  blueMaskPrefab: {fileID: 5865662766892410920, guid: 5b8892acac5e7e3478347548ca2be04e, type: 3}
+  yellowMaskPrefab: {fileID: 5865662766892410920, guid: 99a245dfe7f0314419a9c2a31dfdce3f, type: 3}
 --- !u!114 &8517617963293899866
 MonoBehaviour:
   m_ObjectHideFlags: 0
