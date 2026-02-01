@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2295790174448526791}
   - component: {fileID: 619412616179166914}
   m_Layer: 0
-  m_Name: RedMask
+  m_Name: YellowMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,15 +45,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d835631b6ae42054495af6df5bb1e2f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RangedWeapon
-  weaponName: RedMask
-  weaponIcon: {fileID: 5264695127882112060, guid: c76516f80d278394193532ed27fbe382, type: 3}
+  weaponName: YellowMask
+  weaponIcon: {fileID: -5557553270589673716, guid: a933ab388dc52fb4b8e1cc8ec8a65d3f, type: 3}
   damage: 10
   fireRate: 0.5
   hitLayers:
     serializedVersion: 2
     m_Bits: 128
-  bulletPrefab: {fileID: 5042636497173607135, guid: cc980f5ae5fb7d64986344f98a34168b, type: 3}
-  firePoint: {fileID: 5206776786792775478}
+  bulletPrefab: {fileID: 0}
+  firePoint: {fileID: 0}
   muzzleFlashEffect: {fileID: 0}
   impactEffect: {fileID: 0}
   shootSound: {fileID: 0}
