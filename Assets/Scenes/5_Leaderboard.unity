@@ -591,6 +591,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 244609691}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &261461784 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3555135158756192661, guid: 7912865af747a3a4699f0f2cd52cffc0, type: 3}
+  m_PrefabInstance: {fileID: 2474055}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &320132299
 GameObject:
   m_ObjectHideFlags: 0
@@ -993,6 +1004,30 @@ PhysicsMaterial:
   m_Bounciness: 0
   m_FrictionCombine: 0
   m_BounceCombine: 0
+--- !u!134 &587575947
+PhysicsMaterial:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  serializedVersion: 2
+  m_DynamicFriction: 0.6
+  m_StaticFriction: 0.6
+  m_Bounciness: 0
+  m_FrictionCombine: 0
+  m_BounceCombine: 0
+--- !u!114 &721602246 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9098248989276017572, guid: 7912865af747a3a4699f0f2cd52cffc0, type: 3}
+  m_PrefabInstance: {fileID: 2474055}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &850324990
 GameObject:
   m_ObjectHideFlags: 0
@@ -1753,11 +1788,11 @@ PrefabInstance:
     - target: {fileID: 2795498035571539030, guid: fd33a9d2801db52439faecc8297bdf07, type: 3}
       propertyPath: 'hearts.Array.data[1]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 261461784}
     - target: {fileID: 2795498035571539030, guid: fd33a9d2801db52439faecc8297bdf07, type: 3}
       propertyPath: 'hearts.Array.data[2]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 721602246}
     - target: {fileID: 2795498035571539030, guid: fd33a9d2801db52439faecc8297bdf07, type: 3}
       propertyPath: 'inventorySlots.Array.data[0]'
       value: 
@@ -1991,6 +2026,22 @@ MonoBehaviour:
   scaleWithHeight: 1
   maxHeightForScaling: 10
   minScale: 0.5
+--- !u!114 &1841059709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841059701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 612c592f88395c5488fd6416d9bb0e4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteStacking
+  layerCount: 5
+  layerSpacing: 0.06
+  enableDarkening: 1
+  darkenAmount: 0.4
 --- !u!1001 &7171357925353169889
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2069,7 +2120,3 @@ SceneRoots:
   - {fileID: 329146171}
   - {fileID: 2474055}
   - {fileID: 1775781532}
-  - {fileID: 994553220}
-  - {fileID: 1738552736}
-  - {fileID: 1096252390}
-  - {fileID: 1044984769}
