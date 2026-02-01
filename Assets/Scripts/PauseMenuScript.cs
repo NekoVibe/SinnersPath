@@ -23,7 +23,6 @@ public class PauseMenu : MonoBehaviour
     public Button btnHab3;
     public Button btnPrev;
     public Button btnNext;
-    public Button btnReload;
     public Button btnPickUp;
     public Button btnDash;
 
@@ -50,7 +49,6 @@ public class PauseMenu : MonoBehaviour
         btnHab3?.onClick.AddListener(() => StartRebind("keyHab3"));
         btnPrev?.onClick.AddListener(() => StartRebind("keyPrevHab"));
         btnNext?.onClick.AddListener(() => StartRebind("keyNextHab"));
-        btnReload?.onClick.AddListener(() => StartRebind("keyReload"));
         btnPickUp?.onClick.AddListener(() => StartRebind("keyPickUp"));
         btnDash?.onClick.AddListener(() => StartRebind("keyDash"));
 
@@ -151,7 +149,6 @@ public class PauseMenu : MonoBehaviour
         SetButtonText(btnHab3, data.keyHab3);
         SetButtonText(btnPrev, data.keyPrevHab);
         SetButtonText(btnNext, data.keyNextHab);
-        SetButtonText(btnReload, data.keyReload);
         SetButtonText(btnPickUp, data.keyPickUp);
         SetButtonText(btnDash, data.keyDash);
     }
@@ -239,7 +236,6 @@ public class PauseMenu : MonoBehaviour
             case "keyHab3": data.keyHab3 = keyName; break;
             case "keyPrevHab": data.keyPrevHab = keyName; break;
             case "keyNextHab": data.keyNextHab = keyName; break;
-            case "keyReload": data.keyReload = keyName; break;
             case "keyPickUp": data.keyPickUp = keyName; break;
             case "keyDash": data.keyDash = keyName; break;
         }
@@ -254,7 +250,6 @@ public class PauseMenu : MonoBehaviour
             "keyHab3" => btnHab3,
             "keyPrevHab" => btnPrev,
             "keyNextHab" => btnNext,
-            "keyReload" => btnReload,
             "keyPickUp" => btnPickUp,
             "keyDash" => btnDash,
             _ => null
