@@ -27,6 +27,7 @@ public class MeleeSwingWeapon : WeaponBase
 	private float lastAttackTime = 0f;
 	private Camera mainCamera;
 	private bool isSwinging = false;
+	private float swingStartTime = 0f;
 
 	protected override void Start()
 	{
@@ -39,6 +40,12 @@ public class MeleeSwingWeapon : WeaponBase
 		}
 
 		mainCamera = Camera.main;
+	}
+
+	private void OnEnable()
+	{
+		// Reset swing state when enabled (fixes stuck state after scene changes)
+		isSwinging = false;
 	}
 
 	// Obtener el transform del jugador dinámicamente
@@ -75,11 +82,19 @@ public class MeleeSwingWeapon : WeaponBase
 			return;
 		}
 
+		// Safety: reset stuck swing state after timeout
+		if (isSwinging && Time.time > swingStartTime + swingDuration + 1f)
+		{
+			Debug.LogWarning("MeleeSwingWeapon: Resetting stuck isSwinging state");
+			isSwinging = false;
+		}
+
 		if (isSwinging)
 		{
 			return;
 		}
 
+		swingStartTime = Time.time;
 		StartCoroutine(PerformSwing());
 		lastAttackTime = Time.time;
 	}
@@ -106,11 +121,13 @@ public class MeleeSwingWeapon : WeaponBase
 		GameObject effectObj = null;
 		if (swingEffectPrefab != null)
 		{
-			// Position slightly above ground, rotated to match player facing direction
+			// Position slightly above ground
 			Vector3 effectPos = playerTransform.position + Vector3.up * effectYOffset;
-			float playerAngle = playerTransform.eulerAngles.y;
-			effectObj = Instantiate(swingEffectPrefab, effectPos, Quaternion.Euler(0, playerAngle, 0));
-			effectObj.transform.localScale = Vector3.one * effectScale;
+			effectObj = Instantiate(swingEffectPrefab, effectPos, Quaternion.identity);
+
+			// Flip sprite based on attack direction (left/right)
+			float flipX = cursorDirection.x < 0 ? -1f : 1f;
+			effectObj.transform.localScale = new Vector3(effectScale * flipX, effectScale, effectScale);
 			Destroy(effectObj, swingDuration + 0.1f);
 		}
 

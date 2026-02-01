@@ -80,7 +80,7 @@ public class PlayerPersistence : MonoBehaviour
 
 		// 2. Reset player state for new level (not tutorial)
 		// Skip reset for Story scene (tutorial)
-		if (scene.name != "Story")
+		if (scene.name != "1_Story")
 		{
 			// Re-enable dash
 			movement?.EnableDash();

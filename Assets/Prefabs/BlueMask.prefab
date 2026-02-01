@@ -51,7 +51,7 @@ MonoBehaviour:
   hitLayers:
     serializedVersion: 2
     m_Bits: 128
-  effectPrefab: {fileID: 5042636497173607135, guid: cc980f5ae5fb7d64986344f98a34168b, type: 3}
+  effectPrefab: {fileID: 1000000000000000000, guid: b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6, type: 3}
   effectDuration: 1
   spawnEffect: {fileID: 0}
   spawnSound: {fileID: 0}

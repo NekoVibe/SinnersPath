@@ -51,7 +51,7 @@ MonoBehaviour:
   hitLayers:
     serializedVersion: 2
     m_Bits: 128
-  swingRange: 2.5
+  swingRange: 5.5
   swingAngle: 120
   swingDuration: 0.3
   swingEffectPrefab: {fileID: 1000000000000000000, guid: 689ad613a86c7a34b98e7933624211b1, type: 3}

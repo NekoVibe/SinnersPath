@@ -315,7 +315,7 @@ public class DebugPanel : MonoBehaviour
     {
         GUILayout.Label("<b>Scene Skip</b>", GetHeaderStyle());
 
-        string[] scenes = { "Intro", "Story", "Tutorial", "Level1", "Rest", "Outro" };
+        string[] scenes = { "0_Intro", "1_Story", "2_Level1", "3_Rest", "4_Level2", "5_Leaderboard" };
 
         // Row 1
         GUILayout.BeginHorizontal();

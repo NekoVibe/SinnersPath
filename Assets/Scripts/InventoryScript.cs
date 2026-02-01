@@ -21,6 +21,13 @@ public class WeaponInventory : MonoBehaviour
 	private WeaponBase currentWeapon;
 	private WeaponPickup nearbyWeapon; // Arma cercana que se puede recoger
 
+	// Switch cooldown to prevent spam
+	private float lastSwitchTime = -1f;
+	private const float SWITCH_COOLDOWN = 0.15f;
+
+	// Track scroll state to only trigger once per scroll gesture
+	private bool wasScrolling = false;
+
 	// Animation parameter hash
 	private static readonly int ArmaHash = Animator.StringToHash("arma");
 
@@ -93,6 +100,23 @@ public class WeaponInventory : MonoBehaviour
 		if (index < 0 || index >= weapons.Count)
 			return;
 
+		// Skip if already equipped
+		if (index == currentWeaponIndex)
+			return;
+
+		// Check cooldown to prevent spam switching
+		if (Time.time - lastSwitchTime < SWITCH_COOLDOWN)
+		{
+			Debug.Log($"[WeaponSwitch] BLOCKED by cooldown: {currentWeaponIndex} -> {index}");
+			return;
+		}
+
+		Debug.Log($"[WeaponSwitch] Switching: {currentWeaponIndex} -> {index} (Frame: {Time.frameCount})");
+		lastSwitchTime = Time.time;
+
+		// Update animator FIRST so character visual changes before weapon swap
+		UpdateAnimatorWeaponState(index + 1); // +1 porque 0 = sin arma
+
 		// Desequipar arma actual
 		if (currentWeapon != null)
 		{
@@ -103,9 +127,6 @@ public class WeaponInventory : MonoBehaviour
 		currentWeaponIndex = index;
 		currentWeapon = weapons[currentWeaponIndex];
 		currentWeapon.OnEquip();
-
-		// NUEVO: Actualizar parámetro de animación (arma 1, 2, 3...)
-		UpdateAnimatorWeaponState(currentWeaponIndex + 1); // +1 porque 0 = sin arma
 
 		// Actualizar HUD - seleccionar slot
 		HUDManager.Instance?.SeleccionarSlot(currentWeaponIndex);
@@ -121,26 +142,25 @@ public class WeaponInventory : MonoBehaviour
 		}
 	}
 
-	// Cambiar a siguiente arma
+	// Cambiar a siguiente arma (with wrap-around)
 	public void NextWeapon()
 	{
 		if (weapons.Count <= 1)
 			return;
 
 		int nextIndex = (currentWeaponIndex + 1) % weapons.Count;
+		Debug.Log($"[WeaponSwitch] NextWeapon called: current={currentWeaponIndex}, next={nextIndex}");
 		EquipWeapon(nextIndex);
 	}
 
-	// Cambiar a arma anterior
+	// Cambiar a arma anterior (with wrap-around)
 	public void PreviousWeapon()
 	{
 		if (weapons.Count <= 1)
 			return;
 
-		int prevIndex = currentWeaponIndex - 1;
-		if (prevIndex < 0)
-			prevIndex = weapons.Count - 1;
-
+		int prevIndex = (currentWeaponIndex - 1 + weapons.Count) % weapons.Count;
+		Debug.Log($"[WeaponSwitch] PreviousWeapon called: current={currentWeaponIndex}, prev={prevIndex}");
 		EquipWeapon(prevIndex);
 	}
 
@@ -228,27 +248,34 @@ public class WeaponInventory : MonoBehaviour
 			Reload();
 		}
 
-		// Cambiar arma
-		if (Input.GetKeyDown(nextWeaponKey))
+		// Cambiar arma (only one input source per frame)
+		bool weaponSwitched = false;
+
+		if (Input.GetKeyDown(nextWeaponKey) && !weaponSwitched)
 		{
 			NextWeapon();
+			weaponSwitched = true;
 		}
 
-		if (Input.GetKeyDown(prevWeaponKey))
+		if (Input.GetKeyDown(prevWeaponKey) && !weaponSwitched)
 		{
 			PreviousWeapon();
+			weaponSwitched = true;
 		}
 
-		// Cambiar arma con rueda del ratón
+		// Cambiar arma con rueda del ratón (only trigger once per scroll gesture)
 		float scroll = Input.GetAxis("Mouse ScrollWheel");
-		if (scroll > 0f)
+		bool isScrolling = Mathf.Abs(scroll) > 0.05f;
+
+		if (isScrolling && !wasScrolling && !weaponSwitched)
 		{
-			NextWeapon();
+			if (scroll > 0)
+				PreviousWeapon();
+			else
+				NextWeapon();
+			weaponSwitched = true;
 		}
-		else if (scroll < 0f)
-		{
-			PreviousWeapon();
-		}
+		wasScrolling = isScrolling;
 
 		// Cambiar arma con teclas numéricas
 		for (int i = 0; i < weapons.Count && i < 9; i++)

@@ -66,6 +66,16 @@ public class AreaEffectWeapon : WeaponBase
 		GameObject effect = Instantiate(effectPrefab, spawnPosition, Quaternion.identity);
 		effect.name = "BlueMask_AreaEffect";
 
+		// Flip sprite based on click direction relative to player
+		Vector3 playerPos = transform.root.position;
+		bool clickIsLeft = spawnPosition.x < playerPos.x;
+		if (clickIsLeft)
+		{
+			Vector3 scale = effect.transform.localScale;
+			scale.x = -Mathf.Abs(scale.x);
+			effect.transform.localScale = scale;
+		}
+
 		// Asegurar que el collider sea trigger
 		Collider col = effect.GetComponent<Collider>();
 		if (col != null)
