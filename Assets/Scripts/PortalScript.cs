@@ -6,6 +6,7 @@ public class LevelPortal : MonoBehaviour
 	[Header("Level Settings")]
 	[Tooltip("Drag a scene here to set the target level")]
 	[SerializeField] private SceneReference targetScene;
+	[SerializeField] private string targetSceneName; // Alternative: set by name at runtime
 
 	[Header("Activation Settings")]
 	public bool requireInput = true; // Si necesita presionar tecla o es automático
@@ -64,14 +65,34 @@ public class LevelPortal : MonoBehaviour
 
 	private void LoadLevel()
 	{
-		if (!targetScene.IsValid)
+		// Get scene name from SceneReference or fallback to runtime-set name
+		string sceneName = targetScene.IsValid ? targetScene.SceneName : targetSceneName;
+
+		if (string.IsNullOrEmpty(sceneName))
 		{
-			Debug.LogError("Target scene is not set! Drag a scene to the 'Target Scene' field.");
+			Debug.LogError("Target scene is not set! Drag a scene to the 'Target Scene' field or call SetTargetScene().");
 			return;
 		}
 
-		Debug.Log($"Loading level: {targetScene.SceneName}");
-		SceneManager.LoadScene(targetScene.SceneName);
+		Debug.Log($"Loading level: {sceneName}");
+
+		// Use SceneFader for smooth transition if available
+		if (SceneFader.Instance != null)
+		{
+			SceneFader.Instance.FadeToScene(sceneName, 0.5f);
+		}
+		else
+		{
+			SceneManager.LoadScene(sceneName);
+		}
+	}
+
+	/// <summary>
+	/// Set target scene at runtime (used by MaskUnlockManager)
+	/// </summary>
+	public void SetTargetScene(string sceneName)
+	{
+		targetSceneName = sceneName;
 	}
 
 	// Opcional: Dibujar área del portal en el editor

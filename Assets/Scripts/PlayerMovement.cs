@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
 	private float dashTimer;
 	private float dashCooldownTimer;
 	private Vector3 dashDirection;
+	private bool dashEnabled = true;
 
 	private Camera mainCamera;
 
@@ -80,6 +81,9 @@ public class PlayerMovement : MonoBehaviour
 
 	private void Update()
 	{
+		// Skip input processing in cinematic mode
+		if (cinematicMode) return;
+
 		// Read input
 		moveInput = moveAction.ReadValue<Vector2>();
 
@@ -109,13 +113,15 @@ public class PlayerMovement : MonoBehaviour
 		// Actualizar animación
 		UpdateAnimation();
 
-		// ↓ AÑADIDO - Mirar hacia el cursor
+		// Mirar hacia el cursor
 		LookAtMouse();
-		// ↑ HASTA AQUÍ
 	}
 
 	private void FixedUpdate()
 	{
+		// Skip physics in cinematic mode
+		if (cinematicMode) return;
+
 		if (isDashing)
 		{
 			ApplyDash();
@@ -143,7 +149,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private void OnDash(InputAction.CallbackContext context)
 	{
-		if (dashCooldownTimer > 0f || isDashing)
+		if (!dashEnabled || dashCooldownTimer > 0f || isDashing)
 			return;
 
 		// Dash in movement direction, or last direction if stationary
@@ -208,5 +214,75 @@ public class PlayerMovement : MonoBehaviour
 		currentVelocity = Vector2.zero;
 		isDashing = false;
 		dashTimer = 0f;
+
+		// Actually stop the Rigidbody
+		if (rb != null)
+			rb.linearVelocity = new Vector3(0f, rb.linearVelocity.y, 0f);
 	}
+
+	#region Cinematic Controls
+
+	private bool cinematicMode = false;
+
+	/// <summary>
+	/// Enable cinematic mode - disables input and mouse look
+	/// </summary>
+	public void EnterCinematicMode()
+	{
+		cinematicMode = true;
+		ResetVelocity();
+	}
+
+	/// <summary>
+	/// Exit cinematic mode - re-enables input and mouse look
+	/// </summary>
+	public void ExitCinematicMode()
+	{
+		cinematicMode = false;
+	}
+
+	/// <summary>
+	/// Set walking animation state (for cinematics)
+	/// </summary>
+	public void SetWalking(bool walking)
+	{
+		if (animator != null)
+			animator.SetBool("isWalking", walking);
+	}
+
+	/// <summary>
+	/// Force sprite to face right (positive X scale)
+	/// </summary>
+	public void FaceRight()
+	{
+		if (spriteTransform != null)
+			spriteTransform.localScale = new Vector3(Mathf.Abs(spriteTransform.localScale.x), spriteTransform.localScale.y, spriteTransform.localScale.z);
+	}
+
+	/// <summary>
+	/// Force sprite to face left (negative X scale)
+	/// </summary>
+	public void FaceLeft()
+	{
+		if (spriteTransform != null)
+			spriteTransform.localScale = new Vector3(-Mathf.Abs(spriteTransform.localScale.x), spriteTransform.localScale.y, spriteTransform.localScale.z);
+	}
+
+	/// <summary>
+	/// Enable dash ability
+	/// </summary>
+	public void EnableDash()
+	{
+		dashEnabled = true;
+	}
+
+	/// <summary>
+	/// Disable dash ability
+	/// </summary>
+	public void DisableDash()
+	{
+		dashEnabled = false;
+	}
+
+	#endregion
 }

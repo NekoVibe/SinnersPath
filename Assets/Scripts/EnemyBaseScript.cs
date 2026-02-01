@@ -509,6 +509,12 @@ public class EnemyBase : MonoBehaviour
 		return currentHealth;
 	}
 
+	public void SetHealth(int health)
+	{
+		maxHealth = health;
+		currentHealth = health;
+	}
+
 	private void OnDrawGizmosSelected()
 	{
 		// Attack origin point (small red sphere)

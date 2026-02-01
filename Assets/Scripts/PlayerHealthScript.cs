@@ -21,6 +21,7 @@ public class PlayerHealth : MonoBehaviour
 	public float invulnerabilityTime = 1.5f; // Tiempo de invulnerabilidad tras recibir daño
 	private bool isInvulnerable = false;
 	private float invulnerabilityTimer = 0f;
+	private bool godMode = false; // Invincible but still shows damage effects
 
 	[Header("Visual Feedback")]
 	[SerializeField] private float hitStopDuration = 0.05f;
@@ -54,7 +55,24 @@ public class PlayerHealth : MonoBehaviour
 	// Recibir daño
 	public void TakeDamage(int damage)
 	{
-		if (isInvulnerable || currentHealth <= 0)
+		if (currentHealth <= 0)
+			return;
+
+		if (isInvulnerable)
+			return;
+
+		// Visual feedback (always shown)
+		spriteFlash?.Flash();
+		CameraShake.Instance?.Shake();
+		ScreenEffects.Instance?.DamageFlash();
+		StartCoroutine(HitStop());
+
+		// Activate brief invulnerability
+		isInvulnerable = true;
+		invulnerabilityTimer = invulnerabilityTime;
+
+		// God mode: don't reduce health
+		if (godMode)
 			return;
 
 		currentHealth -= damage;
@@ -151,6 +169,25 @@ public class PlayerHealth : MonoBehaviour
 		UpdateHealthHUD();
 		Debug.Log("Player health reset to maximum");
 	}
+
+	#region God Mode
+
+	public void EnableGodMode()
+	{
+		godMode = true;
+	}
+
+	public void DisableGodMode()
+	{
+		godMode = false;
+	}
+
+	public bool IsGodMode()
+	{
+		return godMode;
+	}
+
+	#endregion
 
 	// Para debugging: cambiar vida directamente
 	[ContextMenu("Test: Take 1 Damage")]

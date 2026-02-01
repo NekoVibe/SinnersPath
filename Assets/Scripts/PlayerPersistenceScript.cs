@@ -8,6 +8,11 @@ public class PlayerPersistence : MonoBehaviour
 	[Header("Spawn Settings")]
 	public string spawnPointTag = "SpawnPoint"; // Tag para identificar puntos de spawn
 
+	[Header("Mask Prefabs")]
+	[SerializeField] private GameObject redMaskPrefab;
+	[SerializeField] private GameObject blueMaskPrefab;
+	[SerializeField] private GameObject yellowMaskPrefab;
+
 	private void Awake()
 	{
 		// Patrón Singleton: solo puede haber un Player
@@ -72,6 +77,30 @@ public class PlayerPersistence : MonoBehaviour
 		// Reset movement velocity after reposition
 		PlayerMovement movement = GetComponent<PlayerMovement>();
 		movement?.ResetVelocity();
+
+		// 2. Reset player state for new level (not tutorial)
+		// Skip reset for Story scene (tutorial)
+		if (scene.name != "Story")
+		{
+			// Re-enable dash
+			movement?.EnableDash();
+
+			// Re-enable combat
+			PlayerMeleeAttack meleeAttack = GetComponent<PlayerMeleeAttack>();
+			meleeAttack?.EnableCombat();
+
+			// Disable god mode
+			PlayerHealth health = GetComponent<PlayerHealth>();
+			health?.DisableGodMode();
+
+			// Re-activate UI canvases that were disabled during tutorial
+			ActivateTutorialHiddenUI();
+
+			// Restore unlocked masks from PlayerPrefs
+			RestoreUnlockedMasks();
+
+			Debug.Log("[PlayerPersistence] Player state reset for new level");
+		}
 
 		// 2. FORZAR actualización del HUD con el estado actual del Player
 		PlayerHealth playerHealth = GetComponent<PlayerHealth>();
@@ -141,6 +170,106 @@ public class PlayerPersistence : MonoBehaviour
 		else
 		{
 			Debug.LogWarning($"No spawn point found with tag '{spawnPointTag}' or name 'spawnpoint'");
+		}
+	}
+
+	// Re-activate UI canvases that were hidden during tutorial
+	private void ActivateTutorialHiddenUI()
+	{
+		// Find the UI parent object (may be named "UI" in hierarchy)
+		// Then activate HUDCanvas and PauseMenuCanvas children
+		GameObject uiParent = GameObject.Find("UI");
+		if (uiParent != null)
+		{
+			ActivateChildByName(uiParent.transform, "HUDCanvas");
+			ActivateChildByName(uiParent.transform, "PauseMenuCanvas");
+			return;
+		}
+
+		// Fallback: try HUDManager parent
+		if (HUDManager.Instance != null)
+		{
+			Transform hudTransform = HUDManager.Instance.transform;
+			ActivateChildByName(hudTransform, "HUDCanvas");
+			ActivateChildByName(hudTransform, "PauseMenuCanvas");
+		}
+	}
+
+	private void ActivateChildByName(Transform parent, string childName)
+	{
+		// First try direct child
+		Transform child = parent.Find(childName);
+		if (child != null)
+		{
+			child.gameObject.SetActive(true);
+			Debug.Log($"[PlayerPersistence] {childName} activated");
+			return;
+		}
+
+		// Search all children recursively (including inactive)
+		foreach (Transform t in parent.GetComponentsInChildren<Transform>(true))
+		{
+			if (t.name == childName)
+			{
+				t.gameObject.SetActive(true);
+				Debug.Log($"[PlayerPersistence] {childName} activated (found nested)");
+				return;
+			}
+		}
+	}
+
+	// Restore masks that were unlocked (saved in PlayerPrefs)
+	private void RestoreUnlockedMasks()
+	{
+		WeaponInventory inventory = GetComponent<WeaponInventory>();
+		if (inventory == null)
+		{
+			Debug.LogWarning("[PlayerPersistence] No WeaponInventory found!");
+			return;
+		}
+
+		Debug.Log($"[PlayerPersistence] RestoreUnlockedMasks - Red:{PlayerPrefs.GetInt("Mask_Red", 0)} Blue:{PlayerPrefs.GetInt("Mask_Blue", 0)} Yellow:{PlayerPrefs.GetInt("Mask_Yellow", 0)}");
+
+		// Check each mask type in PlayerPrefs
+		// MaskUnlockManager saves: PlayerPrefs.SetInt("Mask_" + maskType, 1)
+
+		if (PlayerPrefs.GetInt("Mask_Red", 0) == 1)
+		{
+			if (redMaskPrefab != null)
+			{
+				inventory.AddWeapon(redMaskPrefab);
+				Debug.Log("[PlayerPersistence] Red Mask restored from PlayerPrefs");
+			}
+			else
+			{
+				Debug.LogWarning("[PlayerPersistence] Red Mask unlocked but prefab not assigned!");
+			}
+		}
+
+		if (PlayerPrefs.GetInt("Mask_Blue", 0) == 1)
+		{
+			if (blueMaskPrefab != null)
+			{
+				inventory.AddWeapon(blueMaskPrefab);
+				Debug.Log("[PlayerPersistence] Blue Mask restored from PlayerPrefs");
+			}
+			else
+			{
+				Debug.LogWarning("[PlayerPersistence] Blue Mask unlocked but prefab not assigned!");
+			}
+		}
+
+		if (PlayerPrefs.GetInt("Mask_Yellow", 0) == 1)
+		{
+			if (yellowMaskPrefab != null)
+			{
+				inventory.AddWeapon(yellowMaskPrefab);
+				Debug.Log("[PlayerPersistence] Yellow Mask restored from PlayerPrefs");
+			}
+			else
+			{
+				Debug.LogWarning("[PlayerPersistence] Yellow Mask unlocked but prefab not assigned!");
+			}
 		}
 	}
 

@@ -77,11 +77,11 @@ MonoBehaviour:
   facingRight: 1
   movementThreshold: 0.1
   idleColliderCenter: {x: -0.94672346, y: -0.42883646, z: 1.8932722e-10}
-  idleColliderSize: {x: 5.898181, y: 8.747569, z: 0.35229492}
+  idleColliderSize: {x: 5.898181, y: 9.05, z: 0.35229492}
   walkColliderCenter: {x: -0.94672346, y: -0.42883646, z: 1.8932722e-10}
-  walkColliderSize: {x: 5.898181, y: 8.747569, z: 0.35229492}
+  walkColliderSize: {x: 5.898181, y: 9.05, z: 0.35229492}
   punchColliderCenter: {x: -1.19, y: -0.42883667, z: -0.0000000055756697}
-  punchColliderSize: {x: 5.459059, y: 8.747568, z: 0.3522949}
+  punchColliderSize: {x: 5.459059, y: 9.05, z: 0.3522949}
 --- !u!65 &4794096874020116178
 BoxCollider:
   m_ObjectHideFlags: 0

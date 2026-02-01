@@ -23,6 +23,15 @@ public class EnemyManager : MonoBehaviour
 		Instance = this;
 	}
 
+	private void OnDestroy()
+	{
+		// Clear static reference when destroyed (scene change)
+		if (Instance == this)
+		{
+			Instance = null;
+		}
+	}
+
 	// Registrar un spawner al inicio del nivel
 	public void RegisterSpawner(EnemySpawner spawner)
 	{
@@ -42,7 +51,11 @@ public class EnemyManager : MonoBehaviour
 	// Verificar si todos los spawners han terminado de spawner
 	public bool AllSpawnersCompleted()
 	{
-		return registeredSpawners.Count > 0 && completedSpawners.Count >= registeredSpawners.Count;
+		// If no spawners registered (pre-placed enemies only), consider it complete
+		if (registeredSpawners.Count == 0)
+			return true;
+
+		return completedSpawners.Count >= registeredSpawners.Count;
 	}
 
 	// Registrar un enemigo cuando se crea

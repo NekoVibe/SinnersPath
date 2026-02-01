@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class PlayerMeleeAttack : MonoBehaviour
 {
 	[Header("Attack Settings")]
-	[SerializeField] private float attackDamage = 10f;
+	[SerializeField] private float attackDamage = 1f;
 	[SerializeField] private float attackRange = 1.2f;
 	[SerializeField] private float attackCooldown = 0.5f;
 	[SerializeField] private LayerMask enemyLayer;
@@ -24,6 +24,7 @@ public class PlayerMeleeAttack : MonoBehaviour
 
 	private float nextAttackTime = 0f;
 	private WeaponInventory weaponInventory;
+	private bool combatEnabled = true;
 
 	private void Start()
 	{
@@ -55,6 +56,10 @@ public class PlayerMeleeAttack : MonoBehaviour
 
 	private void HandleAttackInput()
 	{
+		// Skip if combat is disabled
+		if (!combatEnabled)
+			return;
+
 		// Solo atacar con puños si NO hay arma equipada
 		if (Input.GetKeyDown(attackKey) || Input.GetMouseButtonDown(0))
 		{
@@ -165,4 +170,23 @@ public class PlayerMeleeAttack : MonoBehaviour
 		float timeSinceLastAttack = Time.time - (nextAttackTime - attackCooldown);
 		return Mathf.Clamp01(timeSinceLastAttack / attackCooldown);
 	}
+
+	#region Combat Enable/Disable
+
+	public void EnableCombat()
+	{
+		combatEnabled = true;
+	}
+
+	public void DisableCombat()
+	{
+		combatEnabled = false;
+	}
+
+	public bool IsCombatEnabled()
+	{
+		return combatEnabled;
+	}
+
+	#endregion
 }
