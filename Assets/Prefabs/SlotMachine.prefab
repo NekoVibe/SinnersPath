@@ -571,6 +571,7 @@ GameObject:
   - component: {fileID: 7728514134370674856}
   - component: {fileID: 6260391296818750771}
   - component: {fileID: 5821097373921013325}
+  - component: {fileID: 7894907888651445485}
   m_Layer: 0
   m_Name: SlotMachine
   m_TagString: Untagged
@@ -676,8 +677,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.43, y: 5.01, z: 0.2}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 13.297452, y: 12.710479, z: 4.0505404}
+  m_Center: {x: -0.10543108, y: 0.122879505, z: 1.3927901}
 --- !u!114 &5821097373921013325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -723,6 +724,27 @@ MonoBehaviour:
   breakSound: {fileID: 0}
   resultDisplayTime: 3
   forcedWinChance: 0.3
+--- !u!65 &7894907888651445485
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7385560717963249374}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 12.48971, y: 12.704575, z: 3.574665}
+  m_Center: {x: -0.082380295, y: 0.11428261, z: 1.6873326}
 --- !u!1 &7517554939600259741
 GameObject:
   m_ObjectHideFlags: 0

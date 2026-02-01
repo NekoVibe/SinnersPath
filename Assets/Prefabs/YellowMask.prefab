@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2295790174448526791}
-  - component: {fileID: 619412616179166914}
+  - component: {fileID: 2481758266070728010}
   m_Layer: 0
   m_Name: YellowMask
   m_TagString: Untagged
@@ -29,11 +29,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5206776786792775478}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &619412616179166914
+--- !u!114 &2481758266070728010
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,49 +41,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 5865662766892410920}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d835631b6ae42054495af6df5bb1e2f9, type: 3}
+  m_Script: {fileID: 11500000, guid: a8f3d2e1b7c64a9f8e3d5b2c1a0f9e8d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RangedWeapon
+  m_EditorClassIdentifier: Assembly-CSharp::MeleeSwingWeapon
   weaponName: YellowMask
   weaponIcon: {fileID: -5557553270589673716, guid: a933ab388dc52fb4b8e1cc8ec8a65d3f, type: 3}
-  damage: 10
-  fireRate: 0.5
+  damage: 15
+  attackRate: 0.8
   hitLayers:
     serializedVersion: 2
     m_Bits: 128
-  bulletPrefab: {fileID: 0}
-  firePoint: {fileID: 0}
-  muzzleFlashEffect: {fileID: 0}
-  impactEffect: {fileID: 0}
-  shootSound: {fileID: 0}
---- !u!1 &9200168617451119822
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5206776786792775478}
-  m_Layer: 0
-  m_Name: FirePoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5206776786792775478
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9200168617451119822}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2295790174448526791}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  swingRange: 2.5
+  swingAngle: 120
+  swingDuration: 0.3
+  swingEffectPrefab: {fileID: 5042636497173607135, guid: cc980f5ae5fb7d64986344f98a34168b, type: 3}
+  swingSound: {fileID: 0}

@@ -206,7 +206,7 @@ public class PlayerHealth : MonoBehaviour
 	// Actualizar HUD si cambias currentHealth en el Inspector durante Play mode
 	private void OnValidate()
 	{
-		if (Application.isPlaying)
+		if (Application.isPlaying && HUDManager.Instance != null)
 		{
 			_currentHealth = Mathf.Clamp(_currentHealth, 0, maxHealth);
 			UpdateHealthHUD();

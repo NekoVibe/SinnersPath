@@ -107,11 +107,31 @@ public class GameManager : MonoBehaviour
 		{
 			HUDManager.Instance.ActualizarMonedas(coins);
 			HUDManager.Instance.ActualizarCombo(combo);
+
+			// Sincronizar inventario del HUD con el inventario real del player
+			SyncInventoryHUD();
+
 			Debug.Log("HUD updated successfully");
 		}
 		else
 		{
 			Debug.LogWarning("HUD not found! Make sure HUD_Canvas exists in the scene.");
+		}
+	}
+
+	// Sincronizar el HUD del inventario con las armas actuales del player
+	private void SyncInventoryHUD()
+	{
+		GameObject player = GameObject.FindGameObjectWithTag("Player");
+		if (player == null) return;
+
+		WeaponInventory inventory = player.GetComponent<WeaponInventory>();
+		if (inventory == null) return;
+
+		// Si el player no tiene armas, resetear los slots
+		if (inventory.GetCurrentWeapon() == null)
+		{
+			HUDManager.Instance?.ResetInventorySlots();
 		}
 	}
 
@@ -174,6 +194,7 @@ public class GameManager : MonoBehaviour
 		{
 			HUDManager.Instance.ActualizarMonedas(coins);
 			HUDManager.Instance.ActualizarCombo(combo);
+			HUDManager.Instance.ResetInventorySlots();
 		}
 
 		// 5. Notificar cambios
