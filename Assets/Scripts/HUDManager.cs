@@ -65,15 +65,30 @@ public class HUDManager : MonoBehaviour
 
     public void ActualizarHearts(int vidaActual)
     {
-        if (heartImage == null) return;
+        Debug.Log($"HUDManager.ActualizarHearts llamado con vida: {vidaActual}");
 
-        heartImage.sprite = vidaActual switch
+        if (heartImage == null)
+        {
+            Debug.LogError("HUDManager: heartImage es NULL!");
+            return;
+        }
+
+        Sprite nuevoSprite = vidaActual switch
         {
             0 => spriteEmptyHeart,
             1 => spriteHeartOneLife,
             2 => spriteHeartTwoLifes,
             _ => spriteFullHeart // 3 o más
         };
+
+        if (nuevoSprite == null)
+        {
+            Debug.LogError($"HUDManager: Sprite para vida {vidaActual} es NULL!");
+            return;
+        }
+
+        heartImage.sprite = nuevoSprite;
+        Debug.Log($"HUDManager: Sprite actualizado correctamente para vida {vidaActual}");
     }
 
     public void ActualizarMonedas(int cantidad) => coinsText.text = cantidad.ToString();

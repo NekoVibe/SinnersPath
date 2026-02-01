@@ -106,6 +106,12 @@ public class RangedWeapon : WeaponBase
 	// Obtener la dirección de disparo hacia donde apunta el cursor
 	private Vector3 GetShootDirection()
 	{
+		// Obtener la cámara cada vez (puede cambiar entre escenas)
+		if (mainCamera == null)
+		{
+			mainCamera = Camera.main;
+		}
+
 		if (mainCamera == null)
 		{
 			return firePoint.forward;

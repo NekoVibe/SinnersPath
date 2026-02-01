@@ -110,8 +110,15 @@ public class PlayerHealth : MonoBehaviour
 	// Actualizar corazones en el HUD
 	private void UpdateHealthHUD()
 	{
-		// Pasar la vida actual al HUD, que mostrará tantos corazones llenos como vida tenga
-		HUDManager.Instance?.ActualizarHearts(currentHealth);
+		Debug.Log($"PlayerHealth.UpdateHealthHUD: Intentando actualizar HUD con vida {currentHealth}");
+
+		if (HUDManager.Instance == null)
+		{
+			Debug.LogError("PlayerHealth: HUDManager.Instance es NULL!");
+			return;
+		}
+
+		HUDManager.Instance.ActualizarHearts(currentHealth);
 	}
 
 	// Muerte del jugador

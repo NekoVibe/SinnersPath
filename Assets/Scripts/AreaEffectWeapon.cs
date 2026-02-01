@@ -66,6 +66,13 @@ public class AreaEffectWeapon : WeaponBase
 		GameObject effect = Instantiate(effectPrefab, spawnPosition, Quaternion.identity);
 		effect.name = "BlueMask_AreaEffect";
 
+		// Asegurar que el collider sea trigger
+		Collider col = effect.GetComponent<Collider>();
+		if (col != null)
+		{
+			col.isTrigger = true;
+		}
+
 		// Agregar el script de daño de área si no lo tiene
 		AreaDamage areaDamage = effect.GetComponent<AreaDamage>();
 		if (areaDamage == null)
@@ -73,6 +80,8 @@ public class AreaEffectWeapon : WeaponBase
 			areaDamage = effect.AddComponent<AreaDamage>();
 		}
 		areaDamage.Initialize(damage, hitLayers);
+
+		Debug.Log($"BlueMask: Spawned area effect at {spawnPosition}, damage: {damage}, layers: {hitLayers.value}");
 
 		// Efecto visual de spawn
 		if (spawnEffect != null)
@@ -93,8 +102,15 @@ public class AreaEffectWeapon : WeaponBase
 
 	private Vector3 GetMouseWorldPosition()
 	{
+		// Obtener la cámara cada vez (puede cambiar entre escenas)
 		if (mainCamera == null)
 		{
+			mainCamera = Camera.main;
+		}
+
+		if (mainCamera == null)
+		{
+			Debug.LogWarning("AreaEffectWeapon: No se encontró Camera.main");
 			return transform.position;
 		}
 
