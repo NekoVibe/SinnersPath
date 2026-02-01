@@ -229,7 +229,7 @@ public class FoxEnemy : EnemyBase
 		// Terminar animación de ataque
 		SetAnimationState(false, false);
 
-		// Restaurar posición Y
+		// Restaurar la posición Y original (antes del salto)
 		Vector3 pos = transform.position;
 		pos.y = originalY;
 		transform.position = pos;
