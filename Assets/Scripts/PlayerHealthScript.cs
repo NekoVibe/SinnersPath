@@ -61,21 +61,20 @@ public class PlayerHealth : MonoBehaviour
 		if (isInvulnerable)
 			return;
 
-		// Visual feedback (always shown)
-		spriteFlash?.Flash();
-		CameraShake.Instance?.Shake();
-		ScreenEffects.Instance?.DamageFlash();
-		StartCoroutine(HitStop());
-
-		// Activate brief invulnerability
-		isInvulnerable = true;
-		invulnerabilityTimer = invulnerabilityTime;
-
-		// God mode: don't reduce health
+		// God mode: show effects but don't reduce health
 		if (godMode)
+		{
+			spriteFlash?.Flash();
+			CameraShake.Instance?.Shake();
+			ScreenEffects.Instance?.DamageFlash();
+			StartCoroutine(HitStop());
+			isInvulnerable = true;
+			invulnerabilityTimer = invulnerabilityTime;
 			return;
+		}
 
-		currentHealth -= damage;
+		// Reducir vida (clampeada a 0 mínimo)
+		currentHealth = Mathf.Max(0, currentHealth - damage);
 
 		Debug.Log($"Player took {damage} damage. Health: {currentHealth}/{maxHealth}");
 
@@ -87,7 +86,7 @@ public class PlayerHealth : MonoBehaviour
 
 		UpdateHealthHUD();
 
-		if (currentHealth == 0)
+		if (currentHealth <= 0)
 		{
 			isInvulnerable = true;
 			invulnerabilityTimer = 999.0f;
