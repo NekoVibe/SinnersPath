@@ -57,8 +57,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 1.5, z: 0.5}
-  m_Center: {x: 0, y: 0.75, z: 0}
+  m_Size: {x: 4.047933, y: 4.525671, z: 0.5}
+  m_Center: {x: 0.14332128, y: -0.28989124, z: 0}
 --- !u!54 &8865772945229738995
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -135,12 +135,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 0d16a820ef6211c4ab63221d59ad2d6b, type: 3}
-  m_Color: {r: 0.5, g: 0.8, b: 0.5, a: 1}
+  m_Sprite: {fileID: 21300000, guid: ccbca750b066918459f870a39d7825a9, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 12.24, y: 10.24}
+  m_Size: {x: 10.24, y: 10.24}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -244,12 +244,12 @@ MonoBehaviour:
   dropForce: 2
   facingRight: 1
   movementThreshold: 0.1
-  idleColliderCenter: {x: 0, y: 0.75, z: 0}
-  idleColliderSize: {x: 1.5, y: 1.5, z: 0.5}
-  walkColliderCenter: {x: 0, y: 0.75, z: 0}
-  walkColliderSize: {x: 1.5, y: 1.5, z: 0.5}
-  punchColliderCenter: {x: 0, y: 0.75, z: 0}
-  punchColliderSize: {x: 1.5, y: 1.5, z: 0.5}
+  idleColliderCenter: {x: 0.14332128, y: -0.28989124, z: 0}
+  idleColliderSize: {x: 4.047933, y: 4.525671, z: 0.5}
+  walkColliderCenter: {x: 0.14332128, y: -0.28989124, z: 0}
+  walkColliderSize: {x: 4.047933, y: 4.525671, z: 0.5}
+  punchColliderCenter: {x: 0.14332128, y: -0.28989124, z: 0}
+  punchColliderSize: {x: 4.047933, y: 4.525671, z: 0.5}
   bulletPrefab: {fileID: 7042636497173607135, guid: a87a4348b4eecbd409d7f0c5b82d9ec3, type: 3}
   shootRange: 10
   shootCooldown: 1
