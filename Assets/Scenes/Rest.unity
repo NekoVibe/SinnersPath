@@ -495,6 +495,63 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 598522692}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &1189164725
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7385560717963249374, guid: 7fa1cb32855aded449ad42e2489b0568, type: 3}
+      propertyPath: m_Name
+      value: SlotMachine
+      objectReference: {fileID: 0}
+    - target: {fileID: 9079787839803974114, guid: 7fa1cb32855aded449ad42e2489b0568, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9079787839803974114, guid: 7fa1cb32855aded449ad42e2489b0568, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9079787839803974114, guid: 7fa1cb32855aded449ad42e2489b0568, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -8
+      objectReference: {fileID: 0}
+    - target: {fileID: 9079787839803974114, guid: 7fa1cb32855aded449ad42e2489b0568, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9079787839803974114, guid: 7fa1cb32855aded449ad42e2489b0568, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9079787839803974114, guid: 7fa1cb32855aded449ad42e2489b0568, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9079787839803974114, guid: 7fa1cb32855aded449ad42e2489b0568, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9079787839803974114, guid: 7fa1cb32855aded449ad42e2489b0568, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9079787839803974114, guid: 7fa1cb32855aded449ad42e2489b0568, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9079787839803974114, guid: 7fa1cb32855aded449ad42e2489b0568, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7fa1cb32855aded449ad42e2489b0568, type: 3}
 --- !u!1 &1267657062
 GameObject:
   m_ObjectHideFlags: 0
@@ -831,7 +888,6 @@ MonoBehaviour:
   visualEffect: {fileID: 0}
   lockedMessage: Eliminate all enemies first!
   unlockedMessage: Press E to exit
-  messageDuration: 2
   checkInterval: 0.5
 --- !u!4 &1841059706
 Transform:
@@ -1976,28 +2032,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7912865af747a3a4699f0f2cd52cffc0, type: 3}
---- !u!114 &4863317018026930677 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3555135158756192661, guid: 7912865af747a3a4699f0f2cd52cffc0, type: 3}
-  m_PrefabInstance: {fileID: 3937967840446882994}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
---- !u!114 &5015792044529389071 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9098248989276017572, guid: 7912865af747a3a4699f0f2cd52cffc0, type: 3}
-  m_PrefabInstance: {fileID: 3937967840446882994}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1001 &5899479830382672645
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2053,11 +2087,11 @@ PrefabInstance:
     - target: {fileID: 2795498035571539030, guid: fd33a9d2801db52439faecc8297bdf07, type: 3}
       propertyPath: 'hearts.Array.data[1]'
       value: 
-      objectReference: {fileID: 4863317018026930677}
+      objectReference: {fileID: 0}
     - target: {fileID: 2795498035571539030, guid: fd33a9d2801db52439faecc8297bdf07, type: 3}
       propertyPath: 'hearts.Array.data[2]'
       value: 
-      objectReference: {fileID: 5015792044529389071}
+      objectReference: {fileID: 0}
     - target: {fileID: 2795498035571539030, guid: fd33a9d2801db52439faecc8297bdf07, type: 3}
       propertyPath: inventorySlots.Array.size
       value: 3
@@ -2230,3 +2264,4 @@ SceneRoots:
   - {fileID: 329146171}
   - {fileID: 3937967840446882994}
   - {fileID: 5899479830382672645}
+  - {fileID: 1189164725}
