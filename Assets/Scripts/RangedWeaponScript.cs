@@ -5,24 +5,18 @@ public class RangedWeapon : WeaponBase
 	[Header("Weapon Stats")]
 	[SerializeField] private int damage = 10;
 	[SerializeField] private float fireRate = 0.5f; // Tiempo entre disparos
-	[SerializeField] private float range = 100f;
 	[SerializeField] private LayerMask hitLayers; // Capas que puede golpear
 
-	[Header("Ammo")]
-	[SerializeField] private int maxAmmo = 30;
-	[SerializeField] private int currentAmmo;
-	[SerializeField] private int reserveAmmo = 90;
-	[SerializeField] private float reloadTime = 2f;
+	[Header("Projectile")]
+	[SerializeField] private GameObject bulletPrefab; // Prefab de la bala
+	[SerializeField] private Transform firePoint; // Punto desde donde sale el disparo
 
 	[Header("Effects")]
 	[SerializeField] private GameObject muzzleFlashEffect;
 	[SerializeField] private GameObject impactEffect;
-	[SerializeField] private Transform firePoint; // Punto desde donde sale el disparo
 
 	[Header("Audio")]
 	[SerializeField] private AudioClip shootSound;
-	[SerializeField] private AudioClip reloadSound;
-	[SerializeField] private AudioClip emptySound;
 
 	// Referencias
 	private AudioSource audioSource;
@@ -30,14 +24,10 @@ public class RangedWeapon : WeaponBase
 
 	// Estado
 	private float lastFireTime = 0f;
-	private bool isReloading = false;
 
 	protected override void Start()
 	{
 		base.Start(); // IMPORTANTE: Busca el Animator del jugador
-
-		// Inicializar munición
-		currentAmmo = maxAmmo;
 
 		// Obtener componentes
 		audioSource = GetComponent<AudioSource>();
@@ -54,40 +44,36 @@ public class RangedWeapon : WeaponBase
 			Debug.LogWarning($"{weaponName}: No FirePoint assigned! Using weapon position.");
 			firePoint = transform;
 		}
+
+		// Validar bulletPrefab
+		if (bulletPrefab == null)
+		{
+			Debug.LogError($"{weaponName}: No Bullet Prefab assigned!");
+		}
 	}
 
 	// Disparar el arma
 	public override void Fire()
 	{
-		// Verificar si está recargando
-		if (isReloading)
-		{
-			return;
-		}
-
 		// Verificar cooldown (fire rate)
 		if (Time.time < lastFireTime + fireRate)
 		{
 			return;
 		}
 
-		// Verificar munición
-		if (currentAmmo <= 0)
+		// Verificar que existe el prefab
+		if (bulletPrefab == null)
 		{
-			// Sonido de arma vacía
-			PlaySound(emptySound);
 			return;
 		}
 
 		// DISPARAR
 		PerformShot();
 
-		// Consumir munición
-		currentAmmo--;
 		lastFireTime = Time.time;
 	}
 
-	// Realizar el disparo (raycast)
+	// Realizar el disparo (proyectil)
 	private void PerformShot()
 	{
 		// Triggerar animación de ataque
@@ -103,90 +89,56 @@ public class RangedWeapon : WeaponBase
 		// Sonido de disparo
 		PlaySound(shootSound);
 
-		// Raycast desde la cámara (para precisión)
-		Ray ray;
-		if (mainCamera != null)
-		{
-			// Disparar desde el centro de la pantalla
-			ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-		}
-		else
-		{
-			// Fallback: disparar desde el firePoint
-			ray = new Ray(firePoint.position, firePoint.forward);
-		}
+		// Calcular dirección hacia el cursor
+		Vector3 targetDirection = GetShootDirection();
 
-		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit, range, hitLayers))
-		{
-			// Efecto de impacto
-			if (impactEffect != null)
-			{
-				GameObject impact = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-				Destroy(impact, 2f);
-			}
+		// Instanciar la bala
+		GameObject bulletObj = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(targetDirection));
 
-			// Intentar aplicar daño a EnemyBase
-			EnemyBase enemy = hit.collider.GetComponent<EnemyBase>();
-			if (enemy != null)
-			{
-				enemy.TakeDamage(damage);
-			}
-
-			// Debug visual del raycast
-			Debug.DrawLine(ray.origin, hit.point, Color.red, 1f);
-		}
-		else
+		// Inicializar la bala con los parámetros del arma
+		Bullet bullet = bulletObj.GetComponent<Bullet>();
+		if (bullet != null)
 		{
-			// No golpeó nada
-			Debug.DrawRay(ray.origin, ray.direction * range, Color.yellow, 1f);
+			bullet.Initialize(targetDirection, damage, hitLayers, impactEffect);
 		}
 	}
 
-	// Recargar el arma
+	// Obtener la dirección de disparo hacia donde apunta el cursor
+	private Vector3 GetShootDirection()
+	{
+		if (mainCamera == null)
+		{
+			return firePoint.forward;
+		}
+
+		// Obtener posición del cursor en pantalla
+		Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+
+		// Hacer raycast para encontrar el punto objetivo
+		RaycastHit hit;
+		Vector3 targetPoint;
+
+		if (Physics.Raycast(ray, out hit, 1000f))
+		{
+			// Apuntar al punto donde el rayo golpea
+			targetPoint = hit.point;
+		}
+		else
+		{
+			// Si no golpea nada, apuntar a un punto lejano en la dirección del rayo
+			targetPoint = ray.origin + ray.direction * 1000f;
+		}
+
+		// Calcular dirección desde firePoint hacia el punto objetivo
+		Vector3 direction = (targetPoint - firePoint.position).normalized;
+
+		return direction;
+	}
+
+	// Recargar el arma (sin munición, no hace nada)
 	public override void Reload()
 	{
-		// No recargar si ya está llena
-		if (currentAmmo == maxAmmo)
-		{
-			return;
-		}
-
-		// No recargar si no hay munición de reserva
-		if (reserveAmmo <= 0)
-		{
-			return;
-		}
-
-		// No recargar si ya está recargando
-		if (isReloading)
-		{
-			return;
-		}
-
-		// Iniciar recarga
-		StartCoroutine(ReloadRoutine());
-	}
-
-	// Corrutina de recarga
-	private System.Collections.IEnumerator ReloadRoutine()
-	{
-		isReloading = true;
-
-		// Sonido de recarga
-		PlaySound(reloadSound);
-
-		// Esperar tiempo de recarga
-		yield return new WaitForSeconds(reloadTime);
-
-		// Calcular cuánta munición recargar
-		int ammoNeeded = maxAmmo - currentAmmo;
-		int ammoToReload = Mathf.Min(ammoNeeded, reserveAmmo);
-
-		currentAmmo += ammoToReload;
-		reserveAmmo -= ammoToReload;
-
-		isReloading = false;
+		// Sin sistema de munición
 	}
 
 	// Reproducir sonido
@@ -198,16 +150,10 @@ public class RangedWeapon : WeaponBase
 		}
 	}
 
-	// Obtener info de munición
+	// Obtener info de munición (sin límite)
 	public override string GetAmmoInfo()
 	{
-		return $"{currentAmmo}/{reserveAmmo}";
-	}
-
-	// Añadir munición de reserva (pickup de munición)
-	public void AddReserveAmmo(int amount)
-	{
-		reserveAmmo += amount;
+		return "∞";
 	}
 
 	// Debug en el editor
@@ -215,8 +161,8 @@ public class RangedWeapon : WeaponBase
 	{
 		if (firePoint == null) return;
 
-		// Dibujar rango del arma
+		// Dibujar dirección de disparo
 		Gizmos.color = Color.red;
-		Gizmos.DrawRay(firePoint.position, firePoint.forward * range);
+		Gizmos.DrawRay(firePoint.position, firePoint.forward * 10f);
 	}
 }
