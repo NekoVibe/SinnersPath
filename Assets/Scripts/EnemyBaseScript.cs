@@ -99,7 +99,7 @@ public class EnemyBase : MonoBehaviour
 		FindPlayer();
 	}
 
-	private void Update()
+	protected virtual void Update()
 	{
 		if (isDead) return;
 

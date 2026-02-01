@@ -147,8 +147,9 @@ public class RangedEnemy : EnemyBase
 		Transform player = GetPlayer();
 		if (player == null) return;
 
-		// Calcular direccion hacia el jugador
-		Vector3 direction = (player.position - transform.position).normalized;
+		// Calcular direccion hacia el jugador (solo eje X)
+		float dirX = player.position.x - transform.position.x;
+		Vector3 direction = new Vector3(dirX > 0 ? 1f : -1f, 0f, 0f);
 
 		// Ajustar offset segun la direccion - alejarlo mas del enemigo
 		Vector3 spawnOffset = bulletSpawnOffset;
