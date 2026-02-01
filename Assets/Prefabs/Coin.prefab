@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 2059433562955315013}
   - component: {fileID: 8077955925130446781}
   - component: {fileID: 5483766970797935128}
+  - component: {fileID: 8065005424403463859}
+  - component: {fileID: -1027179681341751490}
   m_Layer: 0
   m_Name: Coin
   m_TagString: Untagged
@@ -29,8 +31,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -12.67924, y: 5.9, z: -5.72}
-  m_LocalScale: {x: 10, y: 10, z: 10}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -83,12 +85,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 10
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 8741200022194658665, guid: 4d499dc676ddb204a9bff6c991444cc3, type: 3}
   m_Color: {r: 1, g: 0.7988987, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.16, y: 0.16}
+  m_Size: {x: 4.68, y: 4.68}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -127,14 +129,64 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   coinValue: 1
-  pickupRadius: 1.5
+  pickupRadius: 0.01
   playerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
+  enableDropAnimation: 1
+  dropArcHeight: 4
+  dropDuration: 0.4
+  dropSpreadRadius: 5
   floatAnimation: 1
   floatSpeed: 2
   floatAmplitude: 0.3
-  rotateAnimation: 1
-  rotationSpeed: 100
+  pulseAnimation: 1
+  pulseSpeed: 3
+  pulseAmount: 0.1
+  magneticPickup: 1
+  magnetRadius: 7
+  magnetSpeed: 15
+  magnetAcceleration: 25
+  collectPopScale: 1.1
+  collectDuration: 0.15
   autoDestroy: 0
   lifetime: 10
+--- !u!114 &8065005424403463859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8843497527569057443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4973749dded11e740b1cbc6b511cdfe4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteShadow
+  shadowSize: {x: 3, y: 2}
+  shadowColor: {r: 0, g: 0, b: 0, a: 0.4}
+  groundY: 0
+  autoDetectGround: 1
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  maxRayDistance: 20
+  scaleWithHeight: 1
+  maxHeightForScaling: 10
+  minScale: 0.5
+--- !u!114 &-1027179681341751490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8843497527569057443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 612c592f88395c5488fd6416d9bb0e4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteStacking
+  layerCount: 5
+  layerSpacing: 0.06
+  enableDarkening: 1
+  darkenAmount: 0.4

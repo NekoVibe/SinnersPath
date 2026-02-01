@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 4794096874020116178}
   - component: {fileID: 5865772945229738995}
   - component: {fileID: 6909841629042170994}
-  - component: {fileID: 8639348605500749855}
   - component: {fileID: 6944776230588047903}
+  - component: {fileID: 2238113457890672324}
+  - component: {fileID: 7284563481042250836}
   m_Layer: 7
   m_Name: Oni
   m_TagString: Untagged
@@ -61,6 +62,7 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
+  attackPointOffset: {x: 0, y: 0, z: 0}
   detectionRange: 8
   alwaysChasePlayer: 1
   pointsOnDeath: 100
@@ -74,12 +76,12 @@ MonoBehaviour:
   dropForce: 2
   facingRight: 1
   movementThreshold: 0.1
-  idleColliderCenter: {x: 0, y: 0.5, z: 0}
-  idleColliderSize: {x: 0.8, y: 1, z: 0.8}
-  walkColliderCenter: {x: 0, y: 0.45, z: 0}
-  walkColliderSize: {x: 0.9, y: 0.9, z: 0.8}
-  punchColliderCenter: {x: 0.2, y: 0.4, z: 0}
-  punchColliderSize: {x: 1.5, y: 0.8, z: 0.8}
+  idleColliderCenter: {x: -0.94672346, y: -0.42883646, z: 1.8932722e-10}
+  idleColliderSize: {x: 5.898181, y: 8.747569, z: 0.35229492}
+  walkColliderCenter: {x: -0.94672346, y: -0.42883646, z: 1.8932722e-10}
+  walkColliderSize: {x: 5.898181, y: 8.747569, z: 0.35229492}
+  punchColliderCenter: {x: -1.19, y: -0.42883667, z: -0.0000000055756697}
+  punchColliderSize: {x: 5.459059, y: 8.747568, z: 0.3522949}
 --- !u!65 &4794096874020116178
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -99,8 +101,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 6.068163, y: 8.747569, z: 0.35229492}
-  m_Center: {x: -0.8617325, y: -0.42883646, z: 1.8932722e-10}
+  m_Size: {x: 5.459059, y: 8.747568, z: 0.3522949}
+  m_Center: {x: -1.19, y: -0.42883667, z: -0.0000000055756697}
 --- !u!54 &5865772945229738995
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -126,7 +128,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 116
+  m_Constraints: 112
   m_CollisionDetection: 1
 --- !u!212 &6909841629042170994
 SpriteRenderer:
@@ -178,7 +180,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 0d16a820ef6211c4ab63221d59ad2d6b, type: 3}
-  m_Color: {r: 0.09469509, g: 0, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -187,19 +189,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &8639348605500749855
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 785309415909852800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14f1f753965d3344c8d5c8bdd6cbfd5b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::OctopathSprite
-  tiltAngle: 8
 --- !u!95 &6944776230588047903
 Animator:
   serializedVersion: 7
@@ -222,3 +211,42 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2238113457890672324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 785309415909852800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4973749dded11e740b1cbc6b511cdfe4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteShadow
+  shadowSize: {x: 5, y: 5}
+  shadowColor: {r: 0, g: 0, b: 0, a: 0.4}
+  groundY: 0
+  autoDetectGround: 1
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  maxRayDistance: 20
+  scaleWithHeight: 1
+  maxHeightForScaling: 10
+  minScale: 0.5
+--- !u!114 &7284563481042250836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 785309415909852800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 612c592f88395c5488fd6416d9bb0e4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteStacking
+  layerCount: 5
+  layerSpacing: 0.06
+  enableDarkening: 1
+  darkenAmount: 0.4

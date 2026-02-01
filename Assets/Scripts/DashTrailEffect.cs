@@ -24,6 +24,10 @@ public class DashTrailEffect : MonoBehaviour
 	private bool isTrailActive = false;
 	private Coroutine trailCoroutine;
 
+	// Movement tracking for sorting order
+	private Vector3 lastPosition;
+	private Vector3 velocity;
+
 	private void Awake()
 	{
 		// Singleton
@@ -42,6 +46,17 @@ public class DashTrailEffect : MonoBehaviour
 
 		// Create afterimage pool
 		CreatePool();
+
+		if (sourceSprite != null)
+			lastPosition = sourceSprite.transform.position;
+	}
+
+	private void LateUpdate()
+	{
+		if (sourceSprite == null) return;
+
+		velocity = (sourceSprite.transform.position - lastPosition) / Time.deltaTime;
+		lastPosition = sourceSprite.transform.position;
 	}
 
 	private void CreatePool()
@@ -123,6 +138,23 @@ public class DashTrailEffect : MonoBehaviour
 			baseColor.b * (1f - colorDarken),
 			baseColor.a * 0.7f
 		);
+
+		// Sorting order based on movement direction (same logic as SpriteStacking)
+		// Moving -Z (towards camera): afterimages behind player (lower sorting)
+		// Moving +Z (away from camera): afterimages in front of player (higher sorting)
+		afterimage.sortingLayerName = sourceSprite.sortingLayerName;
+		if (velocity.z < -0.1f) // Moving -Z
+		{
+			afterimage.sortingOrder = sourceSprite.sortingOrder - 1;
+		}
+		else if (velocity.z > 0.1f) // Moving +Z
+		{
+			afterimage.sortingOrder = sourceSprite.sortingOrder + 1;
+		}
+		else
+		{
+			afterimage.sortingOrder = sourceSprite.sortingOrder - 1; // Default behind
+		}
 
 		afterimage.enabled = true;
 

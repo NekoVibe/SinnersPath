@@ -1,4 +1,7 @@
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor.SceneManagement;
+#endif
 
 /// <summary>
 /// Creates a fake shadow under sprite characters.
@@ -27,8 +30,23 @@ public class SpriteShadow : MonoBehaviour
 	private Transform shadowTransform;
 	private Sprite cachedSprite;
 
+	// Check if we're in prefab edit mode (explains scale inheritance bug)
+	private bool IsInPrefabEditMode()
+	{
+#if UNITY_EDITOR
+		// In prefab edit mode, SetParent(null) makes the shadow a sibling in the prefab,
+		// not a scene root object, so it inherits the prefab's transform scale
+		return PrefabStageUtility.GetCurrentPrefabStage() != null;
+#else
+		return false;
+#endif
+	}
+
 	private void OnEnable()
 	{
+		// Skip shadow in prefab edit mode (can't escape prefab's transform hierarchy)
+		if (IsInPrefabEditMode()) return;
+
 		// Create shadow if it doesn't exist
 		if (shadowObject == null)
 		{
@@ -38,6 +56,9 @@ public class SpriteShadow : MonoBehaviour
 
 	private void Start()
 	{
+		// Skip shadow in prefab edit mode
+		if (IsInPrefabEditMode()) return;
+
 		// Ensure shadow exists
 		if (shadowObject == null)
 		{
@@ -62,21 +83,17 @@ public class SpriteShadow : MonoBehaviour
 				DestroyImmediate(shadowObject);
 		}
 
-		// Create shadow GameObject
+		// Create shadow GameObject at scene root with identity transform
 		shadowObject = new GameObject("Shadow_" + gameObject.name);
 		shadowObject.hideFlags = Application.isPlaying ? HideFlags.None : HideFlags.DontSave;
 		shadowTransform = shadowObject.transform;
 
-		// In play mode, parent to same parent (so it doesn't rotate with character)
-		// In edit mode, make it a child so it moves with the object in scene view
-		if (Application.isPlaying)
-		{
-			shadowTransform.SetParent(transform.parent);
-		}
-		else
-		{
-			shadowTransform.SetParent(transform);
-		}
+		// Ensure shadow is at scene root with no parent
+		shadowTransform.SetParent(null);
+		// Reset to identity to avoid any inherited scale
+		shadowTransform.localPosition = Vector3.zero;
+		shadowTransform.localRotation = Quaternion.identity;
+		shadowTransform.localScale = Vector3.one;
 
 		// Add SpriteRenderer
 		shadowRenderer = shadowObject.AddComponent<SpriteRenderer>();
@@ -124,6 +141,9 @@ public class SpriteShadow : MonoBehaviour
 
 	private void LateUpdate()
 	{
+		// Skip shadow in prefab edit mode
+		if (IsInPrefabEditMode()) return;
+
 		UpdateShadow();
 	}
 
@@ -136,15 +156,21 @@ public class SpriteShadow : MonoBehaviour
 			if (shadowTransform == null) return;
 		}
 
+		// Ensure shadow is never parented (prevents scale inheritance)
+		if (shadowTransform.parent != null)
+		{
+			shadowTransform.SetParent(null);
+		}
+
 		// Update color if changed in inspector
 		if (shadowRenderer != null && shadowRenderer.color != shadowColor)
 		{
 			shadowRenderer.color = shadowColor;
 		}
 
-		// Detect ground position
+		// Detect ground position (only use raycast in play mode - physics isn't reliable in editor)
 		float currentGroundY = groundY;
-		if (autoDetectGround)
+		if (autoDetectGround && Application.isPlaying)
 		{
 			if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, maxRayDistance, groundLayer))
 			{
@@ -162,7 +188,7 @@ public class SpriteShadow : MonoBehaviour
 		// Rotate to lie flat on ground
 		shadowTransform.rotation = Quaternion.Euler(90f, 0f, 0f);
 
-		// Scale based on height
+		// Scale based on height (play mode) or use fixed preview scale (editor)
 		float scale = 1f;
 		if (scaleWithHeight)
 		{
@@ -176,10 +202,13 @@ public class SpriteShadow : MonoBehaviour
 
 	private void OnDisable()
 	{
-		// Clean up shadow in editor when component is disabled
-		if (!Application.isPlaying && shadowObject != null)
+		// Clean up shadow when component is disabled
+		if (shadowObject != null)
 		{
-			DestroyImmediate(shadowObject);
+			if (Application.isPlaying)
+				Destroy(shadowObject);
+			else
+				DestroyImmediate(shadowObject);
 			shadowObject = null;
 		}
 	}
