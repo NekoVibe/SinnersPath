@@ -111,9 +111,42 @@ public class HUDManager : MonoBehaviour
             comboText.transform.localScale = Vector3.Lerp(comboText.transform.localScale, Vector3.one, Time.deltaTime * 10f);
     }
 
-    public void ActualizarSlotInventario(int indice, Sprite iconoItem) 
+    public void ActualizarSlotInventario(int indice, Sprite iconoItem)
     {
-        if (indice >= 0 && indice < inventorySlots.Length)
-            inventorySlots[indice].sprite = (iconoItem != null) ? iconoItem : emptySlotSprite;
+        if (indice < 0 || indice >= inventorySlots.Length)
+            return;
+
+        Image slot = inventorySlots[indice];
+        if (slot == null)
+            return;
+
+        if (iconoItem != null)
+        {
+            // Hay arma: mostrar icono
+            slot.sprite = iconoItem;
+            slot.color = Color.white;
+        }
+        else if (emptySlotSprite != null)
+        {
+            // No hay arma pero hay sprite vacío: usarlo
+            slot.sprite = emptySlotSprite;
+            slot.color = Color.white;
+        }
+        else
+        {
+            // No hay arma ni sprite vacío: hacer transparente
+            slot.sprite = null;
+            slot.color = Color.clear;
+        }
+    }
+
+    // Resetear todos los slots del inventario (llamar al reiniciar)
+    public void ResetInventorySlots()
+    {
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            ActualizarSlotInventario(i, null);
+        }
+        indiceSeleccionado = 0;
     }
 }
