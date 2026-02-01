@@ -92,8 +92,8 @@ public class RangedWeapon : WeaponBase
 		// Calcular dirección hacia el cursor
 		Vector3 targetDirection = GetShootDirection();
 
-		// Instanciar la bala
-		GameObject bulletObj = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(targetDirection));
+		// Instanciar la bala sin rotación
+		GameObject bulletObj = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
 
 		// Inicializar la bala con los parámetros del arma
 		Bullet bullet = bulletObj.GetComponent<Bullet>();

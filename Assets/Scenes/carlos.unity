@@ -1270,7 +1270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a10bb4a206e36640b9061d2a1292b3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponPickup
-  weaponPrefab: {fileID: 5865662766892410920, guid: 0e9163e9a7ffb5d438fe1ca83ac45c75, type: 3}
+  weaponPrefab: {fileID: 5865662766892410920, guid: 1106912cc048b1c4aa2a858a493e9f8f, type: 3}
   rotationSpeed: 50
   rotateWeapon: 1
   bobSpeed: 1
@@ -1936,7 +1936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a10bb4a206e36640b9061d2a1292b3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponPickup
-  weaponPrefab: {fileID: 5865662766892410920, guid: 99a245dfe7f0314419a9c2a31dfdce3f, type: 3}
+  weaponPrefab: {fileID: 5865662766892410920, guid: 0e9163e9a7ffb5d438fe1ca83ac45c75, type: 3}
   rotationSpeed: 50
   rotateWeapon: 1
   bobSpeed: 1
